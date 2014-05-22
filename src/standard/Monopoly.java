@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Random;
 
 public class Monopoly {
-	static int Dice_num = 6;
-
 	static int piece_num = 4;
 	static Piece [] player = new Piece[piece_num];
 	
@@ -23,19 +21,5 @@ public class Monopoly {
 				System.out.print("\n");
 		}
 		System.out.print("\n");
-	}
-	
-	static class Dice{
-		public Dice(){
-		}
-		
-		public int exec(){
-			Calendar now = Calendar.getInstance();
-			int seed = now.get(Calendar.MILLISECOND);
-			Random r = new Random();
-			r.setSeed(seed);
-			
-			return Math.abs(r.nextInt() % Dice_num);
-		}
 	}
 }

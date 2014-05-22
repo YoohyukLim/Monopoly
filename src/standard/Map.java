@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Map {
 	static int Map_number_length = 20;
-	static int Map_size=36;
+	static int Map_size = 36;
 	static int Map_side = 4;
 	static Map_piece [] Map_pieces;
 	
