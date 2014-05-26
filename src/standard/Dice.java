@@ -15,6 +15,6 @@ public class Dice {
 		Random r = new Random();
 		r.setSeed(seed);
 		
-		return Math.abs(r.nextInt() % Dice_num);
+		return Math.abs(r.nextInt() % Dice_num)+1;
 	}
 }
