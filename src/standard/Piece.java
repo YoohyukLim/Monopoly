@@ -5,33 +5,33 @@ public class Piece {
 	int position;
 	int map_size;
 	int turn_cnt;
-	
-	public Piece(int type, int start_position){
+
+	public Piece(int type, int start_position) {
 		piece_type = type;
 		position = start_position;
 		turn_cnt = 0;
 	}
-	
-	public int getType(){
+
+	public int getType() {
 		return piece_type;
 	}
-	
-	public int getPosition(){
+
+	public int getPosition() {
 		return position;
 	}
-	
-	public int setPosition(int pos){
+
+	public int setPosition(int pos) {
 		position = pos;
 		return position;
 	}
-	
-	public int movePosition(int dice){
+
+	public int movePosition(int dice) {
 		int pos = position + dice;
 
-		if(pos>map_size-1)
+		if (pos > map_size - 1)
 			turn_cnt++;
-		pos = pos % (map_size-1);
-		
+		pos = pos % (map_size - 1);
+
 		return setPosition(pos);
 	}
 }
