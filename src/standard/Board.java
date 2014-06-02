@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class Board {
 	Map map;
-	
+
 	public JFrame frame;
 
 	public Board() {
 		initialize();
 	}
-	
-	public Board(Map map){
+
+	public Board(Map map) {
 		this.map = map;
 		initialize();
 	}
@@ -31,7 +31,7 @@ public class Board {
 		JPanel leftside = new JPanel();
 		JPanel rightside = new JPanel();
 		JPanel botside = new JPanel();
-		
+
 		JLabel Map_piece[] = new JLabel[36];
 
 		frame.setTitle("Monopoly");
@@ -55,15 +55,17 @@ public class Board {
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 100));
 				PieceList.get(i).setBackground(new Color(0, 255, 255));
-				
-				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
+						.get_map_number()));
 				PieceList.get(i).add(Map_piece[i]);
-			} else if (i < 10 || (i>=18 && i <=27)) {
+			} else if (i < 10 || (i >= 18 && i <= 27)) {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
-				
-				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
+						.get_map_number()));
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
@@ -73,8 +75,9 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
-				
-				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
+						.get_map_number()));
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
@@ -90,7 +93,7 @@ public class Board {
 			leftside.add(PieceList.get(i));
 		}
 		for (int i = 18; i < 28; i++) {
-			topside.add(PieceList.get(i));			
+			topside.add(PieceList.get(i));
 		}
 		for (int i = 28; i < 36; i++) {
 			rightside.add(PieceList.get(i));

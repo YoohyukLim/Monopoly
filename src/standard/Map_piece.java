@@ -14,8 +14,8 @@ public class Map_piece {
 		this.prev_map = post;
 		this.next_map = next;
 	}
-	
-	public int get_map_number(){
+
+	public int get_map_number() {
 		return map_number;
 	}
 }
