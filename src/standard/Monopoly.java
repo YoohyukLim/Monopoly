@@ -20,7 +20,7 @@ public class Monopoly {
 				System.out.print("\n");
 		}
 		System.out.print("\n");
-		Board window = new Board();
+		Board window = new Board(map);
 		window.frame.setVisible(true);
 
 	}

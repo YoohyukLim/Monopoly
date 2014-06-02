@@ -1,14 +1,23 @@
 package standard;
 
 import javax.swing.*;
+
+import org.omg.CORBA.portable.ValueOutputStream;
+
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
-
+	Map map;
+	
 	public JFrame frame;
 
 	public Board() {
+		initialize();
+	}
+	
+	public Board(Map map){
+		this.map = map;
 		initialize();
 	}
 
@@ -22,6 +31,8 @@ public class Board {
 		JPanel leftside = new JPanel();
 		JPanel rightside = new JPanel();
 		JPanel botside = new JPanel();
+		
+		JLabel Map_piece[] = new JLabel[36];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -39,15 +50,21 @@ public class Board {
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
 			// 더티코딩 ㅈㅅ 나중에 바꾸면 될거임
-			if (i == 0 || i == 9 || i == 10 || i == 19) {
+			if (i == 0 || i == 9 || i == 18 || i == 27) {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 100));
 				PieceList.get(i).setBackground(new Color(0, 255, 255));
-			} else if (i < 20) {
+				
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+				PieceList.get(i).add(Map_piece[i]);
+			} else if (i < 10 || (i>=18 && i <=27)) {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
+				
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
@@ -56,6 +73,9 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
+				
+				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i].get_map_number()));
+				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
@@ -63,14 +83,14 @@ public class Board {
 			}
 		}
 
-		for (int i = 0; i < 10; i++) {
-			topside.add(PieceList.get(i));
-		}
-		for (int i = 10; i < 20; i++) {
+		for (int i = 9; i >= 0; i--) {
 			botside.add(PieceList.get(i));
 		}
-		for (int i = 20; i < 28; i++) {
+		for (int i = 17; i >= 10; i--) {
 			leftside.add(PieceList.get(i));
+		}
+		for (int i = 18; i < 28; i++) {
+			topside.add(PieceList.get(i));			
 		}
 		for (int i = 28; i < 36; i++) {
 			rightside.add(PieceList.get(i));
