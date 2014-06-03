@@ -9,7 +9,7 @@ public class Dice {
 	public Dice() {
 	}
 
-	public static int exec() {
+	public int exec() {
 		Calendar now = Calendar.getInstance();
 		int seed = now.get(Calendar.MILLISECOND);
 		Random r = new Random();

@@ -1,27 +1,35 @@
 package standard;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.omg.CORBA.portable.ValueOutputStream;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board {
 	Map map;
+	Dice dice = new Dice();
+	int DiceNumber;
 
 	public JFrame frame;
 
-	public Board() {
+	public Board() throws Exception {
 		initialize();
 	}
 
-	public Board(Map map) {
+	public Board(Map map) throws Exception {
 		this.map = map;
 		initialize();
 	}
 
-	private void initialize() {
+	private void initialize() throws Exception {
 		frame = new JFrame();
 		JPanel boardpanel = new JPanel();
 		JPanel infopanel = new JPanel();
@@ -46,7 +54,7 @@ public class Board {
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 
 		ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
-
+		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
 			// 더티코딩 ㅈㅅ 나중에 바꾸면 될거임
@@ -99,6 +107,15 @@ public class Board {
 			rightside.add(PieceList.get(i));
 		}
 
+		// DicePanel
+		dicepanel.setBackground(new Color(255, 255, 0));
+		dicepanel.setSize(200, 200);
+		JLabel Dice_button = new JLabel(new ImageIcon(ImageIO.read(new File(
+				"Resources/Dice_button.png"))));
+		DiceBtnHandler DBhandler = new DiceBtnHandler();
+		Dice_button.addMouseListener(DBhandler);
+		dicepanel.add(Dice_button);
+
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout());
@@ -106,6 +123,7 @@ public class Board {
 		boardpanel.add(botside, BorderLayout.SOUTH);
 		boardpanel.add(leftside, BorderLayout.WEST);
 		boardpanel.add(rightside, BorderLayout.EAST);
+		boardpanel.add(dicepanel, BorderLayout.CENTER);
 
 		infopanel.setBackground(new Color(127, 127, 127));
 		infopanel.setPreferredSize(new Dimension(320, 680));
@@ -113,14 +131,36 @@ public class Board {
 		chatpanel.setBackground(new Color(255, 0, 255));
 		chatpanel.setPreferredSize(new Dimension(680, 320));
 
-		dicepanel.setBackground(new Color(0, 255, 0));
-		dicepanel.setPreferredSize(new Dimension(320, 320));
-
 		frame.getContentPane().add(boardpanel);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
-		frame.getContentPane().add(dicepanel);
-
 	}
 
+	class DiceBtnHandler implements MouseListener {
+		public void mouseClicked(MouseEvent e) {
+			DiceNumber = dice.exec();
+			String msg = "Dice Number: " + DiceNumber;
+			JOptionPane.showMessageDialog(null, msg);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+	}
 }

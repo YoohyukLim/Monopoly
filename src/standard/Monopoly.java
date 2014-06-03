@@ -1,13 +1,10 @@
 package standard;
 
-import java.util.Calendar;
-import java.util.Random;
-
 public class Monopoly {
 	static int piece_num = 4;
 	static Piece[] player = new Piece[piece_num];
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		Map map = new Map();
 		map.generate_map();
 		for (int i = 0; i < piece_num; i++) {
