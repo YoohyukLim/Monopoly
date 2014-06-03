@@ -2,11 +2,15 @@ package standard;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+
+import org.omg.CORBA.Bounds;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Board {
@@ -56,7 +60,6 @@ public class Board {
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
-			// ��Ƽ�ڵ� ���� ���߿� �ٲٸ� �ɰ���
 			if (i == 0 || i == 9 || i == 18 || i == 27) {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
@@ -108,31 +111,67 @@ public class Board {
 
 		// DicePanel
 		dicepanel.setBackground(new Color(255, 255, 0));
-		JLabel Dice_button = new JLabel(new ImageIcon(ImageIO.read(new File(
-				"Resources/Dice_button.png"))));
+		URL url = new File("Resources/Dice_button.png").toURI().toURL();
+		// URL url = new File("Resources/0002.gif").toURI().toURL();
+		Icon icon = new ImageIcon(url);
+		JLabel Dice_button = new JLabel(icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
+		Dice_button.setPreferredSize(new Dimension(480, 480));
+		Dice_button.setMaximumSize(new Dimension(480, 480));
+		Dice_button.setMinimumSize(new Dimension(480, 480));
 		dicepanel.add(Dice_button);
+		Dice_button.setHorizontalAlignment(JLabel.CENTER);
+		Dice_button.setVerticalAlignment(JLabel.CENTER);
 
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
-		boardpanel.setLayout(new BorderLayout());
+		boardpanel.setLayout(new BorderLayout(0, 0));
 		boardpanel.add(topside, BorderLayout.NORTH);
 		boardpanel.add(botside, BorderLayout.SOUTH);
 		boardpanel.add(leftside, BorderLayout.WEST);
 		boardpanel.add(rightside, BorderLayout.EAST);
 		boardpanel.add(dicepanel, BorderLayout.CENTER);
-
-		// 플레이어 턴과 카드 정보를 넣어 봅시다
-		infopanel.add(cardside, BorderLayout.NORTH);
-		infopanel.add(playerside, BorderLayout.SOUTH);
+		infopanel.setLayout(new BorderLayout(0, 0));
+		infopanel.add(playerside, BorderLayout.NORTH);
+		cardside.setLayout(new CardLayout());
+		
+		JPanel[][] cardpanel = new JPanel[2][6];
+		for (int i = 1; i < cardpanel.length; i++) {
+			cardpanel[i][0] = new JPanel();
+			cardpanel[i][0].setLayout(new FlowLayout(0, 0, 0));
+			cardpanel[i][0].setBackground(new Color(255, 0, 255));
+			JLabel mycard_label = new JLabel();
+			mycard_label.setOpaque(true);
+			mycard_label.setText("My Card");
+			mycard_label.setFont(new Font("���� ����", Font.BOLD, 15));
+			mycard_label.setBackground(new Color(0, 0, 127));
+			mycard_label.setForeground(new Color(255, 0, 0));
+			mycard_label.setPreferredSize(new Dimension(320, 30));
+			mycard_label.setMinimumSize(new Dimension(320, 30));
+			mycard_label.setMaximumSize(new Dimension(320, 30));
+			mycard_label.setHorizontalAlignment(JLabel.CENTER);
+			cardpanel[i][0].add(mycard_label);
+			for (int j = 1; j <= 5; j++) {
+				cardpanel[i][j] = new JPanel();
+				cardpanel[i][j].setPreferredSize(new Dimension(320, 100));
+				cardpanel[i][j].setMinimumSize(new Dimension(320, 100));
+				cardpanel[i][j].setMaximumSize(new Dimension(320, 100));
+				cardpanel[i][j]
+						.setBackground(new Color(50 * j, 50 * j, 50 * j));
+				cardpanel[i][0].add(cardpanel[i][j]);
+			}
+			cardside.add(cardpanel[i][0]);
+		}
+		
+		infopanel.add(cardside, BorderLayout.SOUTH);
 
 		infopanel.setBackground(new Color(127, 127, 127));
 		infopanel.setPreferredSize(new Dimension(320, 680));
-		cardside.setPreferredSize(new Dimension(320, 150));
-		cardside.setBackground(new Color(0, 0, 0));
-		playerside.setPreferredSize(new Dimension(320, 530));
-		playerside.setBackground(new Color(0, 127, 255));
+		playerside.setPreferredSize(new Dimension(320, 150));
+		playerside.setBackground(new Color(0, 0, 0));
+		cardside.setPreferredSize(new Dimension(320, 530));
+		cardside.setBackground(new Color(0, 127, 255));
 
 		chatpanel.setBackground(new Color(255, 0, 255));
 		chatpanel.setPreferredSize(new Dimension(680, 320));
