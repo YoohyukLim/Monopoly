@@ -36,6 +36,9 @@ public class Board {
 		JPanel rightside = new JPanel();
 		JPanel botside = new JPanel();
 
+		JPanel playerside = new JPanel();
+		JPanel cardside = new JPanel();
+
 		JLabel Map_piece[] = new JLabel[36];
 
 		frame.setTitle("Monopoly");
@@ -53,7 +56,7 @@ public class Board {
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
-			// ´õÆ¼ÄÚµù ¤¸¤µ ³ªÁß¿¡ ¹Ù²Ù¸é µÉ°ÅÀÓ
+			// ï¿½ï¿½Æ¼ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ù²Ù¸ï¿½ ï¿½É°ï¿½ï¿½ï¿½
 			if (i == 0 || i == 9 || i == 18 || i == 27) {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
@@ -120,8 +123,16 @@ public class Board {
 		boardpanel.add(rightside, BorderLayout.EAST);
 		boardpanel.add(dicepanel, BorderLayout.CENTER);
 
+		// í”Œë ˆì´ì–´ í„´ê³¼ ì¹´ë“œ ì •ë³´ë¥¼ ë„£ì–´ ë´…ì‹œë‹¤
+		infopanel.add(cardside, BorderLayout.NORTH);
+		infopanel.add(playerside, BorderLayout.SOUTH);
+
 		infopanel.setBackground(new Color(127, 127, 127));
 		infopanel.setPreferredSize(new Dimension(320, 680));
+		cardside.setPreferredSize(new Dimension(320, 150));
+		cardside.setBackground(new Color(0, 0, 0));
+		playerside.setPreferredSize(new Dimension(320, 530));
+		playerside.setBackground(new Color(0, 127, 255));
 
 		chatpanel.setBackground(new Color(255, 0, 255));
 		chatpanel.setPreferredSize(new Dimension(680, 320));
