@@ -3,14 +3,10 @@ package standard;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import org.omg.CORBA.portable.ValueOutputStream;
-
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board {
@@ -109,7 +105,6 @@ public class Board {
 
 		// DicePanel
 		dicepanel.setBackground(new Color(255, 255, 0));
-		dicepanel.setSize(200, 200);
 		JLabel Dice_button = new JLabel(new ImageIcon(ImageIO.read(new File(
 				"Resources/Dice_button.png"))));
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
