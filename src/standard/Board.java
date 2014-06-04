@@ -1,11 +1,6 @@
 package standard;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-
-import org.omg.CORBA.Bounds;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,18 +10,20 @@ import java.util.ArrayList;
 
 public class Board {
 	Map map;
+	GameController gameController;
 	Dice dice = new Dice();
 	int DiceNumber;
 
 	public JFrame frame;
 
-	public Board() throws Exception {
-		initialize();
-	}
-
 	public Board(Map map) throws Exception {
 		this.map = map;
+	}
+	
+	public void getController(GameController _gameController) throws Exception{
+		this.gameController = _gameController;
 		initialize();
+		this.frame.setVisible(true);
 	}
 
 	private void initialize() throws Exception {

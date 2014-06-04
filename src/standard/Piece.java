@@ -5,6 +5,7 @@ public class Piece {
 	int position;
 	int map_size;
 	int turn_cnt;
+	String name;
 
 	public Piece(int type, int start_position) {
 		piece_type = type;
@@ -33,5 +34,14 @@ public class Piece {
 		pos = pos % (map_size - 1);
 
 		return setPosition(pos);
+	}
+	
+	public String setName(String name){
+		this.name = name;
+		return this.name;
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 }
