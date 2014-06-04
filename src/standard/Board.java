@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class Board {
 	Map map;
-	GameController gameController;
 	Dice dice = new Dice();
+	GameController gameController;
 	int DiceNumber;
 
 	public JFrame frame;
