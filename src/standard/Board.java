@@ -185,6 +185,7 @@ public class Board {
 			String msg = "Dice Number: " + DiceNumber;
 			JOptionPane.showMessageDialog(null, msg);
 			gameController.setPlayerbyDice(DiceNumber);
+			gameController.changePlayer();
 		}
 
 		@Override
@@ -208,7 +209,7 @@ public class Board {
 		}
 		
 		/********************************************************/
-		public void refreshPositionPlayer(int position) {
+		/*public void refreshPositionPlayer(int position) {
 			JLabel newPositionLabel = null;
 			String pathImage = "Resources/Piece_1.JPG";
 			
