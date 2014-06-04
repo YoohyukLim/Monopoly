@@ -183,7 +183,7 @@ public class Board {
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
-			DiceNumber = dice.exec();
+			DiceNumber = dice.exec(1) + dice.exec(2);
 			String msg = "Dice Number: " + DiceNumber;
 			JOptionPane.showMessageDialog(null, msg);
 		}

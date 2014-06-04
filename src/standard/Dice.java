@@ -9,9 +9,9 @@ public class Dice {
 	public Dice() {
 	}
 
-	public int exec() {
+	public int exec(int seed_num) {
 		Calendar now = Calendar.getInstance();
-		int seed = now.get(Calendar.MILLISECOND);
+		int seed = now.get(Calendar.MILLISECOND) + seed_num;
 		Random r = new Random();
 		r.setSeed(seed);
 
