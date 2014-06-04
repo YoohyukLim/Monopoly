@@ -183,6 +183,7 @@ public class Board {
 			DiceNumber = dice.exec(1) + dice.exec(2);
 			String msg = "Dice Number: " + DiceNumber;
 			JOptionPane.showMessageDialog(null, msg);
+			gameController.setPlayerbyDice(DiceNumber);
 		}
 
 		@Override

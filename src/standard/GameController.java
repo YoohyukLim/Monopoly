@@ -16,4 +16,7 @@ public class GameController {
 	public void setView(Board board) {
 		this.board = board;
 	}
+	
+	public void setPlayerbyDice(int DiceNumber){
+	}
 }
