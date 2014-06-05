@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Board {
 	Map map;
 	GameController gameController;
+	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 
 	public JFrame frame;
 
@@ -52,8 +53,7 @@ public class Board {
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 
-		ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
-		MapButtonHandler MBHandler = new MapButtonHandler();	
+		MapButtonHandler MBHandler = new MapButtonHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
@@ -74,11 +74,11 @@ public class Board {
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
-				Map_piece[i].setPreferredSize(new Dimension(30, 100));
-				Map_piece[i].setMaximumSize(new Dimension(30, 100));
-				Map_piece[i].setMinimumSize(new Dimension(30, 100));
+				// Map_piece[i].setPreferredSize(new Dimension(30, 100));
+				// Map_piece[i].setMaximumSize(new Dimension(30, 100));
+				// Map_piece[i].setMinimumSize(new Dimension(30, 100));
 				Map_piece[i].addMouseListener(MBHandler);
-				
+
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
@@ -92,17 +92,21 @@ public class Board {
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
-				Map_piece[i].setPreferredSize(new Dimension(100, 30));
-				Map_piece[i].setMaximumSize(new Dimension(100, 30));
-				Map_piece[i].setMinimumSize(new Dimension(100, 30));
+				// Map_piece[i].setPreferredSize(new Dimension(100, 30));
+				// Map_piece[i].setMaximumSize(new Dimension(100, 30));
+				// Map_piece[i].setMinimumSize(new Dimension(100, 30));
 				Map_piece[i].addMouseListener(MBHandler);
-				
+
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
 					PieceList.get(i).setBackground(new Color(0, 255, 127));
 			}
+			MyPanel a = new MyPanel(Color.RED);
+			MyPanel b = new MyPanel(Color.BLUE);
+			PieceList.get(i).add(a);
+			PieceList.get(i).add(b);
 		}
 
 		for (int i = 9; i >= 0; i--) {
@@ -271,7 +275,7 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			JLabel map_piece = (JLabel)e.getComponent();
+			JLabel map_piece = (JLabel) e.getComponent();
 			int map_number = Integer.parseInt(map_piece.getText());
 			new Map_piece().getTypeText(map_number);
 		}
@@ -294,6 +298,18 @@ public class Board {
 		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
+		}
+	}
+
+	class MyPanel extends JPanel {
+		public MyPanel(Color color) {
+			this.setBackground(color);
+		}
+
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawRect(10, 10, 15, 15);
 		}
 	}
 }
