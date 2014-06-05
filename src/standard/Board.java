@@ -180,6 +180,7 @@ public class Board {
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			gameController.setPlayerbyDice();
+			gameController.MapExec();
 			gameController.changePlayer();
 		}
 

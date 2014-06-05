@@ -25,6 +25,12 @@ public class GameController {
 		
 		Players.get(currentPlayer).movePosition(DiceNumber);
 		System.out.println("CurrentPlayer: "+Players.get(currentPlayer).getName()+" Dice: "+DiceNumber);
+	}
+	
+	public void MapExec(){
+		System.out.println("Map Type: "+board.map.Map_pieces[Players.get(currentPlayer).getPosition()].get_map_number());
+		board.map.Map_pieces[Players.get(currentPlayer).getPosition()].exec(Players.get(currentPlayer));
+		
 		for(int i=0; i<playerN; i++)
 			System.out.println(Players.get(i).getName()+": "+Players.get(i).getPosition());
 	}
@@ -43,5 +49,6 @@ public class GameController {
 	
 	public void setView(Board board) {
 		this.board = board;
+		System.out.println("GameController got a Board");
 	}
 }

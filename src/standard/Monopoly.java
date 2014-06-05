@@ -28,6 +28,7 @@ public class Monopoly {
 		gameController.setPlayer(Players);
 		
 		Board board = new Board(map);
+		gameController.setView(board);
 		board.getController(gameController);
 	}
 }
