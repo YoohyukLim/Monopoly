@@ -2,17 +2,27 @@ package standard;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class GameController {
 	Board board;
 	ArrayList<Piece> Players;
 	int currentPlayer;
 	int playerN;
 	int turn;
+	int DiceNumber, Dice1, Dice2;
+	Dice dice = new Dice();
 	
 	public GameController(){
 	}
 	
-	public void setPlayerbyDice(int DiceNumber){
+	public void setPlayerbyDice(){
+		Dice1 = dice.exec(1);
+		Dice2 = dice.exec(2);
+		DiceNumber=Dice1+Dice2;
+		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = " + DiceNumber;
+		JOptionPane.showMessageDialog(null, msg);
+		
 		Players.get(currentPlayer).movePosition(DiceNumber);
 		System.out.println("CurrentPlayer: "+Players.get(currentPlayer).getName()+" Dice: "+DiceNumber);
 		for(int i=0; i<playerN; i++)

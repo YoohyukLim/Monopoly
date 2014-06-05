@@ -11,9 +11,7 @@ import java.util.ArrayList;
 
 public class Board {
 	Map map;
-	Dice dice = new Dice();
 	GameController gameController;
-	int DiceNumber;
 
 	public JFrame frame;
 
@@ -181,10 +179,7 @@ public class Board {
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
-			DiceNumber = dice.exec(1) + dice.exec(2);
-			String msg = "Dice Number: " + dice.exec(1) + " + " + dice.exec(2) + " = " + DiceNumber;
-			JOptionPane.showMessageDialog(null, msg);
-			gameController.setPlayerbyDice(DiceNumber);
+			gameController.setPlayerbyDice();
 			gameController.changePlayer();
 		}
 
