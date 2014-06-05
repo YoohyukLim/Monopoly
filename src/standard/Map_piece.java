@@ -80,9 +80,9 @@ public class Map_piece {
 		}
 	}
 
-	public void getTypeText() {
+	public void getTypeText(int map_number) {
 		String msg = null;
-		switch (this.map_number) {
+		switch (map_number) {
 		// corner
 		case 0:
 			break;
@@ -94,7 +94,7 @@ public class Map_piece {
 			break;
 		// special maps
 		case 4:
-			msg = "승갓의 가호를 받아 앞으로 한칸 전진하게 됩니다.";
+			msg = "승갓의 가호를 받아 앞으로 한 칸 전진하게 됩니다.";
 			break;
 		case 5:
 			msg = "방향 감각 상실";

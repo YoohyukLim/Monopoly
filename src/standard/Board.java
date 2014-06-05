@@ -18,8 +18,8 @@ public class Board {
 	public Board(Map map) throws Exception {
 		this.map = map;
 	}
-	
-	public void getController(GameController _gameController) throws Exception{
+
+	public void getController(GameController _gameController) throws Exception {
 		this.gameController = _gameController;
 		initialize();
 		this.frame.setVisible(true);
@@ -53,6 +53,7 @@ public class Board {
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 
 		ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
+		MapButtonHandler MBHandler = new MapButtonHandler();	
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
@@ -70,8 +71,14 @@ public class Board {
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
 
+				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
+				Map_piece[i].setPreferredSize(new Dimension(30, 100));
+				Map_piece[i].setMaximumSize(new Dimension(30, 100));
+				Map_piece[i].setMinimumSize(new Dimension(30, 100));
+				Map_piece[i].addMouseListener(MBHandler);
+				
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
@@ -82,8 +89,14 @@ public class Board {
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
 
+				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
+				Map_piece[i].setPreferredSize(new Dimension(100, 30));
+				Map_piece[i].setMaximumSize(new Dimension(100, 30));
+				Map_piece[i].setMinimumSize(new Dimension(100, 30));
+				Map_piece[i].addMouseListener(MBHandler);
+				
 				PieceList.get(i).add(Map_piece[i]);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
@@ -131,7 +144,7 @@ public class Board {
 		infopanel.setLayout(new BorderLayout(0, 0));
 		infopanel.add(playerside, BorderLayout.NORTH);
 		cardside.setLayout(new CardLayout());
-		
+
 		JPanel[][] cardpanel = new JPanel[2][6];
 		for (int i = 1; i < cardpanel.length; i++) {
 			cardpanel[i][0] = new JPanel();
@@ -159,7 +172,7 @@ public class Board {
 			}
 			cardside.add(cardpanel[i][0]);
 		}
-		
+
 		infopanel.add(cardside, BorderLayout.SOUTH);
 
 		infopanel.setBackground(new Color(127, 127, 127));
@@ -176,6 +189,55 @@ public class Board {
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
 	}
+
+	/********************************************************/
+	/*
+	 * public void refreshPositionPlayer(int position) { JLabel newPositionLabel
+	 * = null; String pathImage = "Resources/Piece_1.JPG";
+	 * 
+	 * if(position == 0) { newPositionLabel = new JLabel(new
+	 * ImageIcon(pathImage)); newPositionLabel.setBounds(500, 480, 41, 30); }
+	 * else if(position == 10 &&
+	 * gameStateController.getPlayer(gameStateController
+	 * .getaQuiLeTour()).getPrison().isInPrison()==false) { newPositionLabel =
+	 * new JLabel(new ImageIcon(pathImage));
+	 * newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 41, 500,
+	 * 41, 30); } else if(position == 10 &&
+	 * gameStateController.getPlayer(gameStateController
+	 * .getaQuiLeTour()).getPrison().isInPrison()==true) { newPositionLabel =
+	 * new JLabel(new ImageIcon(pathImage)); newPositionLabel.setBounds(30 +
+	 * gameStateController.getaQuiLeTour() * 30, 475, 41, 30); } else
+	 * if(position == 20) { newPositionLabel = new JLabel(new
+	 * ImageIcon(pathImage)); newPositionLabel.setBounds(20, 10 +
+	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position ==
+	 * 30) { newPositionLabel = new JLabel(new ImageIcon(pathImage));
+	 * newPositionLabel.setBounds(500, 20 + gameStateController.getaQuiLeTour()
+	 * * 30, 41, 30); } else if(position > 0 && position < 10) {
+	 * newPositionLabel = new JLabel(new ImageIcon(pathImage));
+	 * newPositionLabel.setBounds(476 - (position * 45), 480 +
+	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position >
+	 * 10 && position < 20) { newPositionLabel = new JLabel(new
+	 * ImageIcon(pathImage));
+	 * newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 35, 476
+	 * - ((position-10) * 45), 41, 30); } else if(position > 20 && position <
+	 * 30) { newPositionLabel = new JLabel(new ImageIcon(pathImage));
+	 * newPositionLabel.setBounds(72 + ((position-21) * 45),
+	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position >
+	 * 30 && position < 40) { newPositionLabel = new JLabel(new
+	 * ImageIcon(pathImage)); newPositionLabel.setBounds(480 +
+	 * gameStateController.getaQuiLeTour() * 35, 72 + ((position-31) * 45), 41,
+	 * 30); }
+	 * 
+	 * System.out.println("Affichage nouvelle location pion : ");
+	 * System.out.println("x : " + newPositionLabel.getLocation().x);
+	 * System.out.println("y : " + newPositionLabel.getLocation().y);
+	 * this.arrayPion[gameStateController.getaQuiLeTour()].setVisible(false);
+	 * this.arrayPion[gameStateController.getaQuiLeTour()] = newPositionLabel;
+	 * imagePlateau.remove(gameStateController.getaQuiLeTour());
+	 * imagePlateau.add(this.arrayPion[gameStateController.getaQuiLeTour()],
+	 * gameStateController.getaQuiLeTour()); }
+	 */
+	/********************************************************/
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
@@ -203,58 +265,35 @@ public class Board {
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
 		}
-		
-		/********************************************************/
-		/*public void refreshPositionPlayer(int position) {
-			JLabel newPositionLabel = null;
-			String pathImage = "Resources/Piece_1.JPG";
-			
-			if(position == 0) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(500, 480, 41, 30);
-			}
-			else if(position == 10 && gameStateController.getPlayer(gameStateController.getaQuiLeTour()).getPrison().isInPrison()==false) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 41, 500, 41, 30);
-			}
-			else if(position == 10 && gameStateController.getPlayer(gameStateController.getaQuiLeTour()).getPrison().isInPrison()==true) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(30 + gameStateController.getaQuiLeTour() * 30, 475, 41, 30);
-			}
-			else if(position == 20) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(20, 10 + gameStateController.getaQuiLeTour() * 30, 41, 30);
-			}
-			else if(position == 30) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(500, 20 + gameStateController.getaQuiLeTour() * 30, 41, 30);
-			}
-			else if(position > 0 && position < 10) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(476 - (position * 45), 480 + gameStateController.getaQuiLeTour() * 30, 41, 30);
-			}
-			else if(position > 10 && position < 20) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 35, 476 - ((position-10) * 45), 41, 30);
-			}
-			else if(position > 20 && position < 30) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(72 + ((position-21) * 45), gameStateController.getaQuiLeTour() * 30, 41, 30);
-			}
-			else if(position > 30 && position < 40) {
-				newPositionLabel = new JLabel(new ImageIcon(pathImage));
-				newPositionLabel.setBounds(480 + gameStateController.getaQuiLeTour() * 35, 72 + ((position-31) * 45), 41, 30);
-			}
-			
-			System.out.println("Affichage nouvelle location pion : ");
-			System.out.println("x : " + newPositionLabel.getLocation().x);
-			System.out.println("y : " + newPositionLabel.getLocation().y);
-			this.arrayPion[gameStateController.getaQuiLeTour()].setVisible(false);
-			this.arrayPion[gameStateController.getaQuiLeTour()] = newPositionLabel;
-			imagePlateau.remove(gameStateController.getaQuiLeTour());
-			imagePlateau.add(this.arrayPion[gameStateController.getaQuiLeTour()], gameStateController.getaQuiLeTour());
+	}
+
+	class MapButtonHandler implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			JLabel map_piece = (JLabel)e.getComponent();
+			int map_number = Integer.parseInt(map_piece.getText());
+			new Map_piece().getTypeText(map_number);
 		}
-		*/
-		/********************************************************/
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+		}
 	}
 }
