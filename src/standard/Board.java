@@ -18,6 +18,7 @@ public class Board {
 	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
 	JPanel playerside, cardside, cardpanel[], cards[][];
 	JLabel Map_piece[];
+	ArrayList<Card> playerCard;
 
 	public JFrame frame;
 	CardLayout cardlayout;
@@ -185,10 +186,9 @@ public class Board {
 				cardpanel[i].add(cards[i][j]);
 			}
 		}
-		cardside.add(cardpanel[0], "player1");
-		cardside.add(cardpanel[1], "player2");
-		
-		cardlayout.show(cardside, "player1");
+		cardside.add(cardpanel[0], String.valueOf(0));
+		cardside.add(cardpanel[1], String.valueOf(1));
+		cardlayout.show(cardside, "0");
 		
 		infopanel.add(cardside, BorderLayout.SOUTH);
 
@@ -207,7 +207,29 @@ public class Board {
 		frame.getContentPane().add(chatpanel);
 	}
 	
-	public void refreshCards(){	
+	public void update(String msg){
+		switch(msg){
+		case "card":
+			cardlayout.show(cardside, String.valueOf(currentPlayer));
+			break;
+		}
+	}
+	
+	public void refreshCards(){
+		playerCard = gameController.Players.get(currentPlayer).cardList;
+		int length = playerCard.size();
+		System.out.println("//"+gameController.Players.get(currentPlayer).getName()+"'s cards "+length+"//");
+		
+		for(int i=0; i<length; i++){
+			Card temp = playerCard.get(i);
+			int number = temp.getCardNumber();
+			JLabel cardnumber = new JLabel("Card Num: "+String.valueOf(number));
+			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			cards[currentPlayer][i].removeAll();
+			cards[currentPlayer][i].add(cardnumber, 0);
+			cards[currentPlayer][i].add(cardtext, 1);
+		}
+		update("card");
 	}
 	
 	class DiceBtnHandler implements MouseListener {
@@ -217,6 +239,7 @@ public class Board {
 			gameController.setPlayerbyDice();
 			gameController.MapExec();
 			currentPlayer = gameController.changePlayer();
+			refreshCards();
 		}
 
 		@Override

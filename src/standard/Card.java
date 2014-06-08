@@ -76,17 +76,21 @@ public class Card {
 		}
 	}
 
-	public void getTypeText(int card_number) {
+	public String getTypeText(int card_number) {
 		String msg = null;
 		switch (card_number) {
 		// corner
 		case 0:
+			msg = "Test0";
 			break;
 		case 1:
+			msg = "Test1";
 			break;
 		case 2:
+			msg = "Test2";
 			break;
 		case 3:
+			msg = "Test3";
 			break;
 		// special maps
 		case 4:
@@ -114,6 +118,6 @@ public class Card {
 		default:
 			msg = "Normal";
 		}
-		JOptionPane.showMessageDialog(null, msg);
+		return msg;
 	}
 }
