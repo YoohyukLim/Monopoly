@@ -312,8 +312,10 @@ public class Board {
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
-			if (lessThanFive == false)
+			if (lessThanFive == false){
+				JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
 				return;
+			}
 
 			lessThanFive = gameController.getCard();
 			System.out
