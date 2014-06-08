@@ -24,7 +24,7 @@ public class GameController {
 				+ DiceNumber;
 		JOptionPane.showMessageDialog(null, msg);
 
-		Players.get(currentPlayer).movePosition(DiceNumber);
+		Players.get(currentPlayer).movePosition(DiceNumber); 
 		System.out
 				.println("CurrentPlayer: "
 						+ Players.get(currentPlayer).getName() + " Dice: "

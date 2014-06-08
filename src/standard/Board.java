@@ -77,8 +77,8 @@ public class Board {
 			PieceList.add(new JPanel());
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
-			PieceList.get(players.get(currentPlayer).getPosition()).add(playerPiece[i][0]);
-			PieceList.get(players.get(currentPlayer).getPosition()).add(playerPiece[i][1]);
+			PieceList.get(i).add(playerPiece[i][0]);
+			PieceList.get(i).add(playerPiece[i][1]);
 			if (i == 0) {
 				playerPiece[i][0].setVisible(true);
 				playerPiece[i][1].setVisible(true);
@@ -271,8 +271,9 @@ public class Board {
 			disappearPiece();
 			gameController.setPlayerbyDice();
 			showPiece();
+			disappearPiece();
 			gameController.MapExec();
-
+			showPiece();
 			currentPlayer = gameController.changePlayer();
 			update("card");
 		}
@@ -333,6 +334,8 @@ public class Board {
 	}
 	
 	public void showPiece() {
+		players = gameController.Players;
+		System.out.println(players.get(currentPlayer).getPosition());
 		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer].setVisible(true);
 	}
 
