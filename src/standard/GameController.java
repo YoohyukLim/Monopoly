@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import dialog.cardDialog;
+
 import model.Card;
 import model.Dice;
 import model.Piece;
