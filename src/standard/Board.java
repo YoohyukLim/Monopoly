@@ -215,7 +215,7 @@ public class Board {
 	public void update(String msg) {
 		switch (msg) {
 		case "card":
-			refreshCards();
+			cardlayout.show(cardside, String.valueOf(currentPlayer));
 			break;
 		}
 	}
@@ -250,9 +250,7 @@ public class Board {
 
 		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
 		cardside.remove(0);
-		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
-		
-		cardlayout.show(cardside, String.valueOf(currentPlayer));
+		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));		
 	}
 
 	class DiceBtnHandler implements MouseListener {
