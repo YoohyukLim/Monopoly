@@ -191,6 +191,7 @@ public class Board {
 			cardpanel[i].setBackground(new Color(255, 0, 255));
 
 			cardstate[i] = new JPanel();
+			cardstate[i].setLayout(new FlowLayout(0, 0, 0));
 			cardstate[i].setPreferredSize(new Dimension(320, 500));
 			cardstate[i].setMinimumSize(new Dimension(320, 500));
 			cardstate[i].setMaximumSize(new Dimension(320, 500));
