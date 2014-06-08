@@ -8,11 +8,14 @@ import javax.swing.JPanel;
 public class Piece {
 	int piece_type;
 	int position;
+
 	int map_size;
 	int turn_cnt;
 	String name;
 	PieceImage pImage;
-
+	Card [] card = new Card[5];
+	int cardCount = 0;
+	
 	public Piece(int type, int start_position) {
 		piece_type = type;
 		position = start_position;

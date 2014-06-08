@@ -48,6 +48,18 @@ public class GameController {
 		currentPlayer = (currentPlayer + 1) % playerN;
 	}
 
+	public void getCard() {
+		System.out.println("Card Type: "
+				+ Map.Map_pieces[Players.get(currentPlayer).getPosition()]
+						.get_map_number());
+		Map.Map_pieces[Players.get(currentPlayer).getPosition()].exec(Players
+				.get(currentPlayer));
+
+		for (int i = 0; i < playerN; i++)
+			System.out.println(Players.get(i).getName() + ": "
+					+ Players.get(i).getPosition());
+	}
+
 	public void setPlayer(ArrayList<Piece> Players) {
 		GameController.currentPlayer = 0;
 		this.turn = 0;
