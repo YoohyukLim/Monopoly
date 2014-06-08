@@ -234,6 +234,7 @@ public class Board {
 	
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
+			System.out.println("/********************************/");
 			gameController.getCard();
 			refreshCards();
 			gameController.setPlayerbyDice();
