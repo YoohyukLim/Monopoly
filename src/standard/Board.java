@@ -95,6 +95,7 @@ public class Board {
 
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
+				Map_piece[i].setVisible(false);
 				PieceList.get(i).add(Map_piece[i]);
 			} else if (i < 10 || (i >= 18 && i <= 27)) {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
@@ -104,12 +105,13 @@ public class Board {
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
+				Map_piece[i].setVisible(false);
 				// Map_piece[i].setPreferredSize(new Dimension(30, 100));
 				// Map_piece[i].setMaximumSize(new Dimension(30, 100));
 				// Map_piece[i].setMinimumSize(new Dimension(30, 100));
-				Map_piece[i].addMouseListener(MBHandler);
 
-				PieceList.get(i).add(Map_piece[i]);
+				PieceList.get(i).add(Map_piece[i], 0);
+				PieceList.get(i).addMouseListener(MBHandler);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
@@ -122,12 +124,13 @@ public class Board {
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
+				Map_piece[i].setVisible(false);
 				// Map_piece[i].setPreferredSize(new Dimension(100, 30));
 				// Map_piece[i].setMaximumSize(new Dimension(100, 30));
 				// Map_piece[i].setMinimumSize(new Dimension(100, 30));
-				Map_piece[i].addMouseListener(MBHandler);
-
-				PieceList.get(i).add(Map_piece[i]);
+				
+				PieceList.get(i).add(Map_piece[i], 0);
+				PieceList.get(i).addMouseListener(MBHandler);
 				if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
@@ -303,7 +306,8 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			JLabel map_piece = (JLabel) e.getComponent();
+			JPanel panel = (JPanel) e.getComponent();
+			JLabel map_piece = (JLabel) panel.getComponent(0);
 			int map_number = Integer.parseInt(map_piece.getText());
 			new Map_piece().getTypeText(map_number);
 		}
