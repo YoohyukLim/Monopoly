@@ -234,7 +234,6 @@ public class Board {
 			cards[currentPlayer][i].add(cardnumber, 0);
 			cards[currentPlayer][i].add(cardtext, 1);
 		}
-		update("card");
 	}
 	
 	class DiceBtnHandler implements MouseListener {
@@ -244,8 +243,9 @@ public class Board {
 			refreshCards();
 			gameController.setPlayerbyDice();
 			gameController.MapExec();
+			update("card");
 			currentPlayer = gameController.changePlayer();
-			refreshCards();
+			update("card");
 		}
 
 		@Override
