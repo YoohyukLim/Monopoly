@@ -14,8 +14,13 @@ public class Board {
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer;
+	
+	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
+	JPanel playerside, cardside, cardpanel[], cards[][];
+	JLabel Map_piece[];
 
 	public JFrame frame;
+	CardLayout cardlayout;
 
 	public Board(Map map) throws Exception {
 		this.map = map;
@@ -30,19 +35,21 @@ public class Board {
 
 	private void initialize() throws Exception {
 		frame = new JFrame();
-		JPanel boardpanel = new JPanel();
-		JPanel infopanel = new JPanel();
-		JPanel chatpanel = new JPanel();
-		JPanel dicepanel = new JPanel();
-		JPanel topside = new JPanel();
-		JPanel leftside = new JPanel();
-		JPanel rightside = new JPanel();
-		JPanel botside = new JPanel();
+		cardlayout = new CardLayout();
+		
+		boardpanel = new JPanel();
+		infopanel = new JPanel();
+		chatpanel = new JPanel();
+		dicepanel = new JPanel();
+		topside = new JPanel();
+		leftside = new JPanel();
+		rightside = new JPanel();
+		botside = new JPanel();
 
-		JPanel playerside = new JPanel();
-		JPanel cardside = new JPanel();
+		playerside = new JPanel();
+		cardside = new JPanel();
 
-		JLabel Map_piece[] = new JLabel[36];
+		Map_piece = new JLabel[36];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -151,13 +158,13 @@ public class Board {
 		infopanel.add(playerside, BorderLayout.NORTH);
 		
 		//Card
-		cardside.setLayout(new CardLayout());
-
-		JPanel[][] cardpanel = new JPanel[2][6];
-		for (int i = 1; i < cardpanel.length; i++) {
-			cardpanel[i][0] = new JPanel();
-			cardpanel[i][0].setLayout(new FlowLayout(0, 0, 0));
-			cardpanel[i][0].setBackground(new Color(255, 0, 255));
+		cardside.setLayout(cardlayout); 
+		cardpanel = new JPanel[2];
+		cards = new JPanel[2][5];
+		for (int i = 0; i < cardpanel.length; i++) {
+			cardpanel[i] = new JPanel();
+			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
+			cardpanel[i].setBackground(new Color(255, 0, 255));
 			JLabel mycard_label = new JLabel();
 			mycard_label.setOpaque(true);
 			mycard_label.setText("My Card");
@@ -168,19 +175,21 @@ public class Board {
 			mycard_label.setMinimumSize(new Dimension(320, 30));
 			mycard_label.setMaximumSize(new Dimension(320, 30));
 			mycard_label.setHorizontalAlignment(JLabel.CENTER);
-			cardpanel[i][0].add(mycard_label);
-			for (int j = 1; j <= 5; j++) {
-				cardpanel[i][j] = new JPanel();
-				cardpanel[i][j].setPreferredSize(new Dimension(320, 100));
-				cardpanel[i][j].setMinimumSize(new Dimension(320, 100));
-				cardpanel[i][j].setMaximumSize(new Dimension(320, 100));
-				cardpanel[i][j]
-						.setBackground(new Color(50 * j, 50 * j, 50 * j));
-				cardpanel[i][0].add(cardpanel[i][j]);
+			cardpanel[i].add(mycard_label);
+			for (int j = 0; j < 5; j++) {
+				cards[i][j] = new JPanel();
+				cards[i][j].setPreferredSize(new Dimension(320, 100));
+				cards[i][j].setMinimumSize(new Dimension(320, 100));
+				cards[i][j].setMaximumSize(new Dimension(320, 100));
+				cards[i][j].setBackground(new Color(255-10 * j, 255-10 * j, 255-10 * j));
+				cardpanel[i].add(cards[i][j]);
 			}
-			cardside.add(cardpanel[i][0]);
 		}
-
+		cardside.add(cardpanel[0], "player1");
+		cardside.add(cardpanel[1], "player2");
+		
+		cardlayout.show(cardside, "player1");
+		
 		infopanel.add(cardside, BorderLayout.SOUTH);
 
 		infopanel.setBackground(new Color(127, 127, 127));
@@ -204,6 +213,7 @@ public class Board {
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			gameController.getCard();
+			refreshCards();
 			gameController.setPlayerbyDice();
 			gameController.MapExec();
 			currentPlayer = gameController.changePlayer();
