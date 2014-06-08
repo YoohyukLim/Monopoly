@@ -43,9 +43,9 @@ public class GameController {
 					+ Players.get(i).getPosition());
 	}
 
-	public void changePlayer() {
+	public int changePlayer() {
 		turn++;
-		currentPlayer = (currentPlayer + 1) % playerN;
+		return currentPlayer = (currentPlayer + 1) % playerN;
 	}
 
 	public void getCard() {

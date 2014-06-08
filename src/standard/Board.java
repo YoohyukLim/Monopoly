@@ -13,6 +13,7 @@ public class Board {
 	Map map;
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
+	int currentPlayer;
 
 	public JFrame frame;
 
@@ -22,6 +23,7 @@ public class Board {
 
 	public void getController(GameController _gameController) throws Exception {
 		this.gameController = _gameController;
+		this.currentPlayer = _gameController.currentPlayer;
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -147,6 +149,8 @@ public class Board {
 		boardpanel.add(dicepanel, BorderLayout.CENTER);
 		infopanel.setLayout(new BorderLayout(0, 0));
 		infopanel.add(playerside, BorderLayout.NORTH);
+		
+		//Card
 		cardside.setLayout(new CardLayout());
 
 		JPanel[][] cardpanel = new JPanel[2][6];
@@ -193,62 +197,16 @@ public class Board {
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
 	}
-
-	/********************************************************/
-	/*
-	 * public void refreshPositionPlayer(int position) { JLabel newPositionLabel
-	 * = null; String pathImage = "Resources/Piece_1.JPG";
-	 * 
-	 * if(position == 0) { newPositionLabel = new JLabel(new
-	 * ImageIcon(pathImage)); newPositionLabel.setBounds(500, 480, 41, 30); }
-	 * else if(position == 10 &&
-	 * gameStateController.getPlayer(gameStateController
-	 * .getaQuiLeTour()).getPrison().isInPrison()==false) { newPositionLabel =
-	 * new JLabel(new ImageIcon(pathImage));
-	 * newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 41, 500,
-	 * 41, 30); } else if(position == 10 &&
-	 * gameStateController.getPlayer(gameStateController
-	 * .getaQuiLeTour()).getPrison().isInPrison()==true) { newPositionLabel =
-	 * new JLabel(new ImageIcon(pathImage)); newPositionLabel.setBounds(30 +
-	 * gameStateController.getaQuiLeTour() * 30, 475, 41, 30); } else
-	 * if(position == 20) { newPositionLabel = new JLabel(new
-	 * ImageIcon(pathImage)); newPositionLabel.setBounds(20, 10 +
-	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position ==
-	 * 30) { newPositionLabel = new JLabel(new ImageIcon(pathImage));
-	 * newPositionLabel.setBounds(500, 20 + gameStateController.getaQuiLeTour()
-	 * * 30, 41, 30); } else if(position > 0 && position < 10) {
-	 * newPositionLabel = new JLabel(new ImageIcon(pathImage));
-	 * newPositionLabel.setBounds(476 - (position * 45), 480 +
-	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position >
-	 * 10 && position < 20) { newPositionLabel = new JLabel(new
-	 * ImageIcon(pathImage));
-	 * newPositionLabel.setBounds(gameStateController.getaQuiLeTour() * 35, 476
-	 * - ((position-10) * 45), 41, 30); } else if(position > 20 && position <
-	 * 30) { newPositionLabel = new JLabel(new ImageIcon(pathImage));
-	 * newPositionLabel.setBounds(72 + ((position-21) * 45),
-	 * gameStateController.getaQuiLeTour() * 30, 41, 30); } else if(position >
-	 * 30 && position < 40) { newPositionLabel = new JLabel(new
-	 * ImageIcon(pathImage)); newPositionLabel.setBounds(480 +
-	 * gameStateController.getaQuiLeTour() * 35, 72 + ((position-31) * 45), 41,
-	 * 30); }
-	 * 
-	 * System.out.println("Affichage nouvelle location pion : ");
-	 * System.out.println("x : " + newPositionLabel.getLocation().x);
-	 * System.out.println("y : " + newPositionLabel.getLocation().y);
-	 * this.arrayPion[gameStateController.getaQuiLeTour()].setVisible(false);
-	 * this.arrayPion[gameStateController.getaQuiLeTour()] = newPositionLabel;
-	 * imagePlateau.remove(gameStateController.getaQuiLeTour());
-	 * imagePlateau.add(this.arrayPion[gameStateController.getaQuiLeTour()],
-	 * gameStateController.getaQuiLeTour()); }
-	 */
-	/********************************************************/
-
+	
+	public void refreshCards(){	
+	}
+	
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			gameController.getCard();
 			gameController.setPlayerbyDice();
 			gameController.MapExec();
-			gameController.changePlayer();
+			currentPlayer = gameController.changePlayer();
 		}
 
 		@Override
