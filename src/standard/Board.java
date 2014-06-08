@@ -33,6 +33,8 @@ public class Board {
 	public JFrame frame;
 	CardLayout cardlayout;
 
+	public boolean lessThanFive = true;
+
 	public Board(Map map) throws Exception {
 		this.map = map;
 	}
@@ -75,7 +77,7 @@ public class Board {
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 
-		MapButtonHandler MBHandler = new MapButtonHandler();
+		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
@@ -90,7 +92,7 @@ public class Board {
 				playerPiece[i][0].setVisible(false);
 				playerPiece[i][1].setVisible(false);
 			}
-			
+
 			if (i == 0 || i == 9 || i == 18 || i == 27) {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
@@ -132,7 +134,7 @@ public class Board {
 				// Map_piece[i].setPreferredSize(new Dimension(100, 30));
 				// Map_piece[i].setMaximumSize(new Dimension(100, 30));
 				// Map_piece[i].setMinimumSize(new Dimension(100, 30));
-				
+
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
 				if (i % 2 == 0)
@@ -249,40 +251,86 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
-			JLabel cardnumber = new JLabel("Card Num: "
-					+ String.valueOf(number));
+			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
+
 			cards[currentPlayer][i] = new JPanel();
 			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
 					255 - 10 * i, 255 - 10 * i));
-			cards[currentPlayer][i].add(cardnumber, 0);
+			cards[currentPlayer][i].add(cardtype, 0);
 			cards[currentPlayer][i].add(cardtext, 1);
 
 			cardstate[currentPlayer].add(cards[currentPlayer][i]);
 		}
 
 		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
-		cardside.remove(0);
-		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));		
+		cardside.remove(cardpanel[currentPlayer]);
+		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
+	}
+
+	public void deleteCards() {
+		playerCard = gameController.Players.get(currentPlayer).cardList;
+		int length = playerCard.size();
+		DeleteCardBtnHandler cardhandler = new DeleteCardBtnHandler();
+
+		System.out.println("Let's Delete Card!");
+
+		cardpanel[currentPlayer].remove(1);
+		cardstate[currentPlayer].removeAll();
+
+		for (int i = 0; i < length; i++) {
+			Card temp = playerCard.get(i);
+			int number = temp.getCardNumber();
+			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
+			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			JLabel cardnumber = new JLabel(String.valueOf(i));
+			cardnumber.setVisible(false);
+
+			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
+					255 - 10 * i, 255 - 10 * i));
+			cards[currentPlayer][i].add(cardtype, 0);
+			cards[currentPlayer][i].add(cardtext, 1);
+			cards[currentPlayer][i].add(cardnumber, 2);
+			cards[currentPlayer][i].addMouseListener(cardhandler);
+
+			cardstate[currentPlayer].add(cards[currentPlayer][i]);
+		}
+
+		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
+		cardside.remove(cardpanel[currentPlayer]);
+		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
+		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
-			gameController.getCard();
-			refreshCards();
-			update("card");
-			disappearPiece();
-			gameController.setPlayerbyDice();
-			showPiece();
-			disappearPiece();
-			gameController.MapExec();
-			showPiece();
-			currentPlayer = gameController.changePlayer();
-			update("card");
+			if (lessThanFive == false)
+				return;
+
+			lessThanFive = gameController.getCard();
+			System.out
+					.println("deleting card: " + String.valueOf(lessThanFive));
+			if (lessThanFive == true) {
+				refreshCards();
+				update("card");
+				disappearPiece();
+				gameController.setPlayerbyDice();
+				showPiece();
+				disappearPiece();
+				gameController.MapExec();
+				showPiece();
+				System.out.println("hi..hi");
+				currentPlayer = gameController.changePlayer();
+				update("card");
+			}
 		}
 
 		@Override
@@ -306,7 +354,7 @@ public class Board {
 		}
 	}
 
-	class MapButtonHandler implements MouseListener {
+	class MapBtnHandler implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -336,15 +384,65 @@ public class Board {
 			// TODO Auto-generated method stub
 		}
 	}
-	
-	public void disappearPiece() {
-		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer].setVisible(false);
+
+	class DeleteCardBtnHandler implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			JPanel card = (JPanel) e.getComponent();
+			JLabel cardNumber = (JLabel) card.getComponent(2);
+			int number = Integer.parseInt(cardNumber.getText());
+			System.out.println("Deleting card has clicked!");
+			gameController.deleteCard(number);
+			gameController.addCard(gameController.tempcard);
+			refreshCards();
+			update("card");
+			disappearPiece();
+			gameController.setPlayerbyDice();
+			showPiece();
+			disappearPiece();
+			gameController.MapExec();
+			showPiece();
+			currentPlayer = gameController.changePlayer();
+			update("card");
+
+			lessThanFive = true;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
 	}
-	
+
+	public void disappearPiece() {
+		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer]
+				.setVisible(false);
+	}
+
 	public void showPiece() {
 		players = gameController.Players;
-		System.out.println(players.get(currentPlayer).getPosition());
-		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer].setVisible(true);
+		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer]
+				.setVisible(true);
 	}
 
 	class MyPanel extends JPanel {

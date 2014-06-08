@@ -11,13 +11,14 @@ import model.Dice;
 import model.Piece;
 
 public class GameController {
-	Board board;
-	ArrayList<Piece> Players;
+	public Board board;
+	public ArrayList<Piece> Players;
 	public static int currentPlayer;
-	int playerN;
-	int turn;
-	int DiceNumber, Dice1, Dice2;
+	public int playerN;
+	public int turn;
+	public int DiceNumber, Dice1, Dice2;
 	Dice dice = new Dice();
+	public Card tempcard;
 
 	public GameController() {
 	}
@@ -54,7 +55,7 @@ public class GameController {
 		return currentPlayer = (currentPlayer + 1) % playerN;
 	}
 
-	public void getCard() {
+	public boolean getCard() {
 		Card card = new Card(1);
 		if (Players.get(currentPlayer).cardList.size() < 5) {
 			Players.get(currentPlayer).addCard(card);
@@ -63,8 +64,31 @@ public class GameController {
 							Players.get(currentPlayer).cardList.size() - 1)
 							.getCardNumber());
 		}else{
-			loadCardDialog(card);
+			this.tempcard = card;
+			return loadCardDialog();
 		}
+		
+		return true;
+	}
+	
+	public boolean addCard(Card card) {
+		if (Players.get(currentPlayer).cardList.size() < 5) {
+			Players.get(currentPlayer).addCard(card);
+			System.out.println("Card Type: "
+					+ Players.get(currentPlayer).cardList.get(
+							Players.get(currentPlayer).cardList.size() - 1)
+							.getCardNumber());
+		}else{
+			this.tempcard = card;
+			return loadCardDialog();
+		}
+		
+		return true;
+	}
+	
+	public void deleteCard(int n){
+		System.out.println("Card "+n+" is deleted");
+		Players.get(currentPlayer).deleteCard(n);
 	}
 
 	public void setPlayer(ArrayList<Piece> Players) {
@@ -79,8 +103,9 @@ public class GameController {
 		System.out.println("GameController got a Board");
 	}
 	
-	public void loadCardDialog(Card card){
+	public boolean loadCardDialog(){
 		System.out.println("Loaded CardDialog");
-		cardDialog cardDialog = new cardDialog(board.frame, this, card);
+		cardDialog dialog = new cardDialog(board.frame, this);
+		return dialog.init();
 	}
 }

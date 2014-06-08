@@ -13,30 +13,27 @@ import javax.swing.JPanel;
 
 import standard.GameController;
 
-import model.Card;
-
 public class cardDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
 	cardDialog carddialog;
 	GameController gameController;
 	JFrame frame;
 	JButton ok, cancel;
-	Card card;
+	boolean result;
 	
-	public cardDialog(JFrame parent, GameController gameController, Card card){
+	public cardDialog(JFrame parent, GameController gameController){
 		super(parent, "Watch out!!",true);
 		this.carddialog = this;
 		this.gameController = gameController;
-		this.card = card;
 		this.setSize(new Dimension(350, 200));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		this.ok = new JButton("기존의 카드 버리기");
 		this.cancel = new JButton("새로운 카드 버리기");
-		this.init();
 	}
 	
-	public void init(){
+	public boolean init(){
 		JLabel text1 = new JLabel("카드의 개수가 소지할 수 있는 범위를 초과했습니다.");
 		JLabel text2 = new JLabel("기존에 있던 카드를 버리시겠습니까?");
 		JPanel textPanel = new JPanel();
@@ -54,17 +51,23 @@ public class cardDialog extends JDialog {
 		this.getContentPane().add(textPanel, BorderLayout.NORTH);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		this.setVisible(true);
+		
+		return result;
 	}
 	
 	class okbuttonhandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			result = false;
+			carddialog.setVisible(false);
+			gameController.board.deleteCards();
 		}
 	}
 	
 	class cancelbuttonhandler implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			result = true;
 			carddialog.setVisible(false);
 		}
 	}

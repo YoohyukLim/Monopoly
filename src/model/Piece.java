@@ -62,6 +62,10 @@ public class Piece {
 		return this.name;
 	}
 
+	public void deleteCard(int n){
+		cardList.remove(n);
+	}
+
 	public class PieceImage extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
