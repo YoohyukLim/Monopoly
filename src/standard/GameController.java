@@ -49,13 +49,15 @@ public class GameController {
 	}
 
 	public void getCard() {
+		Card card = new Card(1);
 		if (Players.get(currentPlayer).cardList.size() < 5) {
-			Card card = new Card(1);
 			Players.get(currentPlayer).addCard(card);
 			System.out.println("Card Type: "
 					+ Players.get(currentPlayer).cardList.get(
 							Players.get(currentPlayer).cardList.size() - 1)
 							.getCardNumber());
+		}else{
+			loadCardDialog(card);
 		}
 	}
 
@@ -69,5 +71,10 @@ public class GameController {
 	public void setView(Board board) {
 		this.board = board;
 		System.out.println("GameController got a Board");
+	}
+	
+	public void loadCardDialog(Card card){
+		System.out.println("Loaded CardDialog");
+		cardDialog cardDialog = new cardDialog(board.frame, this, card);
 	}
 }
