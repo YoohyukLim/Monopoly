@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.zip.CRC32;
 
 public class Board {
 	Map map;
@@ -23,6 +22,7 @@ public class Board {
 			rightside, botside;
 	JPanel playerside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
+	MyPanel[][] playerPiece;
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
 
@@ -58,6 +58,7 @@ public class Board {
 		cardside = new JPanel();
 
 		Map_piece = new JLabel[36];
+		playerPiece = new MyPanel[36][2];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -74,6 +75,18 @@ public class Board {
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
+			playerPiece[i][0] = new MyPanel(Color.RED);
+			playerPiece[i][1] = new MyPanel(Color.BLUE);
+			PieceList.get(players.get(currentPlayer).getPosition()).add(playerPiece[i][0]);
+			PieceList.get(players.get(currentPlayer).getPosition()).add(playerPiece[i][1]);
+			if (i == 0) {
+				playerPiece[i][0].setVisible(true);
+				playerPiece[i][1].setVisible(true);
+			} else {
+				playerPiece[i][0].setVisible(false);
+				playerPiece[i][1].setVisible(false);
+			}
+			
 			if (i == 0 || i == 9 || i == 18 || i == 27) {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
@@ -120,10 +133,6 @@ public class Board {
 				else
 					PieceList.get(i).setBackground(new Color(0, 255, 127));
 			}
-			MyPanel a = new MyPanel(Color.RED);
-			MyPanel b = new MyPanel(Color.BLUE);
-			PieceList.get(i).add(a);
-			PieceList.get(i).add(b);
 		}
 
 		for (int i = 9; i >= 0; i--) {
@@ -259,7 +268,9 @@ public class Board {
 			gameController.getCard();
 			refreshCards();
 			update("card");
+			disappearPiece();
 			gameController.setPlayerbyDice();
+			showPiece();
 			gameController.MapExec();
 
 			currentPlayer = gameController.changePlayer();
@@ -315,6 +326,14 @@ public class Board {
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
 		}
+	}
+	
+	public void disappearPiece() {
+		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer].setVisible(false);
+	}
+	
+	public void showPiece() {
+		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer].setVisible(true);
 	}
 
 	class MyPanel extends JPanel {
