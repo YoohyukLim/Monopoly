@@ -15,6 +15,9 @@ public class Board {
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer;
+	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
+	Icon dice_icon = new ImageIcon(url_dice);
+	JLabel Dice_button;
 
 	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
 			rightside, botside;
@@ -138,10 +141,7 @@ public class Board {
 
 		// DicePanel
 		dicepanel.setBackground(new Color(255, 255, 0));
-		URL url = new File("Resources/Dice_button.png").toURI().toURL();
-		// URL url = new File("Resources/0002.gif").toURI().toURL();
-		Icon icon = new ImageIcon(url);
-		JLabel Dice_button = new JLabel(icon);
+		Dice_button = new JLabel(dice_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
 		Dice_button.setPreferredSize(new Dimension(480, 480));
@@ -215,7 +215,7 @@ public class Board {
 	public void update(String msg) {
 		switch (msg) {
 		case "card":
-			cardlayout.show(cardside, String.valueOf(currentPlayer));
+			refreshCards();
 			break;
 		}
 	}
@@ -251,6 +251,8 @@ public class Board {
 		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
 		cardside.remove(0);
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
+		
+		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
 
 	class DiceBtnHandler implements MouseListener {
