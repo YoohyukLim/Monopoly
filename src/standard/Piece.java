@@ -15,7 +15,7 @@ public class Piece {
 	String name;
 	PieceImage pImage;
 	ArrayList<Card> cardList = new ArrayList<Card>();
-	
+
 	public Piece(int type, int start_position) {
 		piece_type = type;
 		position = start_position;
@@ -23,9 +23,10 @@ public class Piece {
 		pImage = new PieceImage();
 	}
 
-	public void addCard(Card card){
+	public void addCard(Card card) {
 		cardList.add(card);
 	}
+
 	public int getType() {
 		return piece_type;
 	}
