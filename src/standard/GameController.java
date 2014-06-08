@@ -49,15 +49,12 @@ public class GameController {
 	}
 
 	public void getCard() {
+		Card card = new Card(1);
+		Players.get(currentPlayer).addCard(card);
 		System.out.println("Card Type: "
-				+ Map.Map_pieces[Players.get(currentPlayer).getPosition()]
-						.get_map_number());
-		Map.Map_pieces[Players.get(currentPlayer).getPosition()].exec(Players
-				.get(currentPlayer));
-
-		for (int i = 0; i < playerN; i++)
-			System.out.println(Players.get(i).getName() + ": "
-					+ Players.get(i).getPosition());
+				+ Players.get(currentPlayer).cardList.get(
+						Players.get(currentPlayer).cardList.size() - 1)
+						.getCardNumber());
 	}
 
 	public void setPlayer(ArrayList<Piece> Players) {

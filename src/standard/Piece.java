@@ -2,6 +2,7 @@ package standard;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -13,8 +14,7 @@ public class Piece {
 	int turn_cnt;
 	String name;
 	PieceImage pImage;
-	Card [] card = new Card[5];
-	int cardCount = 0;
+	ArrayList<Card> cardList = new ArrayList<Card>();
 	
 	public Piece(int type, int start_position) {
 		piece_type = type;
@@ -23,6 +23,9 @@ public class Piece {
 		pImage = new PieceImage();
 	}
 
+	public void addCard(Card card){
+		cardList.add(card);
+	}
 	public int getType() {
 		return piece_type;
 	}

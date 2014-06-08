@@ -1,11 +1,22 @@
 package standard;
 
+import java.util.Calendar;
+import java.util.Random;
+
 import javax.swing.JOptionPane;
 
 public class Card {
 	int card_number;
 
 	public Card() {
+	}
+
+	public Card(int num) {
+		Calendar now = Calendar.getInstance();
+		int seed = now.get(Calendar.MILLISECOND) + num;
+		Random r = new Random();
+		r.setSeed(seed);
+		this.setCardNumber(Math.abs(r.nextInt() % 10) + 1);
 	}
 
 	public void setCardNumber(int card_number) {
@@ -60,12 +71,6 @@ public class Card {
 			break;
 		case 10:
 			break;
-		case 11:
-			break;
-		case 12:
-			break;
-		case 13:
-			break;
 		// normal
 		default:
 		}
@@ -104,15 +109,6 @@ public class Card {
 			break;
 		case 10:
 			msg = "Test10";
-			break;
-		case 11:
-			msg = "Test11";
-			break;
-		case 12:
-			msg = "Test12";
-			break;
-		case 13:
-			msg = "Test13";
 			break;
 		// normal
 		default:
