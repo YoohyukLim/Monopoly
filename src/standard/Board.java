@@ -8,15 +8,17 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.zip.CRC32;
 
 public class Board {
 	Map map;
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer;
-	
-	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
-	JPanel playerside, cardside, cardpanel[], cards[][];
+
+	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
+			rightside, botside;
+	JPanel playerside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
@@ -39,7 +41,7 @@ public class Board {
 	private void initialize() throws Exception {
 		frame = new JFrame();
 		cardlayout = new CardLayout();
-		
+
 		boardpanel = new JPanel();
 		infopanel = new JPanel();
 		chatpanel = new JPanel();
@@ -159,19 +161,25 @@ public class Board {
 		boardpanel.add(dicepanel, BorderLayout.CENTER);
 		infopanel.setLayout(new BorderLayout(0, 0));
 		infopanel.add(playerside, BorderLayout.NORTH);
-		
-		//Card
-		cardside.setLayout(cardlayout); 
+
+		// Card
+		cardside.setLayout(cardlayout);
 		cardpanel = new JPanel[2];
+		cardstate = new JPanel[2];
 		cards = new JPanel[2][5];
 		for (int i = 0; i < cardpanel.length; i++) {
 			cardpanel[i] = new JPanel();
 			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
 			cardpanel[i].setBackground(new Color(255, 0, 255));
-			
+
+			cardstate[i] = new JPanel();
+			cardstate[i].setPreferredSize(new Dimension(320, 500));
+			cardstate[i].setMinimumSize(new Dimension(320, 500));
+			cardstate[i].setMaximumSize(new Dimension(320, 500));
+
 			JLabel mycard_label = new JLabel();
 			mycard_label.setOpaque(true);
-			mycard_label.setText(players.get(i).getName()+"'s Cards");
+			mycard_label.setText(players.get(i).getName() + "'s Cards");
 			mycard_label.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
 			mycard_label.setBackground(new Color(0, 0, 127));
 			mycard_label.setForeground(new Color(255, 0, 0));
@@ -180,21 +188,13 @@ public class Board {
 			mycard_label.setMaximumSize(new Dimension(320, 30));
 			mycard_label.setHorizontalAlignment(JLabel.CENTER);
 			cardpanel[i].add(mycard_label, 0);
-			
-			for (int j = 0; j < 5; j++) {
-				cards[i][j] = new JPanel();
-				cards[i][j].setPreferredSize(new Dimension(320, 100));
-				cards[i][j].setMinimumSize(new Dimension(320, 100));
-				cards[i][j].setMaximumSize(new Dimension(320, 100));
-				cards[i][j].setBackground(new Color(255-10 * j, 255-10 * j, 255-10 * j));
-				cardpanel[i].add(cards[i][j]);
-			}
+			cardpanel[i].add(cardstate[i], 1);
 		}
-		
+
 		cardside.add(cardpanel[0], String.valueOf(0));
 		cardside.add(cardpanel[1], String.valueOf(1));
 		cardlayout.show(cardside, "0");
-		
+
 		infopanel.add(cardside, BorderLayout.SOUTH);
 
 		infopanel.setBackground(new Color(127, 127, 127));
@@ -211,39 +211,57 @@ public class Board {
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
 	}
-	
-	public void update(String msg){
-		switch(msg){
+
+	public void update(String msg) {
+		switch (msg) {
 		case "card":
 			cardlayout.show(cardside, String.valueOf(currentPlayer));
 			break;
 		}
 	}
-	
-	public void refreshCards(){
+
+	public void refreshCards() {
 		playerCard = gameController.Players.get(currentPlayer).cardList;
 		int length = playerCard.size();
-		System.out.println("//"+gameController.Players.get(currentPlayer).getName()+"'s cards "+length+"//");
-		
-		for(int i=0; i<length; i++){
+		System.out.println("//"
+				+ gameController.Players.get(currentPlayer).getName()
+				+ "'s cards " + length + "//");
+
+		cardpanel[currentPlayer].remove(1);
+		cardstate[currentPlayer].removeAll();
+
+		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
-			JLabel cardnumber = new JLabel("Card Num: "+String.valueOf(number));
+			JLabel cardnumber = new JLabel("Card Num: "
+					+ String.valueOf(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
-			cards[currentPlayer][i].removeAll();
+			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
+					255 - 10 * i, 255 - 10 * i));
 			cards[currentPlayer][i].add(cardnumber, 0);
 			cards[currentPlayer][i].add(cardtext, 1);
+
+			cardstate[currentPlayer].add(cards[currentPlayer][i]);
 		}
+
+		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
+		cardside.remove(0);
+		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 	}
-	
+
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
 			gameController.getCard();
 			refreshCards();
+			update("card");
 			gameController.setPlayerbyDice();
 			gameController.MapExec();
-			update("card");
+
 			currentPlayer = gameController.changePlayer();
 			update("card");
 		}
