@@ -1,32 +1,35 @@
-package standard;
+package model;
+
+import java.util.Calendar;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
-public class Map_piece {
-	int current;
-	int prev_map;
-	int next_map;
-	int map_number;
 
-	public Map_piece() {
+public class Card {
+	int card_number;
+
+	public Card() {
 	}
 
-	public Map_piece(int current, int post, int next) {
-		this.current = current;
-		this.prev_map = post;
-		this.next_map = next;
+	public Card(int num) {
+		Calendar now = Calendar.getInstance();
+		int seed = now.get(Calendar.MILLISECOND) + num;
+		Random r = new Random();
+		r.setSeed(seed);
+		this.setCardNumber(Math.abs(r.nextInt() % 10) + 1);
 	}
 
-	public void setMapNumber(int map_number) {
-		this.map_number = map_number;
+	public void setCardNumber(int card_number) {
+		this.card_number = card_number;
 	}
 
-	public int get_map_number() {
-		return map_number;
+	public int getCardNumber() {
+		return card_number;
 	}
 
 	public void exec(Piece player) {
-		switch (this.map_number) {
+		switch (this.card_number) {
 		// corner
 		case 0:
 			break;
@@ -69,28 +72,26 @@ public class Map_piece {
 			break;
 		case 10:
 			break;
-		case 11:
-			break;
-		case 12:
-			break;
-		case 13:
-			break;
 		// normal
 		default:
 		}
 	}
 
-	public void getTypeText(int map_number) {
+	public String getTypeText(int card_number) {
 		String msg = null;
-		switch (map_number) {
+		switch (card_number) {
 		// corner
 		case 0:
+			msg = "Test0";
 			break;
 		case 1:
+			msg = "Test1";
 			break;
 		case 2:
+			msg = "Test2";
 			break;
 		case 3:
+			msg = "Test3";
 			break;
 		// special maps
 		case 4:
@@ -114,19 +115,10 @@ public class Map_piece {
 		case 10:
 			msg = "Test10";
 			break;
-		case 11:
-			msg = "Test11";
-			break;
-		case 12:
-			msg = "Test12";
-			break;
-		case 13:
-			msg = "Test13";
-			break;
 		// normal
 		default:
 			msg = "Normal";
 		}
-		JOptionPane.showMessageDialog(null, msg);
+		return msg;
 	}
 }

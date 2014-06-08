@@ -1,4 +1,4 @@
-package standard;
+package model;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,15 +6,18 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import standard.GameController;
+
+
 public class Piece {
 	int piece_type;
 	int position;
 
-	int map_size;
+	public int map_size;
 	int turn_cnt;
 	String name;
 	PieceImage pImage;
-	ArrayList<Card> cardList = new ArrayList<Card>();
+	public ArrayList<Card> cardList = new ArrayList<Card>();
 
 	public Piece(int type, int start_position) {
 		piece_type = type;

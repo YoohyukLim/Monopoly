@@ -2,6 +2,10 @@ package standard;
 
 import javax.swing.*;
 
+import model.Card;
+import model.Map_piece;
+import model.Piece;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

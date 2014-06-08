@@ -3,6 +3,8 @@ package standard;
 import java.util.Calendar;
 import java.util.Random;
 
+import model.Map_piece;
+
 public class Map {
 	static int Map_number_length = 20;
 	static int Map_size = 36;

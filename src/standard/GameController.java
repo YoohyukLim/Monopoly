@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import model.Card;
+import model.Dice;
+import model.Piece;
+
 public class GameController {
 	Board board;
 	ArrayList<Piece> Players;
-	static int currentPlayer;
+	public static int currentPlayer;
 	int playerN;
 	int turn;
 	int DiceNumber, Dice1, Dice2;

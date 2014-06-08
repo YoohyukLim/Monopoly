@@ -2,7 +2,9 @@ package standard;
 
 import java.util.ArrayList;
 
-import standard.Piece.PieceImage;
+import model.Piece;
+import model.Piece.PieceImage;
+
 
 public class Monopoly {
 	public static void main(String args[]) throws Exception {

@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.Card;
+
 public class cardDialog extends JDialog {
 	cardDialog carddialog;
 	GameController gameController;

@@ -1,4 +1,4 @@
-package standard;
+package model;
 
 import java.util.Calendar;
 import java.util.Random;
