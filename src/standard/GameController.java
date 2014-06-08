@@ -49,12 +49,14 @@ public class GameController {
 	}
 
 	public void getCard() {
-		Card card = new Card(1);
-		Players.get(currentPlayer).addCard(card);
-		System.out.println("/*********************************/\n" + "Card Type: "
-				+ Players.get(currentPlayer).cardList.get(
-						Players.get(currentPlayer).cardList.size() - 1)
-						.getCardNumber());
+		if (Players.get(currentPlayer).cardList.size() < 5) {
+			Card card = new Card(1);
+			Players.get(currentPlayer).addCard(card);
+			System.out.println("Card Type: "
+					+ Players.get(currentPlayer).cardList.get(
+							Players.get(currentPlayer).cardList.size() - 1)
+							.getCardNumber());
+		}
 	}
 
 	public void setPlayer(ArrayList<Piece> Players) {
