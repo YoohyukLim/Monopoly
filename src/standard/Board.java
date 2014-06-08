@@ -18,6 +18,7 @@ public class Board {
 	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
 	JPanel playerside, cardside, cardpanel[], cards[][];
 	JLabel Map_piece[];
+	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
 
 	public JFrame frame;
@@ -30,6 +31,7 @@ public class Board {
 	public void getController(GameController _gameController) throws Exception {
 		this.gameController = _gameController;
 		this.currentPlayer = _gameController.currentPlayer;
+		this.players = _gameController.Players;
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -166,9 +168,10 @@ public class Board {
 			cardpanel[i] = new JPanel();
 			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
 			cardpanel[i].setBackground(new Color(255, 0, 255));
+			
 			JLabel mycard_label = new JLabel();
 			mycard_label.setOpaque(true);
-			mycard_label.setText("My Card");
+			mycard_label.setText(players.get(i).getName()+"'s Cards");
 			mycard_label.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
 			mycard_label.setBackground(new Color(0, 0, 127));
 			mycard_label.setForeground(new Color(255, 0, 0));
@@ -176,7 +179,8 @@ public class Board {
 			mycard_label.setMinimumSize(new Dimension(320, 30));
 			mycard_label.setMaximumSize(new Dimension(320, 30));
 			mycard_label.setHorizontalAlignment(JLabel.CENTER);
-			cardpanel[i].add(mycard_label);
+			cardpanel[i].add(mycard_label, 0);
+			
 			for (int j = 0; j < 5; j++) {
 				cards[i][j] = new JPanel();
 				cards[i][j].setPreferredSize(new Dimension(320, 100));
@@ -186,6 +190,7 @@ public class Board {
 				cardpanel[i].add(cards[i][j]);
 			}
 		}
+		
 		cardside.add(cardpanel[0], String.valueOf(0));
 		cardside.add(cardpanel[1], String.valueOf(1));
 		cardlayout.show(cardside, "0");
