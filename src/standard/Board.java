@@ -12,19 +12,20 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Board {
 	Map map;
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
-	int currentPlayer;
+	int currentPlayer, currentTurn;
 	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
 	JLabel Dice_button;
 
 	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
 			rightside, botside;
-	JPanel playerside, cardside, cardpanel[], cardstate[], cards[][];
+	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	MyPanel[][] playerPiece;
 	ArrayList<Piece> players;
@@ -60,7 +61,7 @@ public class Board {
 		rightside = new JPanel();
 		botside = new JPanel();
 
-		playerside = new JPanel();
+		infoside = new JPanel();
 		cardside = new JPanel();
 
 		Map_piece = new JLabel[36];
@@ -76,6 +77,7 @@ public class Board {
 		botside.setLayout(new BoxLayout(botside, BoxLayout.LINE_AXIS));
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
+		infoside.setLayout(new GridLayout(3, 1));
 
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
@@ -85,6 +87,8 @@ public class Board {
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
 			PieceList.get(i).add(playerPiece[i][0]);
 			PieceList.get(i).add(playerPiece[i][1]);
+			PieceList.get(i).setLayout(new GridBagLayout());
+
 			if (i == 0) {
 				playerPiece[i][0].setVisible(true);
 				playerPiece[i][1].setVisible(true);
@@ -158,7 +162,7 @@ public class Board {
 		}
 
 		// DicePanel
-		dicepanel.setBackground(new Color(255, 255, 0));
+		dicepanel.setBackground(new Color(47, 157, 39));
 		Dice_button = new JLabel(dice_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
@@ -178,7 +182,7 @@ public class Board {
 		boardpanel.add(rightside, BorderLayout.EAST);
 		boardpanel.add(dicepanel, BorderLayout.CENTER);
 		infopanel.setLayout(new BorderLayout(0, 0));
-		infopanel.add(playerside, BorderLayout.NORTH);
+		infopanel.add(infoside, BorderLayout.NORTH);
 
 		// Card
 		cardside.setLayout(cardlayout);
@@ -218,8 +222,8 @@ public class Board {
 
 		infopanel.setBackground(new Color(127, 127, 127));
 		infopanel.setPreferredSize(new Dimension(320, 680));
-		playerside.setPreferredSize(new Dimension(320, 150));
-		playerside.setBackground(new Color(0, 0, 0));
+		infoside.setPreferredSize(new Dimension(320, 150));
+		infoside.setBackground(new Color(0, 0, 0));
 		cardside.setPreferredSize(new Dimension(320, 530));
 		cardside.setBackground(new Color(0, 127, 255));
 
@@ -237,6 +241,33 @@ public class Board {
 			cardlayout.show(cardside, String.valueOf(currentPlayer));
 			break;
 		}
+	}
+
+	public void refreshInfo() {
+		JLabel playerNameLabel = new JLabel();
+		JLabel currentTurnLabel = new JLabel();
+		JLabel rotationCntLabel = new JLabel();
+
+		currentTurn = gameController.getTurn();
+		players = gameController.Players;
+
+		infoside.removeAll();
+		playerNameLabel
+				.setText("ÇÃ·¹ÀÌ¾î: " + players.get(currentPlayer).getName());
+		playerNameLabel.setForeground(Color.WHITE);
+		playerNameLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
+		currentTurnLabel.setText("ÅÏ ¼ö: "
+				+ String.valueOf(gameController.getTurn()));
+		currentTurnLabel.setForeground(Color.WHITE);
+		currentTurnLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 25));
+		rotationCntLabel.setText("µ¹Àº ¹ÙÄû ¼ö: "
+				+ String.valueOf(players.get(currentPlayer).rotationCnt));
+		rotationCntLabel.setForeground(Color.WHITE);
+		rotationCntLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
+
+		infoside.add(playerNameLabel);
+		infoside.add(currentTurnLabel);
+		infoside.add(rotationCntLabel);
 	}
 
 	public void refreshCards() {
@@ -313,7 +344,7 @@ public class Board {
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
-			if (lessThanFive == false){
+			if (lessThanFive == false) {
 				JOptionPane.showMessageDialog(null, "Áö¿ï Ä«µå¸¦ Å¬¸¯ÇØ¾ß ÇÕ´Ï´Ù.");
 				return;
 			}
@@ -323,16 +354,32 @@ public class Board {
 					.println("deleting card: " + String.valueOf(lessThanFive));
 			if (lessThanFive == true) {
 				refreshCards();
+				refreshInfo();
 				update("card");
 				disappearPiece();
 				gameController.setPlayerbyDice();
+				refreshInfo();
 				showPiece();
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				disappearPiece();
 				gameController.MapExec();
+				refreshInfo();
 				showPiece();
+				try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				System.out.println("hi..hi");
 				currentPlayer = gameController.changePlayer();
 				update("card");
+				refreshInfo();
 			}
 		}
 

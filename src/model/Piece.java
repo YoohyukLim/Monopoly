@@ -8,22 +8,19 @@ import javax.swing.JPanel;
 
 import standard.GameController;
 
-
 public class Piece {
 	int piece_type;
 	int position;
 
 	public int map_size;
-	int turn_cnt;
+	public int rotationCnt;
 	String name;
-	PieceImage pImage;
 	public ArrayList<Card> cardList = new ArrayList<Card>();
 
 	public Piece(int type, int start_position) {
 		piece_type = type;
 		position = start_position;
-		turn_cnt = 0;
-		pImage = new PieceImage();
+		rotationCnt = 0;
 	}
 
 	public void addCard(Card card) {
@@ -45,9 +42,11 @@ public class Piece {
 
 	public int movePosition(int dice) {
 		int pos = position + dice;
-
-		if (pos > map_size - 1)
-			turn_cnt++;
+		if (pos < 0) {
+			if (rotationCnt != 0)
+				rotationCnt--;
+		} else if (pos >= map_size - 1)
+			rotationCnt++;
 		pos = pos % (map_size - 1);
 
 		return setPosition(pos);
@@ -62,27 +61,7 @@ public class Piece {
 		return this.name;
 	}
 
-	public void deleteCard(int n){
+	public void deleteCard(int n) {
 		cardList.remove(n);
-	}
-
-	public class PieceImage extends JPanel {
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
-			if (GameController.currentPlayer == 1) {
-				g.drawRect(0, 0, 15, 15);
-				g.setColor(Color.BLUE);
-				g.fillRect(0, 0, 15, 15);
-			} else {
-				g.drawRect(0, 0, 15, 15);
-				g.setColor(Color.RED);
-				g.fillRect(0, 0, 15, 15);
-			}
-		}
-
-		public void drawPiece(int x, int y) {
-			repaint();
-		}
 	}
 }

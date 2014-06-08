@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
-
 public class Card {
 	int card_number;
 

@@ -2,7 +2,6 @@ package model;
 
 import javax.swing.JOptionPane;
 
-
 public class Map_piece {
 	int current;
 	int prev_map;

@@ -13,7 +13,7 @@ import model.Piece;
 public class GameController {
 	public Board board;
 	public ArrayList<Piece> Players;
-	public static int currentPlayer;
+	public int currentPlayer;
 	public int playerN;
 	public int turn;
 	public int DiceNumber, Dice1, Dice2;
@@ -31,7 +31,7 @@ public class GameController {
 				+ DiceNumber;
 		JOptionPane.showMessageDialog(null, msg);
 
-		Players.get(currentPlayer).movePosition(DiceNumber); 
+		Players.get(currentPlayer).movePosition(DiceNumber);
 		System.out
 				.println("CurrentPlayer: "
 						+ Players.get(currentPlayer).getName() + " Dice: "
@@ -63,14 +63,14 @@ public class GameController {
 					+ Players.get(currentPlayer).cardList.get(
 							Players.get(currentPlayer).cardList.size() - 1)
 							.getCardNumber());
-		}else{
+		} else {
 			this.tempcard = card;
 			return loadCardDialog();
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean addCard(Card card) {
 		if (Players.get(currentPlayer).cardList.size() < 5) {
 			Players.get(currentPlayer).addCard(card);
@@ -78,21 +78,21 @@ public class GameController {
 					+ Players.get(currentPlayer).cardList.get(
 							Players.get(currentPlayer).cardList.size() - 1)
 							.getCardNumber());
-		}else{
+		} else {
 			this.tempcard = card;
 			return loadCardDialog();
 		}
-		
+
 		return true;
 	}
-	
-	public void deleteCard(int n){
-		System.out.println("Card "+n+" is deleted");
+
+	public void deleteCard(int n) {
+		System.out.println("Card " + n + " is deleted");
 		Players.get(currentPlayer).deleteCard(n);
 	}
 
 	public void setPlayer(ArrayList<Piece> Players) {
-		GameController.currentPlayer = 0;
+		currentPlayer = 0;
 		this.turn = 0;
 		this.playerN = Players.size();
 		this.Players = Players;
@@ -102,10 +102,14 @@ public class GameController {
 		this.board = board;
 		System.out.println("GameController got a Board");
 	}
-	
-	public boolean loadCardDialog(){
+
+	public boolean loadCardDialog() {
 		System.out.println("Loaded CardDialog");
 		cardDialog dialog = new cardDialog(board.frame, this);
 		return dialog.init();
+	}
+
+	public int getTurn() {
+		return turn / Players.size() + 1;
 	}
 }

@@ -20,9 +20,9 @@ public class cardDialog extends JDialog {
 	JFrame frame;
 	JButton ok, cancel;
 	boolean result;
-	
-	public cardDialog(JFrame parent, GameController gameController){
-		super(parent, "Watch out!!",true);
+
+	public cardDialog(JFrame parent, GameController gameController) {
+		super(parent, "Watch out!!", true);
 		this.carddialog = this;
 		this.gameController = gameController;
 		this.setSize(new Dimension(350, 200));
@@ -32,8 +32,8 @@ public class cardDialog extends JDialog {
 		this.ok = new JButton("기존의 카드 버리기");
 		this.cancel = new JButton("새로운 카드 버리기");
 	}
-	
-	public boolean init(){
+
+	public boolean init() {
 		JLabel text1 = new JLabel("카드의 개수가 소지할 수 있는 범위를 초과했습니다.");
 		JLabel text2 = new JLabel("기존에 있던 카드를 버리시겠습니까?");
 		JPanel textPanel = new JPanel();
@@ -42,20 +42,20 @@ public class cardDialog extends JDialog {
 
 		ok.addActionListener(new okbuttonhandler());
 		cancel.addActionListener(new cancelbuttonhandler());
-		
+
 		textPanel.add(text1, BorderLayout.NORTH);
 		textPanel.add(text2, BorderLayout.SOUTH);
 		buttonPanel.add(ok);
 		buttonPanel.add(cancel);
-		
+
 		this.getContentPane().add(textPanel, BorderLayout.NORTH);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		this.setVisible(true);
-		
+
 		return result;
 	}
-	
-	class okbuttonhandler implements ActionListener{
+
+	class okbuttonhandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			result = false;
@@ -63,8 +63,8 @@ public class cardDialog extends JDialog {
 			gameController.board.deleteCards();
 		}
 	}
-	
-	class cancelbuttonhandler implements ActionListener{
+
+	class cancelbuttonhandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			result = true;
