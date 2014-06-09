@@ -11,9 +11,11 @@ import standard.GameController;
 public class Piece {
 	int piece_type;
 	int position;
+	boolean mission;
 
 	public int map_size;
 	public int rotationCnt;
+	public int catchCnt;
 	String name;
 	public ArrayList<Card> cardList = new ArrayList<Card>();
 
@@ -21,6 +23,8 @@ public class Piece {
 		piece_type = type;
 		position = start_position;
 		rotationCnt = 0;
+		catchCnt = 0;
+		mission = false;
 	}
 
 	public void addCard(Card card) {
@@ -64,4 +68,26 @@ public class Piece {
 	public void deleteCard(int n) {
 		cardList.remove(n);
 	}
+	
+	public void caught(){
+		this.position = 0;
+	}
+	
+	public void catching(){
+		this.catchCnt++;
+	}
+	
+	public boolean missionCheck(){
+		switch(piece_type){
+		case 0:
+			if(rotationCnt == 5)
+				mission = true;
+			break;
+		case 1:
+			if(catchCnt == 3)
+				mission = true;
+			break;
+		}
+		return mission;
+	}	
 }

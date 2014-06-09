@@ -340,6 +340,39 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
+	
+	public void dorest(){
+		refreshCards();
+		update("card");
+		disappearPiece(currentPlayer);
+		gameController.setPlayerbyDice();
+		refreshInfo();
+		//showPiece(currentPlayer);
+		//disappearPiece(currentPlayer);
+		/*try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		gameController.MapExec();
+		refreshInfo();
+		/*try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		//showPiece(currentPlayer);
+		//disappearPiece(currentPlayer);
+		gameController.catching();
+		showPiece(currentPlayer);
+		gameController.missionCheck();
+		
+		currentPlayer = gameController.changePlayer();
+		update("card");
+		refreshInfo();
+	}
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
@@ -352,32 +385,7 @@ public class Board {
 			lessThanFive = gameController.getCard();
 
 			if (lessThanFive == true) {
-				refreshCards();
-				refreshInfo();
-				update("card");
-				disappearPiece();
-				gameController.setPlayerbyDice();
-				refreshInfo();
-				showPiece();
-				/*try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				disappearPiece();
-				gameController.MapExec();
-				refreshInfo();
-				showPiece();
-				/*try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				currentPlayer = gameController.changePlayer();
-				update("card");
-				refreshInfo();
+				dorest();
 			}
 		}
 
@@ -443,19 +451,9 @@ public class Board {
 			System.out.println("Deleting card has clicked!");
 			gameController.deleteCard(number);
 			gameController.addCard(gameController.tempcard);
-			refreshCards();
-			update("card");
-			disappearPiece();
-			gameController.setPlayerbyDice();
-			refreshInfo();
-			showPiece();
-			disappearPiece();
-			gameController.MapExec();
-			refreshInfo();
-			showPiece();
-			currentPlayer = gameController.changePlayer();
-			update("card");
-			refreshInfo();
+			
+			dorest();
+			
 			lessThanFive = true;
 		}
 
@@ -484,14 +482,14 @@ public class Board {
 		}
 	}
 
-	public void disappearPiece() {
-		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer]
+	public void disappearPiece(int Player) {
+		playerPiece[players.get(Player).getPosition()][Player]
 				.setVisible(false);
 	}
 
-	public void showPiece() {
+	public void showPiece(int Player) {
 		players = gameController.Players;
-		playerPiece[players.get(currentPlayer).getPosition()][currentPlayer]
+		playerPiece[players.get(Player).getPosition()][Player]
 				.setVisible(true);
 	}
 
