@@ -350,8 +350,7 @@ public class Board {
 			}
 
 			lessThanFive = gameController.getCard();
-			System.out
-					.println("deleting card: " + String.valueOf(lessThanFive));
+
 			if (lessThanFive == true) {
 				refreshCards();
 				refreshInfo();
@@ -360,23 +359,22 @@ public class Board {
 				gameController.setPlayerbyDice();
 				refreshInfo();
 				showPiece();
-				try {
+				/*try {
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 				disappearPiece();
 				gameController.MapExec();
 				refreshInfo();
 				showPiece();
-				try {
+				/*try {
 					TimeUnit.SECONDS.sleep(1);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
-				System.out.println("hi..hi");
+				}*/
 				currentPlayer = gameController.changePlayer();
 				update("card");
 				refreshInfo();
@@ -449,13 +447,15 @@ public class Board {
 			update("card");
 			disappearPiece();
 			gameController.setPlayerbyDice();
+			refreshInfo();
 			showPiece();
 			disappearPiece();
 			gameController.MapExec();
+			refreshInfo();
 			showPiece();
 			currentPlayer = gameController.changePlayer();
 			update("card");
-
+			refreshInfo();
 			lessThanFive = true;
 		}
 
