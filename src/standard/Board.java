@@ -53,7 +53,7 @@ public class Board {
 	JLayeredPane dicepanel;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
-	MyPanel[][] playerPiece;
+	IPanel[][] playerPiece;
 	JPanel[] playerPiecePanel;
 	JPanel[] cardPiece;
 	ArrayList<Piece> players;
@@ -94,7 +94,7 @@ public class Board {
 		cardside = new JPanel();
 
 		Map_piece = new JLabel[36];
-		playerPiece = new MyPanel[36][2];
+		playerPiece = new IPanel[36][2];
 		playerPiecePanel = new JPanel[36];
 		cardPiece = new JPanel[36];
 
@@ -121,8 +121,15 @@ public class Board {
 				PieceList.add(new IPanel("Resources/image/Stone2.jpg"));
 
 			playerPiecePanel[i] = new JPanel();
-			playerPiece[i][0] = new MyPanel(Color.RED);
-			playerPiece[i][1] = new MyPanel(Color.BLUE);
+			playerPiece[i][0] = new IPanel("Resources/image/masteryi.jpg");
+			playerPiece[i][1] = new IPanel("Resources/image/ohkong.jpg");
+			playerPiece[i][0].setPreferredSize(new Dimension(30, 30));
+			playerPiece[i][0].setMaximumSize(new Dimension(30, 30));
+			playerPiece[i][0].setMinimumSize(new Dimension(30, 30));
+			playerPiece[i][1].setPreferredSize(new Dimension(30, 30));
+			playerPiece[i][1].setMaximumSize(new Dimension(30, 30));
+			playerPiece[i][1].setMinimumSize(new Dimension(30, 30));
+			
 			playerPiecePanel[i].setLayout(new GridBagLayout());
 			playerPiecePanel[i].setOpaque(false);
 			playerPiecePanel[i].add(playerPiece[i][0]);
@@ -714,18 +721,6 @@ public class Board {
 
 	public void showCard(int card) {
 		cardPiece[card].setVisible(true);
-	}
-
-	class MyPanel extends JPanel {
-		public MyPanel(Color color) {
-			this.setBackground(color);
-		}
-
-		@Override
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			g.drawRect(10, 10, 15, 15);
-		}
 	}
 
 	class IPanel extends JPanel {
