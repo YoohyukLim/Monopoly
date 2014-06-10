@@ -110,7 +110,7 @@ public class Board {
 		botside.setLayout(new BoxLayout(botside, BoxLayout.LINE_AXIS));
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
-		infoside.setLayout(new GridLayout(3, 1));
+		infoside.setLayout(new GridLayout(4, 1));
 
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
@@ -275,19 +275,23 @@ public class Board {
 
 		// Card
 		cardside.setLayout(cardlayout);
+		cardside.setBackground(new Color(0, 0, 0));
+		cardside.setOpaque(false);
 		cardpanel = new JPanel[2];
 		cardstate = new JPanel[2];
 		cards = new IPanel[2][5];
 		for (int i = 0; i < cardpanel.length; i++) {
-			cardpanel[i] = new IPanel("Resources/image/cardpage.jpg");
+			cardpanel[i] = new JPanel();
 			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
-			cardpanel[i].setBackground(new Color(255, 0, 255));
+			cardpanel[i].setBackground(new Color(0, 0, 0));
+			cardpanel[i].setOpaque(false);
 
 			cardstate[i] = new JPanel();
 			cardstate[i].setLayout(new FlowLayout(0, 0, 0));
 			cardstate[i].setPreferredSize(new Dimension(320, 500));
 			cardstate[i].setMinimumSize(new Dimension(320, 500));
 			cardstate[i].setMaximumSize(new Dimension(320, 500));
+			cardstate[i].setOpaque(false);
 
 			JLabel mycard_label = new JLabel();
 			mycard_label.setOpaque(true);
@@ -354,6 +358,7 @@ public class Board {
 		JLabel playerNameLabel = new JLabel();
 		JLabel currentTurnLabel = new JLabel();
 		JLabel rotationCntLabel = new JLabel();
+		JLabel caughtCntLabel = new JLabel();
 
 		currentTurn = gameController.getTurn();
 		players = gameController.Players;
@@ -362,19 +367,24 @@ public class Board {
 		playerNameLabel
 				.setText("ÇÃ·¹ÀÌ¾î: " + players.get(currentPlayer).getName());
 		playerNameLabel.setForeground(Color.WHITE);
-		playerNameLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 30));
+		playerNameLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 27));
 		currentTurnLabel.setText("ÅÏ ¼ö: "
 				+ String.valueOf(gameController.getTurn()));
 		currentTurnLabel.setForeground(Color.WHITE);
-		currentTurnLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 25));
+		currentTurnLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 23));
 		rotationCntLabel.setText("µ¹Àº ¹ÙÄû ¼ö: "
 				+ String.valueOf(players.get(currentPlayer).rotationCnt));
 		rotationCntLabel.setForeground(Color.WHITE);
-		rotationCntLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 20));
+		rotationCntLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
+		caughtCntLabel.setText("ÀâÀº ¼ö: "
+				+ String.valueOf(players.get(currentPlayer).catchCnt));
+		caughtCntLabel.setForeground(Color.WHITE);
+		caughtCntLabel.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
 
 		infoside.add(playerNameLabel);
 		infoside.add(currentTurnLabel);
 		infoside.add(rotationCntLabel);
+		infoside.add(caughtCntLabel);
 	}
 
 	public void refreshCards() throws Exception {
