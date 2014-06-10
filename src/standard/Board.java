@@ -21,6 +21,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -35,21 +36,12 @@ public class Board {
 	int currentPlayer, currentTurn;
 	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
-	// Icon mainBackground = new ImageIcon("Resources/background.jpg");
-	JLabel Dice_button;
+	Icon backimage = new ImageIcon("Resources/background.jpg");
+	JLabel Dice_button, background;
 
-	class Gream extends JPanel {
-		public Image mainBackground = new ImageIcon("Resources/background.jpg")
-				.getImage();
-
-		public void paintComponent(Graphics g) {
-			paintComponent(g);
-			g.drawImage(mainBackground, 0, 0, this);
-		}
-	}
-
-	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
+	JPanel boardpanel, infopanel, chatpanel, topside, leftside,
 			rightside, botside;
+	JLayeredPane dicepanel;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	MyPanel[][] playerPiece;
@@ -83,7 +75,7 @@ public class Board {
 		boardpanel = new JPanel();
 		infopanel = new JPanel();
 		chatpanel = new JPanel();
-		dicepanel = new JPanel();
+		dicepanel = new JLayeredPane();
 		topside = new JPanel();
 		leftside = new JPanel();
 		rightside = new JPanel();
@@ -230,19 +222,15 @@ public class Board {
 		}
 
 		// DicePanel
+		background = new JLabel(backimage);
+		dicepanel.add(background, new Integer(1));
 		Dice_button = new JLabel(dice_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
-		Dice_button.setPreferredSize(new Dimension(480, 480));
-		Dice_button.setMaximumSize(new Dimension(480, 480));
-		Dice_button.setMinimumSize(new Dimension(480, 480));
-		Dice_button.setHorizontalAlignment(JLabel.CENTER);
-		Dice_button.setVerticalAlignment(JLabel.CENTER);
-
-		// mainBackground.setHorizontalAlignment(JLabel.CENTER);
-		// dicepanel.add(mainBackground);
-		dicepanel.add(Dice_button);
-
+		dicepanel.add(Dice_button, new Integer(2));
+		background.setBounds(0, 0, backimage.getIconWidth(), backimage.getIconHeight());
+		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(), dice_icon.getIconHeight());
+		
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
