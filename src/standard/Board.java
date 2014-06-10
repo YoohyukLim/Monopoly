@@ -32,15 +32,18 @@ import model.Piece;
 public class Board {
 	Map map;
 	GameController gameController;
-	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
+	static ArrayList<JLayeredPane> PieceList = new ArrayList<JLayeredPane>();
 	int currentPlayer, currentTurn;
-	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
+	URL url_dice = new File("Resources/image/Dice_button.png").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
-	Icon backimage = new ImageIcon("Resources/background.jpg");
-	JLabel Dice_button, background;
+	Icon backimage = new ImageIcon("Resources/image/background.jpg");
+	Icon stoneImage0 = new ImageIcon("Resources/image/Stone0.jpg");
+	Icon stoneImage1 = new ImageIcon("Resources/image/Stone1.jpg");
+	Icon stoneImage2 = new ImageIcon("Resources/image/Stone2.jpg");
+	JLabel Dice_button, background, stone;
 
-	JPanel boardpanel, infopanel, chatpanel, topside, leftside,
-			rightside, botside;
+	JPanel boardpanel, infopanel, chatpanel, topside, leftside, rightside,
+			botside;
 	JLayeredPane dicepanel;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
@@ -104,7 +107,7 @@ public class Board {
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
-			PieceList.add(new JPanel());
+			PieceList.add(new JLayeredPane());
 			playerPiecePanel[i] = new JPanel();
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
@@ -112,23 +115,24 @@ public class Board {
 			playerPiecePanel[i].setOpaque(false);
 			playerPiecePanel[i].add(playerPiece[i][0]);
 			playerPiecePanel[i].add(playerPiece[i][1]);
-			
+
 			cardPiece[i] = new JPanel();
 			JLabel cardnum = new JLabel(String.valueOf(i));
 			cardnum.setVisible(false);
 			cardPiece[i].add(cardnum, 0);
 			cardPiece[i].setVisible(false);
-			
+
 			gameController.cardmap[i][0] = 0;
 			gameController.cardmap[i][1] = 0;
 			gameController.cardmap[i][2] = 0;
-			
-			//PieceList.get(i).setLayout(new GridBagLayout());
-			//PieceList.get(i).add(playerPiece[i][0]);
-			//PieceList.get(i).add(playerPiece[i][1]);
-			PieceList.get(i).setLayout(new BoxLayout(PieceList.get(i), BoxLayout.PAGE_AXIS));
+
+			// PieceList.get(i).setLayout(new GridBagLayout());
+			// PieceList.get(i).add(playerPiece[i][0]);
+			// PieceList.get(i).add(playerPiece[i][1]);
+			PieceList.get(i).setLayout(
+					new BoxLayout(PieceList.get(i), BoxLayout.PAGE_AXIS));
 			PieceList.get(i).add(playerPiecePanel[i]);
-			if(i!=0)
+			if (i != 0)
 				PieceList.get(i).add(cardPiece[i]);
 
 			if (i == 0) {
@@ -147,19 +151,25 @@ public class Board {
 				playerPiecePanel[i].setPreferredSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMaximumSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMinimumSize(new Dimension(100, 50));
-
+				// PieceList.get(i).
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
 				Map_piece[i].setVisible(false);
-				PieceList.get(i).add(Map_piece[i]);
+
+				stone = new JLabel(stoneImage0);
+				PieceList.get(i).add(stone, new Integer(1));
+				stone.setBounds(0, 0, stoneImage0.getIconWidth(),
+						stoneImage0.getIconHeight());
+				PieceList.get(i).add(Map_piece[i], new Integer(2));
+
 			} else if (i < 10 || (i >= 18 && i <= 27)) {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
-				playerPiecePanel[i].setPreferredSize(new Dimension(60, 50));
+				/*playerPiecePanel[i].setPreferredSize(new Dimension(60, 50));
 				playerPiecePanel[i].setMaximumSize(new Dimension(60, 50));
 				playerPiecePanel[i].setMinimumSize(new Dimension(60, 50));
-				
+*/
 				cardPiece[i].setPreferredSize(new Dimension(60, 50));
 				cardPiece[i].setMaximumSize(new Dimension(60, 50));
 				cardPiece[i].setMinimumSize(new Dimension(60, 50));
@@ -168,24 +178,33 @@ public class Board {
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
 				Map_piece[i].setVisible(false);
+
+				stone = new JLabel(stoneImage1);
+				PieceList.get(i).add(stone, new Integer(1));
+				stone.setBounds(0, 0, stoneImage0.getIconWidth(),
+						stoneImage0.getIconHeight());
+				PieceList.get(i).add(Map_piece[i], new Integer(2));
+
 				// Map_piece[i].setPreferredSize(new Dimension(30, 100));
 				// Map_piece[i].setMaximumSize(new Dimension(30, 100));
 				// Map_piece[i].setMinimumSize(new Dimension(30, 100));
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				if (i % 2 == 0)
+			/*
+			 * 	if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
 					PieceList.get(i).setBackground(new Color(0, 255, 127));
+					*/
 			} else {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
-				playerPiecePanel[i].setPreferredSize(new Dimension(100, 30));
+			/*	playerPiecePanel[i].setPreferredSize(new Dimension(100, 30));
 				playerPiecePanel[i].setMaximumSize(new Dimension(100, 30));
 				playerPiecePanel[i].setMinimumSize(new Dimension(100, 30));
-				
+*/
 				cardPiece[i].setPreferredSize(new Dimension(100, 30));
 				cardPiece[i].setMaximumSize(new Dimension(100, 30));
 				cardPiece[i].setMinimumSize(new Dimension(100, 30));
@@ -194,16 +213,27 @@ public class Board {
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
 				Map_piece[i].setVisible(false);
-				// Map_piece[i].setPreferredSize(new Dimension(100, 30));
-				// Map_piece[i].setMaximumSize(new Dimension(100, 30));
-				// Map_piece[i].setMinimumSize(new Dimension(100, 30));
+				 Map_piece[i].setPreferredSize(new Dimension(100, 30));
+				 Map_piece[i].setMaximumSize(new Dimension(100, 30));
+				 Map_piece[i].setMinimumSize(new Dimension(100, 30));
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				if (i % 2 == 0)
+				
+				stone = new JLabel(stoneImage2);
+				stone.setPreferredSize(new Dimension(100, 60));
+				stone.setMaximumSize(new Dimension(100, 60));
+				stone.setMinimumSize(new Dimension(100, 60));
+				PieceList.get(i).add(stone, new Integer(1));
+				stone.setBounds(0, 0, stoneImage0.getIconWidth(),
+						stoneImage0.getIconHeight());
+				PieceList.get(i).add(Map_piece[i], new Integer(2));
+
+			/*	if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
 					PieceList.get(i).setBackground(new Color(0, 255, 127));
+					*/
 			}
 		}
 
@@ -227,9 +257,11 @@ public class Board {
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
 		dicepanel.add(Dice_button, new Integer(2));
-		background.setBounds(0, 0, backimage.getIconWidth(), backimage.getIconHeight());
-		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(), dice_icon.getIconHeight());
-		
+		background.setBounds(0, 0, backimage.getIconWidth(),
+				backimage.getIconHeight());
+		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(),
+				dice_icon.getIconHeight());
+
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
@@ -290,7 +322,7 @@ public class Board {
 		frame.getContentPane().add(boardpanel);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
-		
+
 		refreshInfo();
 	}
 
@@ -404,7 +436,7 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
-	
+
 	public void executableCards() {
 		playerCard = gameController.Players.get(currentPlayer).cardList;
 		int length = playerCard.size();
@@ -467,26 +499,27 @@ public class Board {
 		// disappearPiece(currentPlayer);
 		gameController.catching();
 		showPiece(currentPlayer);
-		
+
 		executableCards();
 	}
 
-	public void dofinal(){
+	public void dofinal() {
 		gameController.missionCheck();
 		currentPlayer = gameController.changePlayer();
 		update("card");
 		refreshInfo();
 		cardtime = false;
 	}
+
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
 			if (lessThanFive == false) {
 				JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
 				return;
-			} else if(cardtime == true){
+			} else if (cardtime == true) {
 				JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
-				
+
 				dofinal();
 				return;
 			}
@@ -591,7 +624,7 @@ public class Board {
 		}
 	}
 
-	class CardBtnHandler implements MouseListener{
+	class CardBtnHandler implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -599,7 +632,7 @@ public class Board {
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
 			System.out.println("Using this card!");
-			if(gameController.useCard(number)){
+			if (gameController.useCard(number)) {
 				dofinal();
 				cardtime = false;
 			}
@@ -608,46 +641,47 @@ public class Board {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-	
+
 	public void disappearPiece(int Player) {
-		playerPiece[players.get(Player).getPosition()][Player].setVisible(false);
+		playerPiece[players.get(Player).getPosition()][Player]
+				.setVisible(false);
 	}
 
 	public void showPiece(int Player) {
 		players = gameController.Players;
 		playerPiece[players.get(Player).getPosition()][Player].setVisible(true);
 	}
-	
-	public void disappearCard(int card){
-		gameController.cardmap[card][0]=0;
-		gameController.cardmap[card][1]=0;
-		gameController.cardmap[card][2]=0;
-		
+
+	public void disappearCard(int card) {
+		gameController.cardmap[card][0] = 0;
+		gameController.cardmap[card][1] = 0;
+		gameController.cardmap[card][2] = 0;
+
 		cardPiece[card].setVisible(false);
 	}
-	
-	public void showCard(int card){
+
+	public void showCard(int card) {
 		cardPiece[card].setVisible(true);
 	}
 
