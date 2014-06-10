@@ -244,6 +244,10 @@ public class Board {
 		for (int i = 28; i < 36; i++) {
 			rightside.add(PieceList.get(i));
 		}
+		botside.setOpaque(false);
+		leftside.setOpaque(false);
+		topside.setOpaque(false);
+		rightside.setOpaque(false);
 
 		// DicePanel
 		background = new JLabel(backimage);
@@ -257,7 +261,7 @@ public class Board {
 		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(),
 				dice_icon.getIconHeight());
 
-		boardpanel.setBackground(new Color(255, 255, 255));
+		//boardpanel.setBackground(new Color(0, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
 		boardpanel.add(topside, BorderLayout.NORTH);
@@ -735,6 +739,7 @@ public class Board {
 		public IPanel(String filename) throws Exception {
 			URL url = new File(filename).toURI().toURL();
 			image = new ImageIcon(url);
+			this.setOpaque(false);
 		}
 
 		public void paintComponent(Graphics g) {
