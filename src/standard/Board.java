@@ -598,10 +598,16 @@ public class Board {
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
+			
 			System.out.println("Deleting card has clicked!");
 			gameController.deleteCard(number);
 			gameController.addCard(gameController.tempcard);
-
+			try {
+				new Sound("Resources/sounds/game/global-menu_close.wav").play();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			try {
 				dorest();
 			} catch (Exception e1) {
@@ -644,6 +650,13 @@ public class Board {
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
+			try {
+				new Sound("Resources/sounds/game/global-menu_close.wav").play();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
 			System.out.println("Using this card!");
 			if (gameController.useCard(number)) {
 				try {
