@@ -45,10 +45,12 @@ public class Board {
 	GameController gameController;
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer, currentTurn;
-	URL url_dice = new File("Resources/image/Dice_button.png").toURI().toURL();
+	URL url_dice = new File("Resources/image/Dice_on.png").toURI().toURL();
+	URL url_next = new File("Resources/image/Next.png").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
+	Icon next_icon = new ImageIcon(url_next);
 	Icon backimage = new ImageIcon("Resources/image/background.jpg");
-	JLabel Dice_button, background;
+	JLabel Dice_button, Next_button, background;
 
 	JPanel boardpanel, infopanel, topside, leftside, rightside,
 			botside;
@@ -265,12 +267,18 @@ public class Board {
 		/*background = new JLabel(backimage);
 		dicepanel.add(background, new Integer(1));*/
 		Dice_button = new JLabel(dice_icon);
+		Next_button = new JLabel(next_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
-		dicepanel.add(Dice_button);
+		Next_button.addMouseListener(DBhandler);
+		Next_button.setVisible(false);
+		dicepanel.add(Dice_button, 0);
+		dicepanel.add(Next_button, 1);
 		/*background.setBounds(0, 0, backimage.getIconWidth(),
 				backimage.getIconHeight());*/
-		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(),
+		Dice_button.setBounds(100, 340, dice_icon.getIconWidth(),
+				dice_icon.getIconHeight());
+		Next_button.setBounds(100, 340, next_icon.getIconWidth(),
 				dice_icon.getIconHeight());
 
 		//boardpanel.setBackground(new Color(0, 255, 255));
