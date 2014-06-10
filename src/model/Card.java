@@ -30,8 +30,6 @@ public class Card {
 	public void exec(Piece player) {
 		switch (this.card_number) {
 		// corner
-		case 0:
-			break;
 		case 1:
 			break;
 		case 2:
@@ -80,9 +78,6 @@ public class Card {
 		String msg = null;
 		switch (card_number) {
 		// corner
-		case 0:
-			msg = "Test0";
-			break;
 		case 1:
 			msg = "Test1";
 			break;

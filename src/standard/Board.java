@@ -57,6 +57,7 @@ public class Board {
 	JPanel[] cardPiece;
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
+	int cardmap[][];
 
 	public JFrame frame;
 	CardLayout cardlayout;
@@ -93,8 +94,9 @@ public class Board {
 
 		Map_piece = new JLabel[36];
 		playerPiece = new MyPanel[36][2];
-		cardPiece = new JPanel[36];
 		playerPiecePanel = new JPanel[36];
+		cardPiece = new JPanel[36];
+		cardmap = new int [36][2];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -112,15 +114,31 @@ public class Board {
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			PieceList.add(new JPanel());
+			playerPiecePanel[i] = new JPanel();
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
-			/*playerPiecePanel[i].setLayout(new GridBagLayout());
+			playerPiecePanel[i].setLayout(new GridBagLayout());
+			playerPiecePanel[i].setOpaque(false);
 			playerPiecePanel[i].add(playerPiece[i][0]);
-			playerPiecePanel[i].add(playerPiece[i][1]);*/
+			playerPiecePanel[i].add(playerPiece[i][1]);
 			
-			PieceList.get(i).setLayout(new GridBagLayout());
-			PieceList.get(i).add(playerPiece[i][0]);
-			PieceList.get(i).add(playerPiece[i][1]);
+			CardBtnHandler cardMouse = new CardBtnHandler();
+			cardPiece[i] = new JPanel();
+			JLabel cardnum = new JLabel(String.valueOf(i));
+			cardnum.setVisible(false);
+			cardPiece[i].add(cardnum, 0);
+			cardPiece[i].addMouseListener(cardMouse);
+			cardPiece[i].setVisible(false);
+			cardmap[i][0] = 0;
+			cardmap[i][1] = 0;
+			
+			//PieceList.get(i).setLayout(new GridBagLayout());
+			//PieceList.get(i).add(playerPiece[i][0]);
+			//PieceList.get(i).add(playerPiece[i][1]);
+			PieceList.get(i).setLayout(new BoxLayout(PieceList.get(i), BoxLayout.PAGE_AXIS));
+			PieceList.get(i).add(playerPiecePanel[i]);
+			if(i!=0)
+				PieceList.get(i).add(cardPiece[i]);
 
 			if (i == 0) {
 				playerPiece[i][0].setVisible(true);
@@ -135,6 +153,9 @@ public class Board {
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 100));
 				PieceList.get(i).setBackground(new Color(0, 255, 255));
+				playerPiecePanel[i].setPreferredSize(new Dimension(100, 50));
+				playerPiecePanel[i].setMaximumSize(new Dimension(100, 50));
+				playerPiecePanel[i].setMinimumSize(new Dimension(100, 50));
 
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
@@ -144,6 +165,13 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
+				playerPiecePanel[i].setPreferredSize(new Dimension(60, 50));
+				playerPiecePanel[i].setMaximumSize(new Dimension(60, 50));
+				playerPiecePanel[i].setMinimumSize(new Dimension(60, 50));
+				
+				cardPiece[i].setPreferredSize(new Dimension(60, 50));
+				cardPiece[i].setMaximumSize(new Dimension(60, 50));
+				cardPiece[i].setMinimumSize(new Dimension(60, 50));
 
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
@@ -163,6 +191,13 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
+				playerPiecePanel[i].setPreferredSize(new Dimension(100, 30));
+				playerPiecePanel[i].setMaximumSize(new Dimension(100, 30));
+				playerPiecePanel[i].setMinimumSize(new Dimension(100, 30));
+				
+				cardPiece[i].setPreferredSize(new Dimension(100, 30));
+				cardPiece[i].setMaximumSize(new Dimension(100, 30));
+				cardPiece[i].setMinimumSize(new Dimension(100, 30));
 
 				// Map Piece Panel
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
@@ -268,6 +303,8 @@ public class Board {
 		frame.getContentPane().add(boardpanel);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
+		
+		refreshInfo();
 	}
 
 	private Color getImage(String string) {
@@ -518,6 +555,39 @@ public class Board {
 		}
 	}
 
+	class CardBtnHandler implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
 	public void disappearPiece(int Player) {
 		playerPiece[players.get(Player).getPosition()][Player].setVisible(false);
 	}
