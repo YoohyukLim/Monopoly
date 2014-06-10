@@ -113,7 +113,13 @@ public class Board {
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
-			PieceList.add(new JPanel());
+			if (i == 0 || i == 9 || i == 18 || i == 27)
+				PieceList.add(new IPanel("Resources/image/Stone0.jpg"));
+			else if (i < 10 || (i >= 18 && i <= 27))
+				PieceList.add(new IPanel("Resources/image/Stone1.jpg"));
+			else
+				PieceList.add(new IPanel("Resources/image/Stone2.jpg"));
+			
 			playerPiecePanel[i] = new JPanel();
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
