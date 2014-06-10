@@ -48,8 +48,10 @@ public class Board {
 	Icon backimage = new ImageIcon("Resources/image/background.jpg");
 	JLabel Dice_button, background;
 
-	JPanel boardpanel, infopanel, chatpanel, topside, leftside, rightside,
+	JPanel boardpanel, infopanel, topside, leftside, rightside,
 			botside;
+	IPanel chatpanel, consolepanel;
+	
 	JLayeredPane dicepanel;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
@@ -83,7 +85,7 @@ public class Board {
 
 		boardpanel = new JPanel();
 		infopanel = new JPanel();
-		chatpanel = new JPanel();
+		chatpanel = new IPanel("Resources/image/chat.png");
 		dicepanel = new JLayeredPane();
 		topside = new JPanel();
 		leftside = new JPanel();
@@ -114,11 +116,11 @@ public class Board {
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
 			if (i == 0 || i == 9 || i == 18 || i == 27)
-				PieceList.add(new IPanel("Resources/image/Stone0.jpg"));
+				PieceList.add(new IPanel("Resources/image/Stone0.png"));
 			else if (i < 10 || (i >= 18 && i <= 27))
-				PieceList.add(new IPanel("Resources/image/Stone1.jpg"));
+				PieceList.add(new IPanel("Resources/image/Stone1.png"));
 			else
-				PieceList.add(new IPanel("Resources/image/Stone2.jpg"));
+				PieceList.add(new IPanel("Resources/image/Stone2.png"));
 
 			playerPiecePanel[i] = new JPanel();
 			playerPiece[i][0] = new IPanel("Resources/image/masteryi.jpg");
@@ -166,7 +168,7 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 100));
-				PieceList.get(i).setBackground(new Color(0, 255, 255));
+				//PieceList.get(i).setBackground(new Color(0, 255, 255));
 				playerPiecePanel[i].setPreferredSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMaximumSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMinimumSize(new Dimension(100, 50));
@@ -197,10 +199,10 @@ public class Board {
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				if (i % 2 == 0)
+				/*if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));
+					PieceList.get(i).setBackground(new Color(0, 255, 127));*/
 			} else {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
@@ -223,10 +225,10 @@ public class Board {
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				if (i % 2 == 0)
+				/*if (i % 2 == 0)
 					PieceList.get(i).setBackground(new Color(127, 255, 0));
 				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));
+					PieceList.get(i).setBackground(new Color(0, 255, 127));*/
 			}
 		}
 
@@ -309,12 +311,15 @@ public class Board {
 		cardside.setPreferredSize(new Dimension(320, 530));
 		cardside.setBackground(new Color(0, 127, 255));
 
-		chatpanel.setBackground(new Color(255, 0, 255));
-		chatpanel.setPreferredSize(new Dimension(680, 320));
+		//chatpanel.setBackground(new Color(255, 0, 255));
+		chatpanel.setPreferredSize(new Dimension(680, 220));
+		consolepanel = new IPanel("Resources/image/console.png");
+		consolepanel.setPreferredSize(new Dimension(320, 220));
 
 		frame.getContentPane().add(boardpanel);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
+		frame.getContentPane().add(consolepanel);
 
 		refreshInfo();
 
