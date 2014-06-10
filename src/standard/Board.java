@@ -49,12 +49,12 @@ public class Board {
 	JPanel[] cardPiece;
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
-	int cardmap[][];
 
 	public JFrame frame;
 	CardLayout cardlayout;
 
 	public boolean lessThanFive = true;
+	public boolean cardtime = false;
 
 	public Board(Map map) throws Exception {
 		this.map = map;
@@ -88,7 +88,6 @@ public class Board {
 		playerPiece = new MyPanel[36][2];
 		playerPiecePanel = new JPanel[36];
 		cardPiece = new JPanel[36];
-		cardmap = new int [36][2];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -114,15 +113,15 @@ public class Board {
 			playerPiecePanel[i].add(playerPiece[i][0]);
 			playerPiecePanel[i].add(playerPiece[i][1]);
 			
-			CardBtnHandler cardMouse = new CardBtnHandler();
 			cardPiece[i] = new JPanel();
 			JLabel cardnum = new JLabel(String.valueOf(i));
 			cardnum.setVisible(false);
 			cardPiece[i].add(cardnum, 0);
-			cardPiece[i].addMouseListener(cardMouse);
 			cardPiece[i].setVisible(false);
-			cardmap[i][0] = 0;
-			cardmap[i][1] = 0;
+			
+			gameController.cardmap[i][0] = 0;
+			gameController.cardmap[i][1] = 0;
+			gameController.cardmap[i][2] = 0;
 			
 			//PieceList.get(i).setLayout(new GridBagLayout());
 			//PieceList.get(i).add(playerPiece[i][0]);
@@ -405,6 +404,45 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
+	
+	public void executableCards() {
+		playerCard = gameController.Players.get(currentPlayer).cardList;
+		int length = playerCard.size();
+		CardBtnHandler cardhandler = new CardBtnHandler();
+		cardtime = true;
+
+		System.out.println("Let's use Card!");
+
+		cardpanel[currentPlayer].remove(1);
+		cardstate[currentPlayer].removeAll();
+
+		for (int i = 0; i < length; i++) {
+			Card temp = playerCard.get(i);
+			int number = temp.getCardNumber();
+			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
+			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			JLabel cardnumber = new JLabel(String.valueOf(i));
+			cardnumber.setVisible(false);
+
+			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
+			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
+					255 - 10 * i, 255 - 10 * i));
+			cards[currentPlayer][i].add(cardtype, 0);
+			cards[currentPlayer][i].add(cardtext, 1);
+			cards[currentPlayer][i].add(cardnumber, 2);
+			cards[currentPlayer][i].addMouseListener(cardhandler);
+
+			cardstate[currentPlayer].add(cards[currentPlayer][i]);
+		}
+
+		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
+		cardside.remove(cardpanel[currentPlayer]);
+		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
+		cardlayout.show(cardside, String.valueOf(currentPlayer));
+	}
 
 	public void dorest() {
 		refreshCards();
@@ -428,11 +466,8 @@ public class Board {
 		// disappearPiece(currentPlayer);
 		gameController.catching();
 		showPiece(currentPlayer);
-		gameController.missionCheck();
-
-		currentPlayer = gameController.changePlayer();
-		update("card");
-		refreshInfo();
+		
+		executableCards();
 	}
 
 	class DiceBtnHandler implements MouseListener {
@@ -440,6 +475,15 @@ public class Board {
 			System.out.println("/********************************/");
 			if (lessThanFive == false) {
 				JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
+				return;
+			} else if(cardtime == true){
+				JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
+				
+				gameController.missionCheck();
+				currentPlayer = gameController.changePlayer();
+				update("card");
+				refreshInfo();
+				cardtime = false;
 				return;
 			}
 
@@ -547,8 +591,17 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+			JPanel card = (JPanel) e.getComponent();
+			JLabel cardNumber = (JLabel) card.getComponent(2);
+			int number = Integer.parseInt(cardNumber.getText());
+			System.out.println("Using this card!");
+			gameController.useCard(number);
+
+			gameController.missionCheck();
+			currentPlayer = gameController.changePlayer();
+			update("card");
+			refreshInfo();
+			cardtime = false;
 		}
 
 		@Override
@@ -583,6 +636,18 @@ public class Board {
 	public void showPiece(int Player) {
 		players = gameController.Players;
 		playerPiece[players.get(Player).getPosition()][Player].setVisible(true);
+	}
+	
+	public void disappearCard(int card){
+		gameController.cardmap[card][0]=0;
+		gameController.cardmap[card][1]=0;
+		gameController.cardmap[card][2]=0;
+		
+		cardPiece[card].setVisible(false);
+	}
+	
+	public void showCard(int card){
+		cardPiece[card].setVisible(true);
 	}
 
 	class MyPanel extends JPanel {

@@ -20,6 +20,7 @@ public class GameController {
 	public int DiceNumber, Dice1, Dice2;
 	Dice dice = new Dice();
 	public Card tempcard;
+	public int cardmap[][];
 
 	public GameController() {
 	}
@@ -86,6 +87,17 @@ public class GameController {
 
 		return true;
 	}
+	
+	public void useCard(int n){
+		Piece player = Players.get(currentPlayer);
+		int position = player.getPosition();
+		System.out.println("Card"+n+" is used");
+		player.deleteCard(n);
+		cardmap[position][0]=1;
+		cardmap[position][1]=currentPlayer;
+		cardmap[position][2]=n;
+		board.showCard(position);
+	}
 
 	public void deleteCard(int n) {
 		System.out.println("Card " + n + " is deleted");
@@ -97,6 +109,7 @@ public class GameController {
 		this.turn = 0;
 		this.playerN = Players.size();
 		this.Players = Players;
+		this.cardmap = new int[36][3];
 	}
 	
 	public void catching(){
