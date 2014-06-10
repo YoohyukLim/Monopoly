@@ -51,8 +51,6 @@ public class GameController {
 	public void CardExec(){
 		Piece player = Players.get(currentPlayer);
 		int position = player.getPosition();
-		if(cardmap[position][0] == 0)
-			return;
 		
 		System.out.println("//Card Type: "+cardmap[position][2]+"//");
 		System.out.println("//"+new Card().getTypeText(cardmap[position][2])+"//");
@@ -98,6 +96,11 @@ public class GameController {
 	public boolean useCard(int n){
 		Piece player = Players.get(currentPlayer);
 		int position = player.getPosition();
+		if(position == 0){
+			JOptionPane.showMessageDialog(null, "시작 위치에는 카드를 놓을 수 없습니다.");
+			return false;
+		}
+		
 		if(cardmap[position][0]==1){
 			JOptionPane.showMessageDialog(null, "카드가 이미 존재합니다.");
 			return false;
