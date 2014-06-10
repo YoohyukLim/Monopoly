@@ -519,8 +519,7 @@ public class Board {
 	}
 
 	public void disappearPiece(int Player) {
-		playerPiece[players.get(Player).getPosition()][Player]
-				.setVisible(false);
+		playerPiece[players.get(Player).getPosition()][Player].setVisible(false);
 	}
 
 	public void showPiece(int Player) {

@@ -107,8 +107,8 @@ public class GameController {
 				System.out.println(Players.get(currentPlayer).getName()+"이 "+Players.get(i).getName()+"을 잡았습니다!");
 				board.disappearPiece(i);
 				Players.get(currentPlayer).catching();
-				board.showPiece(i);
 				Players.get(i).caught();
+				board.showPiece(i);
 			}
 		}
 	}
