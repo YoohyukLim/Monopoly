@@ -20,8 +20,8 @@ public class Monopoly {
 		Player2.setName("Sonokong");
 		Player2.map_size = 36;
 
-		Players.add(Player1);
 		Players.add(Player2);
+		Players.add(Player1);
 
 		System.out.print("\n");
 

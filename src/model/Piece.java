@@ -84,11 +84,11 @@ public class Piece {
 	
 	public boolean missionCheck(){
 		switch(piece_type){
-		case 0:
+		case 1:
 			if(rotationCnt == 5)
 				mission = true;
 			break;
-		case 1:
+		case 0:
 			if(catchCnt == 3)
 				mission = true;
 			break;
