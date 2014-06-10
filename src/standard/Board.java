@@ -101,7 +101,7 @@ public class Board {
 		cardPiece = new JPanel[36];
 
 		frame.setTitle("Monopoly");
-		frame.setBounds(0, 0, 1006, 900);
+		frame.setBounds(0, 0, 1006, 928);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -313,7 +313,7 @@ public class Board {
 
 		//chatpanel.setBackground(new Color(255, 0, 255));
 		chatpanel.setPreferredSize(new Dimension(680, 220));
-		consolepanel = new IPanel("Resources/image/console.png");
+		consolepanel = new IPanel("Resources/image/info.png");
 		consolepanel.setPreferredSize(new Dimension(320, 220));
 
 		frame.getContentPane().add(boardpanel);
