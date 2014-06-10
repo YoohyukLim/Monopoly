@@ -28,6 +28,8 @@ public class Board {
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	MyPanel[][] playerPiece;
+	JPanel[] playerPiecePanel;
+	JPanel[] cardPiece;
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
 
@@ -66,6 +68,8 @@ public class Board {
 
 		Map_piece = new JLabel[36];
 		playerPiece = new MyPanel[36][2];
+		cardPiece = new JPanel[36];
+		playerPiecePanel = new JPanel[36];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 900);
@@ -85,9 +89,13 @@ public class Board {
 			PieceList.add(new JPanel());
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
+			/*playerPiecePanel[i].setLayout(new GridBagLayout());
+			playerPiecePanel[i].add(playerPiece[i][0]);
+			playerPiecePanel[i].add(playerPiece[i][1]);*/
+			
+			PieceList.get(i).setLayout(new GridBagLayout());
 			PieceList.get(i).add(playerPiece[i][0]);
 			PieceList.get(i).add(playerPiece[i][1]);
-			PieceList.get(i).setLayout(new GridBagLayout());
 
 			if (i == 0) {
 				playerPiece[i][0].setVisible(true);
