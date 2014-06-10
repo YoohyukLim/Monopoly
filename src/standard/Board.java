@@ -150,7 +150,7 @@ public class Board {
 			playerPiecePanel[i].add(playerPiece[i][0]);
 			playerPiecePanel[i].add(playerPiece[i][1]);
 
-			cardPiece[i] = new IPanel(cardfile[Math.abs(r.nextInt() % 2)]);
+			cardPiece[i] = new IPanel(cardfile[Math.abs(r.nextInt() % 3)]);
 			cardPiece[i].setOpaque(false);
 			JLabel cardnum = new JLabel(String.valueOf(i));
 			cardnum.setVisible(false);
