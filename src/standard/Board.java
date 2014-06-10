@@ -479,6 +479,7 @@ public class Board {
       refreshInfo();
       cardtime = false;
    }
+
    class DiceBtnHandler implements MouseListener {
       public void mouseClicked(MouseEvent e) {
          System.out.println("/********************************/");
@@ -663,4 +664,5 @@ public class Board {
          g.drawRect(10, 10, 15, 15);
       }
    }
+
 }
