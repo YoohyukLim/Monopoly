@@ -69,7 +69,12 @@ public class Piece {
 		cardList.remove(n);
 	}
 	
-	public void caught(){
+	public void caught() throws Exception{
+		if(piece_type==1)
+			new OhKong_Sound().dead();
+		else if(piece_type==0)
+			new MasterYi_Sound().dead();
+		
 		this.position = 0;
 	}
 	

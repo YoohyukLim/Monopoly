@@ -9,6 +9,8 @@ import dialog.missionDialog;
 
 import model.Card;
 import model.Dice;
+import model.MasterYi_Sound;
+import model.OhKong_Sound;
 import model.Piece;
 import model.Sound;
 
@@ -26,12 +28,16 @@ public class GameController {
 	public GameController() {
 	}
 
-	public void setPlayerbyDice() {
+	public void setPlayerbyDice() throws Exception {
 		Dice1 = dice.exec(1);
 		Dice2 = dice.exec(2);
 		DiceNumber = Dice1 + Dice2;
 		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = "
 				+ DiceNumber;
+		if(currentPlayer==0)
+			new MasterYi_Sound().normal();
+		else if(currentPlayer==1)
+			new OhKong_Sound().normal();
 		JOptionPane.showMessageDialog(null, msg);
 
 		Players.get(currentPlayer).movePosition(DiceNumber);
