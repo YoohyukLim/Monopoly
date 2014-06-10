@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -57,7 +59,7 @@ public class Board {
 	JLabel Map_piece[];
 	IPanel[][] playerPiece;
 	JPanel[] playerPiecePanel;
-	JPanel[] cardPiece;
+	IPanel[] cardPiece;
 	ArrayList<Piece> players;
 	ArrayList<Card> playerCard;
 
@@ -80,6 +82,15 @@ public class Board {
 	}
 
 	private void initialize() throws Exception {
+		Calendar now = Calendar.getInstance();
+		int seed = now.get(Calendar.MILLISECOND);
+		Random r = new Random();
+		r.setSeed(seed);
+		String cardfile[] = new String[3];
+		cardfile[0]= new String("Resources/image/card0.png");
+		cardfile[1]= new String("Resources/image/card1.png");
+		cardfile[2]= new String("Resources/image/card2.png");
+		
 		frame = new JFrame();
 		cardlayout = new CardLayout();
 
@@ -98,7 +109,7 @@ public class Board {
 		Map_piece = new JLabel[36];
 		playerPiece = new IPanel[36][2];
 		playerPiecePanel = new JPanel[36];
-		cardPiece = new JPanel[36];
+		cardPiece = new IPanel[36];
 
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 928);
@@ -137,7 +148,8 @@ public class Board {
 			playerPiecePanel[i].add(playerPiece[i][0]);
 			playerPiecePanel[i].add(playerPiece[i][1]);
 
-			cardPiece[i] = new JPanel();
+			cardPiece[i] = new IPanel(cardfile[Math.abs(r.nextInt() % 2)]);
+			cardPiece[i].setOpaque(false);
 			JLabel cardnum = new JLabel(String.valueOf(i));
 			cardnum.setVisible(false);
 			cardPiece[i].add(cardnum, 0);

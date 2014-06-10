@@ -52,21 +52,21 @@ public class Map_piece {
 					+ " moved to start point.");
 			player.setPosition(0);
 			break;
-		case 7:
-			System.out.println("Player " + player.getName()
-					+ " moved to start point.");
-			player.setPosition(0);
-			break;
-		case 8:
-			System.out.println("Player " + player.getName()
-					+ " moved to start point.");
-			player.setPosition(0);
-			break;
-		case 9:
-			System.out.println("Player " + player.getName()
-					+ " moved to start point.");
-			player.setPosition(0);
-			break;
+//		case 7:
+//			System.out.println("Player " + player.getName()
+//					+ " moved to start point.");
+//			player.setPosition(0);
+//			break;
+//		case 8:
+//			System.out.println("Player " + player.getName()
+//					+ " moved to start point.");
+//			player.setPosition(0);
+//			break;
+//		case 9:
+//			System.out.println("Player " + player.getName()
+//					+ " moved to start point.");
+//			player.setPosition(0);
+//			break;
 		case 10:
 			break;
 		case 11:
