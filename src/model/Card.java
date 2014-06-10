@@ -27,8 +27,8 @@ public class Card {
 		return card_number;
 	}
 
-	public void exec(Piece player) {
-		switch (this.card_number) {
+	public void exec(int master, Piece player, int card_number) {
+		switch (card_number) {
 		// corner
 		case 1:
 			break;

@@ -46,15 +46,22 @@ public class GameController {
 						.get_map_number());
 		Map.Map_pieces[Players.get(currentPlayer).getPosition()].exec(Players
 				.get(currentPlayer));
-
+	}
+	
+	public void CardExec(){
+		Piece player = Players.get(currentPlayer);
+		int position = player.getPosition();
+		if(cardmap[position][0] == 0)
+			return;
+		
+		System.out.println("//Card Type: "+cardmap[position][2]+"//");
+		System.out.println("//"+new Card().getTypeText(cardmap[position][2])+"//");
+		new Card().exec(cardmap[position][1], player, cardmap[position][2]);
+		board.disappearCard(position);
+		
 		for (int i = 0; i < playerN; i++)
 			System.out.println(Players.get(i).getName() + ": "
 					+ Players.get(i).getPosition());
-	}
-
-	public int changePlayer() {
-		turn++;
-		return currentPlayer = (currentPlayer + 1) % playerN;
 	}
 
 	public boolean getCard() {
@@ -118,9 +125,16 @@ public class GameController {
 		this.cardmap = new int[36][3];
 	}
 	
+	public int changePlayer() {
+		turn++;
+		return currentPlayer = (currentPlayer + 1) % playerN;
+	}
+	
 	public void catching(){
 		int nowposition = Players.get(currentPlayer).getPosition();
 		int size = Players.size();
+		if(nowposition == 0)
+			return;
 		for(int i=0; i<size; i++){
 			if(i != currentPlayer && nowposition == Players.get(i).getPosition()){
 				System.out.println(Players.get(currentPlayer).getName()+"이 "+Players.get(i).getName()+"을 잡았습니다!");

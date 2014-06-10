@@ -456,6 +456,7 @@ public class Board {
 		 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
 		 * // TODO Auto-generated catch block e1.printStackTrace(); }
 		 */
+		gameController.CardExec();
 		gameController.MapExec();
 		refreshInfo();
 		/*
@@ -470,6 +471,13 @@ public class Board {
 		executableCards();
 	}
 
+	public void dofinal(){
+		gameController.missionCheck();
+		currentPlayer = gameController.changePlayer();
+		update("card");
+		refreshInfo();
+		cardtime = false;
+	}
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
 			System.out.println("/********************************/");
@@ -479,11 +487,7 @@ public class Board {
 			} else if(cardtime == true){
 				JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
 				
-				gameController.missionCheck();
-				currentPlayer = gameController.changePlayer();
-				update("card");
-				refreshInfo();
-				cardtime = false;
+				dofinal();
 				return;
 			}
 
@@ -596,10 +600,7 @@ public class Board {
 			int number = Integer.parseInt(cardNumber.getText());
 			System.out.println("Using this card!");
 			if(gameController.useCard(number)){
-				gameController.missionCheck();
-				currentPlayer = gameController.changePlayer();
-				update("card");
-				refreshInfo();
+				dofinal();
 				cardtime = false;
 			}
 		}
