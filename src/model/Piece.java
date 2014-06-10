@@ -25,7 +25,7 @@ public class Piece {
 		rotationCnt = 0;
 		catchCnt = 0;
 		mission = false;
-	}
+	} 
 
 	public void addCard(Card card) {
 		cardList.add(card);

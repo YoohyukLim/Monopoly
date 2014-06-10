@@ -1,18 +1,31 @@
 package standard;
 
-import javax.swing.*;
-
-import model.Card;
-import model.Map_piece;
-import model.Piece;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import model.Card;
+import model.Map_piece;
+import model.Piece;
 
 public class Board {
 	Map map;
@@ -20,11 +33,11 @@ public class Board {
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer, currentTurn;
 	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
+	URL url_background = new File("Resources/background.jpg").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
 	JLabel Dice_button;
 
-	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
-			rightside, botside;
+	JPanel	boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	MyPanel[][] playerPiece;
@@ -78,7 +91,7 @@ public class Board {
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 		infoside.setLayout(new GridLayout(3, 1));
-
+		 
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
@@ -172,7 +185,7 @@ public class Board {
 		dicepanel.add(Dice_button);
 		Dice_button.setHorizontalAlignment(JLabel.CENTER);
 		Dice_button.setVerticalAlignment(JLabel.CENTER);
-
+		
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
@@ -233,6 +246,11 @@ public class Board {
 		frame.getContentPane().add(boardpanel);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
+	}
+
+	private Color getImage(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void update(String msg) {
