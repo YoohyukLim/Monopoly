@@ -51,9 +51,12 @@ public class GameController {
 	public void CardExec(){
 		Piece player = Players.get(currentPlayer);
 		int position = player.getPosition();
+		if(cardmap[position][0]==0)
+			return;
 		
 		System.out.println("//Card Type: "+cardmap[position][2]+"//");
 		System.out.println("//"+new Card().getTypeText(cardmap[position][2])+"//");
+		JOptionPane.showMessageDialog(null, new Card().getTypeText(cardmap[position][2]));
 		new Card().exec(cardmap[position][1], player, cardmap[position][2]);
 		board.disappearCard(position);
 		

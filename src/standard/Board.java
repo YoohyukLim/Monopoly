@@ -458,6 +458,7 @@ public class Board {
        */
       gameController.CardExec();
       gameController.MapExec();
+      gameController.CardExec();
       refreshInfo();
       /*
        * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
