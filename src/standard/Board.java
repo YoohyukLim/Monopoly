@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -33,11 +34,22 @@ public class Board {
 	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer, currentTurn;
 	URL url_dice = new File("Resources/Dice_button.png").toURI().toURL();
-	URL url_background = new File("Resources/background.jpg").toURI().toURL();
 	Icon dice_icon = new ImageIcon(url_dice);
+	// Icon mainBackground = new ImageIcon("Resources/background.jpg");
 	JLabel Dice_button;
 
-	JPanel	boardpanel, infopanel, chatpanel, dicepanel, topside, leftside, rightside, botside;
+	class Gream extends JPanel {
+		public Image mainBackground = new ImageIcon("Resources/background.jpg")
+				.getImage();
+
+		public void paintComponent(Graphics g) {
+			paintComponent(g);
+			g.drawImage(mainBackground, 0, 0, this);
+		}
+	}
+
+	JPanel boardpanel, infopanel, chatpanel, dicepanel, topside, leftside,
+			rightside, botside;
 	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
 	JLabel Map_piece[];
 	MyPanel[][] playerPiece;
@@ -91,7 +103,7 @@ public class Board {
 		leftside.setLayout(new BoxLayout(leftside, BoxLayout.PAGE_AXIS));
 		rightside.setLayout(new BoxLayout(rightside, BoxLayout.PAGE_AXIS));
 		infoside.setLayout(new GridLayout(3, 1));
-		 
+
 		MapBtnHandler MBHandler = new MapBtnHandler();
 		// MapPieces
 		for (int i = 0; i < 36; i++) {
@@ -175,17 +187,19 @@ public class Board {
 		}
 
 		// DicePanel
-		dicepanel.setBackground(new Color(47, 157, 39));
 		Dice_button = new JLabel(dice_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
 		Dice_button.setPreferredSize(new Dimension(480, 480));
 		Dice_button.setMaximumSize(new Dimension(480, 480));
 		Dice_button.setMinimumSize(new Dimension(480, 480));
-		dicepanel.add(Dice_button);
 		Dice_button.setHorizontalAlignment(JLabel.CENTER);
 		Dice_button.setVerticalAlignment(JLabel.CENTER);
-		
+
+		// mainBackground.setHorizontalAlignment(JLabel.CENTER);
+		// dicepanel.add(mainBackground);
+		dicepanel.add(Dice_button);
+
 		boardpanel.setBackground(new Color(255, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
@@ -358,35 +372,31 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
-	
-	public void dorest(){
+
+	public void dorest() {
 		refreshCards();
 		update("card");
 		disappearPiece(currentPlayer);
 		gameController.setPlayerbyDice();
 		refreshInfo();
-		//showPiece(currentPlayer);
-		//disappearPiece(currentPlayer);
-		/*try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
+		// showPiece(currentPlayer);
+		// disappearPiece(currentPlayer);
+		/*
+		 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
+		 * // TODO Auto-generated catch block e1.printStackTrace(); }
+		 */
 		gameController.MapExec();
 		refreshInfo();
-		/*try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-		//showPiece(currentPlayer);
-		//disappearPiece(currentPlayer);
+		/*
+		 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
+		 * // TODO Auto-generated catch block e1.printStackTrace(); }
+		 */
+		// showPiece(currentPlayer);
+		// disappearPiece(currentPlayer);
 		gameController.catching();
 		showPiece(currentPlayer);
 		gameController.missionCheck();
-		
+
 		currentPlayer = gameController.changePlayer();
 		update("card");
 		refreshInfo();
@@ -469,9 +479,9 @@ public class Board {
 			System.out.println("Deleting card has clicked!");
 			gameController.deleteCard(number);
 			gameController.addCard(gameController.tempcard);
-			
+
 			dorest();
-			
+
 			lessThanFive = true;
 		}
 
@@ -507,8 +517,7 @@ public class Board {
 
 	public void showPiece(int Player) {
 		players = gameController.Players;
-		playerPiece[players.get(Player).getPosition()][Player]
-				.setVisible(true);
+		playerPiece[players.get(Player).getPosition()][Player].setVisible(true);
 	}
 
 	class MyPanel extends JPanel {
