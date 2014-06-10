@@ -166,10 +166,10 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(60, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(60, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(60, 100));
-				/*playerPiecePanel[i].setPreferredSize(new Dimension(60, 50));
+				playerPiecePanel[i].setPreferredSize(new Dimension(60, 50));
 				playerPiecePanel[i].setMaximumSize(new Dimension(60, 50));
 				playerPiecePanel[i].setMinimumSize(new Dimension(60, 50));
-*/
+
 				cardPiece[i].setPreferredSize(new Dimension(60, 50));
 				cardPiece[i].setMaximumSize(new Dimension(60, 50));
 				cardPiece[i].setMinimumSize(new Dimension(60, 50));
@@ -185,26 +185,25 @@ public class Board {
 						stoneImage0.getIconHeight());
 				PieceList.get(i).add(Map_piece[i], new Integer(2));
 
-				// Map_piece[i].setPreferredSize(new Dimension(30, 100));
-				// Map_piece[i].setMaximumSize(new Dimension(30, 100));
-				// Map_piece[i].setMinimumSize(new Dimension(30, 100));
+				Map_piece[i].setPreferredSize(new Dimension(30, 100));
+				Map_piece[i].setMaximumSize(new Dimension(30, 100));
+				Map_piece[i].setMinimumSize(new Dimension(30, 100));
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-			/*
-			 * 	if (i % 2 == 0)
-					PieceList.get(i).setBackground(new Color(127, 255, 0));
-				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));
-					*/
+				/*
+				 * if (i % 2 == 0) PieceList.get(i).setBackground(new Color(127,
+				 * 255, 0)); else PieceList.get(i).setBackground(new Color(0,
+				 * 255, 127));
+				 */
 			} else {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 60));
-			/*	playerPiecePanel[i].setPreferredSize(new Dimension(100, 30));
+				playerPiecePanel[i].setPreferredSize(new Dimension(100, 30));
 				playerPiecePanel[i].setMaximumSize(new Dimension(100, 30));
 				playerPiecePanel[i].setMinimumSize(new Dimension(100, 30));
-*/
+
 				cardPiece[i].setPreferredSize(new Dimension(100, 30));
 				cardPiece[i].setMaximumSize(new Dimension(100, 30));
 				cardPiece[i].setMinimumSize(new Dimension(100, 30));
@@ -213,13 +212,13 @@ public class Board {
 				Map_piece[i] = new JLabel(String.valueOf(Map.Map_pieces[i]
 						.get_map_number()));
 				Map_piece[i].setVisible(false);
-				 Map_piece[i].setPreferredSize(new Dimension(100, 30));
-				 Map_piece[i].setMaximumSize(new Dimension(100, 30));
-				 Map_piece[i].setMinimumSize(new Dimension(100, 30));
+				Map_piece[i].setPreferredSize(new Dimension(100, 30));
+				Map_piece[i].setMaximumSize(new Dimension(100, 30));
+				Map_piece[i].setMinimumSize(new Dimension(100, 30));
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				
+
 				stone = new JLabel(stoneImage2);
 				stone.setPreferredSize(new Dimension(100, 60));
 				stone.setMaximumSize(new Dimension(100, 60));
@@ -229,11 +228,11 @@ public class Board {
 						stoneImage0.getIconHeight());
 				PieceList.get(i).add(Map_piece[i], new Integer(2));
 
-			/*	if (i % 2 == 0)
-					PieceList.get(i).setBackground(new Color(127, 255, 0));
-				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));
-					*/
+				/*
+				 * if (i % 2 == 0) PieceList.get(i).setBackground(new Color(127,
+				 * 255, 0)); else PieceList.get(i).setBackground(new Color(0,
+				 * 255, 127));
+				 */
 			}
 		}
 
