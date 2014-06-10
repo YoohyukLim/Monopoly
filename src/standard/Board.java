@@ -456,7 +456,7 @@ public class Board {
       cardlayout.show(cardside, String.valueOf(currentPlayer));
    }
 
-   public void dorest() {
+   public void dorest() throws Exception {
       refreshCards();
       update("card");
       disappearPiece(currentPlayer);
@@ -520,7 +520,12 @@ public class Board {
          lessThanFive = gameController.getCard();
 
          if (lessThanFive == true) {
-            dorest();
+            try {
+				dorest();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
          }
       }
 
@@ -587,7 +592,12 @@ public class Board {
          gameController.deleteCard(number);
          gameController.addCard(gameController.tempcard);
 
-         dorest();
+         try {
+			dorest();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
          lessThanFive = true;
       }

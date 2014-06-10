@@ -10,6 +10,7 @@ import dialog.missionDialog;
 import model.Card;
 import model.Dice;
 import model.Piece;
+import model.Sound;
 
 public class GameController {
 	public Board board;
@@ -136,14 +137,16 @@ public class GameController {
 		return currentPlayer = (currentPlayer + 1) % playerN;
 	}
 	
-	public void catching(){
+	public void catching() throws Exception{
 		int nowposition = Players.get(currentPlayer).getPosition();
 		int size = Players.size();
+		Sound defeat = new Sound("Resources/sounds/game/defeat_enemy1.wav");
 		if(nowposition == 0)
 			return;
 		for(int i=0; i<size; i++){
 			if(i != currentPlayer && nowposition == Players.get(i).getPosition()){
 				System.out.println(Players.get(currentPlayer).getName()+"이 "+Players.get(i).getName()+"을 잡았습니다!");
+				defeat.play();
 				board.disappearPiece(i);
 				Players.get(currentPlayer).catching();
 				Players.get(i).caught();
