@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.Sound;
+
 import standard.GameController;
 
 public class missionDialog extends JDialog {
@@ -22,7 +24,7 @@ public class missionDialog extends JDialog {
 	JButton ok;
 	int playerNumber;
 
-	public missionDialog(JFrame parent, GameController gameController, int playerNumber) {
+	public missionDialog(JFrame parent, GameController gameController, int playerNumber) throws Exception {
 		super(parent, "GAME OVER", true);
 		this.missionDialog = this;
 		this.gameController = gameController;
@@ -35,7 +37,8 @@ public class missionDialog extends JDialog {
 		this.init();
 	}
 
-	public void init() {
+	public void init() throws Exception {
+		Sound victory = new Sound("Resources/sounds/game/victory.wav");
 		JLabel text1 = new JLabel("VICTORY");
 		JLabel text2 = new JLabel(gameController.Players.get(playerNumber).getName());
 		JPanel textPanel = new JPanel();
@@ -54,6 +57,7 @@ public class missionDialog extends JDialog {
 
 		this.getContentPane().add(textPanel, BorderLayout.NORTH);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		victory.play();
 		this.setVisible(true);
 	}
 

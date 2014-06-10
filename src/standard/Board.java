@@ -13,9 +13,17 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -28,6 +36,7 @@ import javax.swing.JPanel;
 import model.Card;
 import model.Map_piece;
 import model.Piece;
+import model.Sound;
 
 public class Board {
    Map map;
@@ -88,7 +97,7 @@ public class Board {
       playerPiece = new MyPanel[36][2];
       playerPiecePanel = new JPanel[36];
       cardPiece = new JPanel[36];
-
+      
       frame.setTitle("Monopoly");
       frame.setBounds(0, 0, 1006, 900);
       frame.setResizable(false);
@@ -292,6 +301,9 @@ public class Board {
       frame.getContentPane().add(chatpanel);
       
       refreshInfo();
+      
+      Sound bgm = new Sound("Resources/sounds/game/ChmpSlct_DraftMode.wav");
+      bgm.loop();
    }
 
    private Color getImage(String string) {
@@ -472,7 +484,7 @@ public class Board {
       executableCards();
    }
 
-   public void dofinal(){
+   public void dofinal() throws Exception{
       gameController.missionCheck();
       currentPlayer = gameController.changePlayer();
       update("card");
@@ -482,6 +494,13 @@ public class Board {
 
    class DiceBtnHandler implements MouseListener {
       public void mouseClicked(MouseEvent e) {
+    	 try {
+			Sound btnsound = new Sound("Resources/sounds/game/global-button_large.wav");
+			btnsound.play();
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
          System.out.println("/********************************/");
          if (lessThanFive == false) {
             JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
@@ -489,7 +508,12 @@ public class Board {
          } else if(cardtime == true){
             JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
             
-            dofinal();
+            try {
+				dofinal();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             return;
          }
 
@@ -602,7 +626,12 @@ public class Board {
          int number = Integer.parseInt(cardNumber.getText());
          System.out.println("Using this card!");
          if(gameController.useCard(number)){
-            dofinal();
+            try {
+				dofinal();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             cardtime = false;
          }
       }
@@ -664,5 +693,4 @@ public class Board {
          g.drawRect(10, 10, 15, 15);
       }
    }
-
 }

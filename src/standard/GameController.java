@@ -152,7 +152,7 @@ public class GameController {
 		}
 	}
 	
-	public void missionCheck(){
+	public void missionCheck() throws Exception{
 		int size = Players.size();
 		for(int i=0; i<size; i++){
 			if(Players.get(i).missionCheck())
@@ -171,7 +171,7 @@ public class GameController {
 		return dialog.init();
 	}
 	
-	public void loadMissionDialog(int i){
+	public void loadMissionDialog(int i) throws Exception{
 		System.out.println("Game Over!");
 		new missionDialog(board.frame, this, i);
 	}
