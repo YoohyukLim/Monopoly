@@ -119,7 +119,7 @@ public class Board {
 				PieceList.add(new IPanel("Resources/image/Stone1.jpg"));
 			else
 				PieceList.add(new IPanel("Resources/image/Stone2.jpg"));
-			
+
 			playerPiecePanel[i] = new JPanel();
 			playerPiece[i][0] = new MyPanel(Color.RED);
 			playerPiece[i][1] = new MyPanel(Color.BLUE);
@@ -263,9 +263,9 @@ public class Board {
 		cardside.setLayout(cardlayout);
 		cardpanel = new JPanel[2];
 		cardstate = new JPanel[2];
-		cards = new JPanel[2][5];
+		cards = new IPanel[2][5];
 		for (int i = 0; i < cardpanel.length; i++) {
-			cardpanel[i] = new JPanel();
+			cardpanel[i] = new IPanel("Resources/image/cardpage.jpg");
 			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
 			cardpanel[i].setBackground(new Color(255, 0, 255));
 
@@ -355,7 +355,7 @@ public class Board {
 		infoside.add(rotationCntLabel);
 	}
 
-	public void refreshCards() {
+	public void refreshCards() throws Exception {
 		playerCard = gameController.Players.get(currentPlayer).cardList;
 		int length = playerCard.size();
 		System.out.println("//"
@@ -371,7 +371,7 @@ public class Board {
 			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
 
-			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
 			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
@@ -388,7 +388,7 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 	}
 
-	public void deleteCards() {
+	public void deleteCards() throws Exception {
 		playerCard = gameController.Players.get(currentPlayer).cardList;
 		int length = playerCard.size();
 		DeleteCardBtnHandler cardhandler = new DeleteCardBtnHandler();
@@ -406,7 +406,7 @@ public class Board {
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
-			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
 			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
@@ -426,7 +426,7 @@ public class Board {
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
 
-	public void executableCards() {
+	public void executableCards() throws Exception {
 		playerCard = gameController.Players.get(currentPlayer).cardList;
 		int length = playerCard.size();
 		CardBtnHandler cardhandler = new CardBtnHandler();
@@ -445,7 +445,7 @@ public class Board {
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
-			cards[currentPlayer][i] = new JPanel();
+			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
 			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
 			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
@@ -718,7 +718,7 @@ public class Board {
 	class IPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 		private ImageIcon image = null;
-		
+
 		public IPanel(String filename) throws Exception {
 			URL url = new File(filename).toURI().toURL();
 			image = new ImageIcon(url);

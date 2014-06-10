@@ -60,7 +60,12 @@ public class cardDialog extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			result = false;
 			carddialog.setVisible(false);
-			gameController.board.deleteCards();
+			try {
+				gameController.board.deleteCards();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
