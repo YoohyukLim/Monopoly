@@ -250,20 +250,21 @@ public class Board {
 		rightside.setOpaque(false);
 
 		// DicePanel
-		background = new JLabel(backimage);
-		dicepanel.add(background, new Integer(1));
+		/*background = new JLabel(backimage);
+		dicepanel.add(background, new Integer(1));*/
 		Dice_button = new JLabel(dice_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
 		Dice_button.addMouseListener(DBhandler);
-		dicepanel.add(Dice_button, new Integer(2));
-		background.setBounds(0, 0, backimage.getIconWidth(),
-				backimage.getIconHeight());
+		dicepanel.add(Dice_button);
+		/*background.setBounds(0, 0, backimage.getIconWidth(),
+				backimage.getIconHeight());*/
 		Dice_button.setBounds(165, 300, dice_icon.getIconWidth(),
 				dice_icon.getIconHeight());
 
 		//boardpanel.setBackground(new Color(0, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
+		boardpanel.setOpaque(false);
 		boardpanel.add(topside, BorderLayout.NORTH);
 		boardpanel.add(botside, BorderLayout.SOUTH);
 		boardpanel.add(leftside, BorderLayout.WEST);
@@ -320,7 +321,12 @@ public class Board {
 		consolepanel = new IPanel("Resources/image/info.png");
 		consolepanel.setPreferredSize(new Dimension(320, 220));
 
-		frame.getContentPane().add(boardpanel);
+		IPanel finalboard = new IPanel("Resources/image/background.jpg");
+		finalboard.setPreferredSize(new Dimension(680, 680));
+		finalboard.setMaximumSize(new Dimension(680, 680));
+		finalboard.setMinimumSize(new Dimension(680, 680));
+		finalboard.add(boardpanel);
+		frame.getContentPane().add(finalboard);
 		frame.getContentPane().add(infopanel);
 		frame.getContentPane().add(chatpanel);
 		frame.getContentPane().add(consolepanel);
