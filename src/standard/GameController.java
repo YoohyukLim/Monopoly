@@ -88,15 +88,21 @@ public class GameController {
 		return true;
 	}
 	
-	public void useCard(int n){
+	public boolean useCard(int n){
 		Piece player = Players.get(currentPlayer);
 		int position = player.getPosition();
+		if(cardmap[position][0]==1){
+			JOptionPane.showMessageDialog(null, "카드가 이미 존재합니다.");
+			return false;
+		}
 		System.out.println("Card"+n+" is used");
 		player.deleteCard(n);
 		cardmap[position][0]=1;
 		cardmap[position][1]=currentPlayer;
 		cardmap[position][2]=n;
 		board.showCard(position);
+		
+		return true;
 	}
 
 	public void deleteCard(int n) {

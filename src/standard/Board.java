@@ -595,13 +595,13 @@ public class Board {
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
 			System.out.println("Using this card!");
-			gameController.useCard(number);
-
-			gameController.missionCheck();
-			currentPlayer = gameController.changePlayer();
-			update("card");
-			refreshInfo();
-			cardtime = false;
+			if(gameController.useCard(number)){
+				gameController.missionCheck();
+				currentPlayer = gameController.changePlayer();
+				update("card");
+				refreshInfo();
+				cardtime = false;
+			}
 		}
 
 		@Override
