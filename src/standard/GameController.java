@@ -164,6 +164,7 @@ public class GameController {
 						&& Players.get(i).getPosition() - nowposition >= -1) {
 					System.out.println(Players.get(currentPlayer).getName()
 							+ "의 일격필살!!");
+					new Sound("Resources/sounds/MasterYi/alpha.wav").play();
 					defeat.play();
 					board.disappearPiece(i);
 					Players.get(currentPlayer).catching();
