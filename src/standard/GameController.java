@@ -160,7 +160,7 @@ public class GameController {
 					Players.get(i).caught();
 					board.showPiece(i);
 				} else if (Players.get(currentPlayer).piece_type == 1
-						&& Players.get(i).getPosition() - nowposition <= 2
+						&& Players.get(i).getPosition() - nowposition <= 3
 						&& Players.get(i).getPosition() - nowposition >= -1) {
 					System.out.println(Players.get(currentPlayer).getName()
 							+ "의 일격필살!!");
