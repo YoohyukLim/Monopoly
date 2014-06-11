@@ -554,6 +554,7 @@ public class Board {
 		Dice_button.setVisible(true);
 		gameController.missionCheck();
 		currentPlayer = gameController.changePlayer();
+		refreshCards();
 		update("card");
 		refreshInfo();
 		cardtime = false;
