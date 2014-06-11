@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import standard.GameController;
 
 public class Piece {
-	int piece_type;
+	public int piece_type;
 	int position;
 	boolean mission;
 
