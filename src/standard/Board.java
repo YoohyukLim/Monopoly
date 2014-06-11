@@ -552,12 +552,11 @@ public class Board {
 	public void dofinal() throws Exception {
 		Next_button.setVisible(false);
 		Dice_button.setVisible(true);
-		refreshInfo();
 		gameController.missionCheck();
 		currentPlayer = gameController.changePlayer();
-		refreshInfo();
 		refreshCards();
 		update("card");
+		refreshInfo();
 		cardtime = false;
 	}
 
