@@ -70,6 +70,8 @@ public class Board {
 
 	public boolean lessThanFive = true;
 	public boolean cardtime = false;
+	
+	public Sound bgm = new Sound("Resources/sounds/game/ChmpSlct_DraftMode.wav");
 
 	public Board(Map map) throws Exception {
 		this.map = map;
@@ -136,8 +138,8 @@ public class Board {
 				PieceList.add(new IPanel("Resources/image/Stone2.png"));
 
 			playerPiecePanel[i] = new JPanel();
-			playerPiece[i][0] = new IPanel("Resources/image/masteryi.jpg");
-			playerPiece[i][1] = new IPanel("Resources/image/ohkong.jpg");
+			playerPiece[i][0] = new IPanel("Resources/image/ohkong.jpg");
+			playerPiece[i][1] = new IPanel("Resources/image/masteryi.jpg");
 			playerPiece[i][0].setPreferredSize(new Dimension(30, 30));
 			playerPiece[i][0].setMaximumSize(new Dimension(30, 30));
 			playerPiece[i][0].setMinimumSize(new Dimension(30, 30));
@@ -357,7 +359,6 @@ public class Board {
 
 		refreshInfo();
 
-		Sound bgm = new Sound("Resources/sounds/game/ChmpSlct_DraftMode.wav");
 		bgm.loop();
 	}
 
@@ -541,11 +542,16 @@ public class Board {
 		// disappearPiece(currentPlayer);
 		gameController.catching();
 		showPiece(currentPlayer);
+		
+		Dice_button.setVisible(false);
+		Next_button.setVisible(true);
 
 		executableCards();
 	}
 
 	public void dofinal() throws Exception {
+		Next_button.setVisible(false);
+		Dice_button.setVisible(true);
 		gameController.missionCheck();
 		currentPlayer = gameController.changePlayer();
 		update("card");

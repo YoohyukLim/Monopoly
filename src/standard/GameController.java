@@ -35,9 +35,9 @@ public class GameController {
 		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = "
 				+ DiceNumber;
 		if(currentPlayer==0)
-			new MasterYi_Sound().normal();
-		else if(currentPlayer==1)
 			new OhKong_Sound().normal();
+		else if(currentPlayer==1)
+			new MasterYi_Sound().normal();
 		JOptionPane.showMessageDialog(null, msg);
 
 		Players.get(currentPlayer).movePosition(DiceNumber);

@@ -57,6 +57,7 @@ public class missionDialog extends JDialog {
 
 		this.getContentPane().add(textPanel, BorderLayout.NORTH);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		gameController.board.bgm.stop();
 		victory.play();
 		this.setVisible(true);
 	}

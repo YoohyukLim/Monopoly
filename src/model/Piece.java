@@ -70,9 +70,9 @@ public class Piece {
 	}
 	
 	public void caught() throws Exception{
-		if(piece_type==1)
+		if(piece_type==0)
 			new OhKong_Sound().dead();
-		else if(piece_type==0)
+		else if(piece_type==1)
 			new MasterYi_Sound().dead();
 		
 		this.position = 0;
@@ -84,11 +84,11 @@ public class Piece {
 	
 	public boolean missionCheck(){
 		switch(piece_type){
-		case 1:
+		case 0:
 			if(rotationCnt == 5)
 				mission = true;
 			break;
-		case 0:
+		case 1:
 			if(catchCnt == 3)
 				mission = true;
 			break;
