@@ -3,20 +3,21 @@ package gameServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
-import protocol.LoginProtocol;
+import protocol.LobbyProtocol;
 import protocol.Protocol;
 
 public class monoServer {
 	HashMap<String, ObjectOutputStream> clients;
+	ArrayList<String> clientsName;
 	Protocol data;
 
 	public static void main(String args[]) {
@@ -25,7 +26,9 @@ public class monoServer {
 
 	public monoServer() {
 		clients = new HashMap<String, ObjectOutputStream>();
-		Collections.synchronizedMap(clients);
+		clientsName = new ArrayList<String>();
+		//Collections.synchronizedMap(clients);
+		//Collections.synchronizedList(clientsName);
 	}
 
 	public void start() {
@@ -59,8 +62,8 @@ public class monoServer {
 			this.socket = socket;
 
 			try {
-				in = new ObjectInputStream(socket.getInputStream());
 				out = new ObjectOutputStream(socket.getOutputStream());
+				in = new ObjectInputStream(socket.getInputStream());
 			} catch (Exception e) {
 			}
 		}
@@ -70,13 +73,14 @@ public class monoServer {
 				data = (Protocol) in.readObject();
 				name = data.getName();
 
-				if (data instanceof LoginProtocol)
-					clients.put(name, out);
-				else
+				if (data instanceof LobbyProtocol){
+					addClient(name, out);
+				}else
 					System.exit(0);
 
 				System.out.println(name + "님이 접속하셨습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
+				UpdateClient(new LobbyProtocol(clientsName));
 
 				while (in != null) {
 					data = (Protocol) in.readObject();
@@ -90,7 +94,8 @@ public class monoServer {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} finally {
-				clients.remove(name);
+				subClient(name);
+				UpdateClient(new LobbyProtocol(clientsName));
 				System.out.println("[" + socket.getInetAddress() + ":"
 						+ socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
@@ -102,18 +107,28 @@ public class monoServer {
 
 		private void analysisChatProtocol(ChatProtocol data) {
 		}
-
-		void sendToAll(String msg) {
-			Iterator it = clients.keySet().iterator();
-
-			while (it.hasNext()) {
-				try {
-					ObjectOutputStream out = new ObjectOutputStream(
-							(OutputStream) clients.get(it.next()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}// sendToAll
 	}// ServerReceiver()
+	
+	public synchronized void addClient(String name, ObjectOutputStream out){
+		clients.put(name, out);
+		clientsName.add(name);
+	}
+	
+	public synchronized void subClient(String name){
+		clients.remove(name);
+		clientsName.remove(name);
+	}
+	
+	public void UpdateClient(LobbyProtocol data) {
+		Iterator it = clients.keySet().iterator();
+		while (it.hasNext()) {
+			try {
+				ObjectOutputStream out = (ObjectOutputStream) clients.get((String) it.next());
+				out.writeObject(data);
+				out.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}// sendToAll
 }

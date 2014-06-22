@@ -1,7 +1,10 @@
 package gui;
 
+import gameClient.monoClient;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 public class CreateRoom extends JPanel {
@@ -10,8 +13,16 @@ public class CreateRoom extends JPanel {
 	private JButton cancelButton;
 	private JLabel createRoomLabel = new JLabel("방 제목을 입력하세요!");
 	public static JFrame f;
+	public static monoClient monoClient;
 	
-	public CreateRoom() {
+	public CreateRoom(monoClient monoClient) {
+		this.monoClient = monoClient;
+		
+		f = new JFrame();
+		f.setSize(405,150);
+		f.setResizable(false);
+		f.setVisible(true);
+		
 		roomId = new JTextField(10);
 		createButton = new JButton();
 		cancelButton = new JButton();
@@ -27,18 +38,21 @@ public class CreateRoom extends JPanel {
 		createButton.setText("확인");
 		cancelButton.setText("취소");
 		
+		cancelButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				f.setVisible(false);
+			}
+		});
+		
+		f.getContentPane().add(this);
+		
 		this.setLayout(null);
 		this.setVisible(true);
-
 	}
 
 
 	public static void main(String[] args) {
-		f = new JFrame();
-		f.setSize(405,150);
-		f.setResizable(false);
-		f.getContentPane().add(new CreateRoom());
-		f.setVisible(true);
+		new CreateRoom(null);
 	}
-
 }

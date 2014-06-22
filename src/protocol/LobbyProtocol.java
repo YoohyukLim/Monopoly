@@ -1,6 +1,9 @@
 package protocol;
 
-public class LoginProtocol implements Protocol {
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class LobbyProtocol implements Protocol {
 	private static final long serialVersionUID = 1L;
 	
 	public static final short ENTER = 1000;
@@ -12,16 +15,26 @@ public class LoginProtocol implements Protocol {
 	public static final short SEND_USER_LIST = 4000;
 	public static final short SEND_TOTAL_USER = 4100;
 	
+	private ArrayList<String> clients;
 	private String name;
 	private short state;
 	
-	public LoginProtocol(String name, short state){
+	public LobbyProtocol(String name, short state){
 		this.name = name;
 		this.state = state;
 	}
+	
+	public LobbyProtocol(ArrayList <String> data){
+		this.clients = data;
+		this.state = SEND_USER_LIST;
+	}
+	
+	public ArrayList<String> getUserlist(){
+		return clients;
+	}
 
 	public short getProtocol() {
-		return 0;
+		return state;
 	}
 
 	@Override
