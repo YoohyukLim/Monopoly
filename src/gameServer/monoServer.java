@@ -14,7 +14,6 @@ import standard.Map;
 
 public class monoServer {
 	HashMap<String, ObjectOutputStream> clients;
-	Map map;
 	
 	public monoServer(){
 		clients = new HashMap<String, ObjectOutputStream>();
