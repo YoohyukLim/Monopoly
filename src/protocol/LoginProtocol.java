@@ -3,8 +3,8 @@ package protocol;
 public class LoginProtocol implements Protocol {
 	private static final long serialVersionUID = 1L;
 	
-	private static final short ENTER = 1000;
-	private static final short LOGIN_CHECK = 1100;
+	public static final short ENTER = 1000;
+	public static final short LOGIN_CHECK = 1100;
 	public static final short LOGIN_ERROR = 1200;
 	public static final short MESSAGE = 2000;
 	public static final short MESSAGE_SLIP = 2100;

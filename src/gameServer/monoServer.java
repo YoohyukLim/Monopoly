@@ -10,10 +10,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import standard.Map;
+import protocol.LoginProtocol;
+import protocol.Protocol;
 
 public class monoServer {
 	HashMap<String, ObjectOutputStream> clients;
+	Protocol data;
 	
 	public monoServer(){
 		clients = new HashMap<String, ObjectOutputStream>();
@@ -44,6 +46,7 @@ public class monoServer {
 		Socket socket;
 		ObjectInputStream in;
 		ObjectOutputStream out;
+		String name;
 
 		ServerReceiver(Socket socket){
 			this.socket = socket;
@@ -56,16 +59,25 @@ public class monoServer {
 		
 		public void run(){
 			try{
-				/*name = in.readUTF();
+				data = (Protocol) in.readObject();
+				name = data.getName();
 				
-				clients.put(name, out);
-				System.out.println("현재 접속자 수는 "+clients.size()+"입니다.");*/
+				if(data instanceof LoginProtocol)
+					clients.put(name, out);
+				else
+					System.exit(0);
+				
+				System.out.println(name+"님이 접속하셨습니다.");
+				System.out.println("현재 접속자 수는 "+clients.size()+"입니다.");
+				
 				while(in!=null){
-					sendToAll(in.readUTF());
+					//sendToAll(in.readUTF());
 				}
 			} catch(IOException e){
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			} finally {
-				//clients.remove(name);
+				clients.remove(name);
 				
 				System.out.println("["+socket.getInetAddress()+":"+socket.getPort()+"]"+"에서 접속을 종료하였습니다.");
 				System.out.println("현재 접속자 수는 "+clients.size()+"입니다.");
