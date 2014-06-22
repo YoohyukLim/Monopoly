@@ -34,8 +34,8 @@ public class NicknameSet extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!inputId.getText().equals("")) {
-					new monoClient(inputId.getText());
 					f.setVisible(false);
+					new monoClient(inputId.getText());
 				}
 			}
 		});

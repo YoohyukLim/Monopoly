@@ -1,5 +1,6 @@
 package gameClient;
 
+import gui.Lobby;
 import gui.NicknameSet;
 
 import java.io.IOException;
@@ -10,17 +11,22 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import protocol.ChatProtocol;
+import protocol.GameProtocol;
 import protocol.LoginProtocol;
+import protocol.Protocol;
 
 public class monoClient {
 	public static String name;
 	String serverIp = "127.0.0.1";
 
-	Socket socket;
+	static Socket socket;
 	public static ObjectInputStream in;
 	public static ObjectOutputStream out;
+	static Protocol data;
 
 	public static JFrame m_frame;
+	public static Lobby lobby;
 
 	public static void main(String args[]) {
 		new monoClient();
@@ -36,40 +42,38 @@ public class monoClient {
 			System.out.println("서버에 연결 중 IP: " + serverIp);
 			socket = new Socket(serverIp, 7777);
 
-			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
+			/*out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());*/
 
 			System.out.println("서버에 연결되었습니다.");
 
-			/*
-			 * Thread sender = new Thread(new ClientSender(socket, name));
-			 * Thread receiver = new Thread(new ClientReceiver(socket));
-			 * 
-			 * sender.start(); receiver.start();
-			 */
-			out.writeObject(new LoginProtocol(name, LoginProtocol.LOGIN_CHECK));
-			start();
+			Thread sender = new Thread(new ClientSender(name));
+			Thread receiver = new Thread(new ClientReceiver());
+			sender.start();
+			receiver.start();
+
+			lobby = new Lobby(this);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			System.exit(0);
 		}
 	}
 
-	public void start() {
+	public void exit() {
+		System.out.println("exit");
+		try {
+			socket.close();
+			System.exit(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	static class ClientSender extends Thread {
-		Socket socket;
 		ObjectOutputStream out;
 		String name;
 
-		ClientSender(Socket socket, String name) {
-			this.socket = socket;
+		ClientSender(String name) {
 			this.name = name;
 
 			try {
@@ -81,8 +85,7 @@ public class monoClient {
 
 		public void run() {
 			try {
-				out.writeObject(new LoginProtocol(name,
-						LoginProtocol.LOGIN_CHECK));
+				out.writeObject(new LoginProtocol(name, LoginProtocol.LOGIN_CHECK));
 
 				while (out != null) {
 				}
@@ -93,12 +96,9 @@ public class monoClient {
 	}// ClientSender()
 
 	static class ClientReceiver extends Thread {
-		Socket socket;
 		ObjectInputStream in;
 
-		ClientReceiver(Socket socket) {
-			this.socket = socket;
-
+		ClientReceiver() {
 			try {
 				in = new ObjectInputStream(socket.getInputStream());
 			} catch (IOException e) {
@@ -106,8 +106,33 @@ public class monoClient {
 		}// 생성자
 
 		public void run() {
-			while (in != null) {
+
+			try {
+				while (in != null) {
+					data = (Protocol) in.readObject();
+
+					if (data instanceof ChatProtocol)
+						analysisChatProtocol((ChatProtocol) data);
+					else if (data instanceof GameProtocol)
+						analysisGameProtocol((GameProtocol) data);
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		}// run()
+		}
+
+		public void analysisChatProtocol(ChatProtocol data) {
+		}
+
+		public void analysisGameProtocol(GameProtocol data) {
+		}
 	}// ClientReceiver()
 }

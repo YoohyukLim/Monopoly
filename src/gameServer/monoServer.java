@@ -17,6 +17,10 @@ public class monoServer {
 	HashMap<String, ObjectOutputStream> clients;
 	Protocol data;
 	
+	public static void main(String args[]){
+		new monoServer().start();
+	}
+	
 	public monoServer(){
 		clients = new HashMap<String, ObjectOutputStream>();
 		Collections.synchronizedMap(clients);
@@ -78,7 +82,6 @@ public class monoServer {
 				e.printStackTrace();
 			} finally {
 				clients.remove(name);
-				
 				System.out.println("["+socket.getInetAddress()+":"+socket.getPort()+"]"+"에서 접속을 종료하였습니다.");
 				System.out.println("현재 접속자 수는 "+clients.size()+"입니다.");
 			}
@@ -96,8 +99,4 @@ public class monoServer {
 			} 
 		}
 	}//sendToAll
-	
-	public static void main(String args[]){
-		new monoServer().start();
-	}
 }
