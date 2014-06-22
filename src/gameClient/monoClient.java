@@ -16,6 +16,7 @@ public class monoClient {
 	public static String name;
 	String serverIp = "127.0.0.1";
 
+	Socket socket;
 	public static ObjectInputStream in;
 	public static ObjectOutputStream out;
 
@@ -33,7 +34,7 @@ public class monoClient {
 		try {
 			this.name = name;
 			System.out.println("서버에 연결 중 IP: " + serverIp);
-			Socket socket = new Socket(serverIp, 7777);
+			socket = new Socket(serverIp, 7777);
 
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
@@ -46,19 +47,20 @@ public class monoClient {
 			 * 
 			 * sender.start(); receiver.start();
 			 */
+			out.writeObject(new LoginProtocol(name, LoginProtocol.LOGIN_CHECK));
 			start();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void start() {
-		try {
-			out.writeObject(new LoginProtocol(name, LoginProtocol.LOGIN_CHECK));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	static class ClientSender extends Thread {

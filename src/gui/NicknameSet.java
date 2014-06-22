@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class NicknameSet extends JPanel {
+public class NicknameSet extends JFrame {
 	private JTextField inputId;
 	private JButton loginButton;
 	private JLabel inputIdLabel = new JLabel("닉네임을 입력하세요!");
@@ -49,11 +49,7 @@ public class NicknameSet extends JPanel {
 
 
 	public static void main(String[] args) {
-		f = new JFrame();
-		f.setSize(405,150);
-		f.setResizable(false);
-		f.getContentPane().add(new NicknameSet());
-		f.setVisible(true);
+		new NicknameSet();
 	}
 
 }
