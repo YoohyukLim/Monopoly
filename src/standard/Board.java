@@ -553,8 +553,8 @@ public class Board {
 		Next_button.setVisible(false);
 		Dice_button.setVisible(true);
 		gameController.missionCheck();
+		refreshInfo();
 		currentPlayer = gameController.changePlayer();
-		refreshCards();
 		update("card");
 		refreshInfo();
 		cardtime = false;
