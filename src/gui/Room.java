@@ -14,8 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import protocol.LobbyProtocol;
-
 public class Room extends JFrame {
 	
 	public static JFrame f;
@@ -24,6 +22,8 @@ public class Room extends JFrame {
 	private JPanel panel;
 	private JLabel masterLabel;
 	private JLabel joinerLabel;
+	private JLabel masterNick;
+	private JLabel joinerNick;
 	private JPanel masterPanel;
 	private JPanel joinerPanel;
 	private JButton startButton;
@@ -42,6 +42,8 @@ public class Room extends JFrame {
 		panel = new JPanel();
 		masterLabel = new JLabel();
 		joinerLabel = new JLabel();
+		masterNick = new JLabel();
+		joinerNick = new JLabel();
 		masterPanel = new JPanel();
 		joinerPanel = new JPanel();
 		startButton = new JButton();
@@ -49,15 +51,21 @@ public class Room extends JFrame {
 		
 		masterLabel.setText("방장");
 		joinerLabel.setText("도전자");
+		masterNick.setText("Player1");
+		joinerNick.setText("Player2");
 		masterPanel.setBackground(Color.BLACK);
 		joinerPanel.setBackground(Color.BLACK);
 		startButton.setText("시작");
 		exitButton.setText("나가기");
 		masterLabel.setHorizontalAlignment(JLabel.CENTER);
 		joinerLabel.setHorizontalAlignment(JLabel.CENTER);
+		masterNick.setHorizontalAlignment(JLabel.CENTER);
+		joinerNick.setHorizontalAlignment(JLabel.CENTER);
 		
-		masterLabel.setBounds(30, 40, 100, 30);
-		joinerLabel.setBounds(160, 40, 100, 30);
+		masterLabel.setBounds(30, 10, 100, 30);
+		joinerLabel.setBounds(160, 10, 100, 30);
+		masterNick.setBounds(30, 40, 100, 30);
+		joinerNick.setBounds(160, 40, 100, 30);
 		masterPanel.setBounds(30, 75, 100, 100);
 		joinerPanel.setBounds(160, 75, 100, 100);
 		startButton.setBounds(50, 200, 80, 30);
@@ -67,8 +75,6 @@ public class Room extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				f.setVisible(false);
-				LobbyProtocol room = new LobbyProtocol(monoClient.name, LobbyProtocol.OUT_ROOM);
-				room.setRoomName(monoClient.roomName);
 				monoClient.lobby.f.setVisible(true);
 			}
 		});
@@ -76,6 +82,8 @@ public class Room extends JFrame {
 		cp.setLayout(null);
 		cp.add(masterLabel);
 		cp.add(joinerLabel);
+		cp.add(masterNick);
+		cp.add(joinerNick);
 		cp.add(masterPanel);
 		cp.add(joinerPanel);
 		cp.add(startButton);
