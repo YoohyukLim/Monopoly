@@ -66,14 +66,12 @@ public class Lobby extends JFrame {
 		int length = clients.size();
 		this.clients = (DefaultListModel) userList.getModel();
 		this.clients.removeAllElements();
-		for(int i=0; i<length; i++)
-			this.clients.addElement(clients.get(i));
-		/*userList.setModel(this.clients);
-		
-		cp.removeAll();
-		cp.add(roomList, "room");
-		cp.add(userList, "user");
-		cp.add(roomCreateButton);*/
+		for(int i=0; i<length; i++){
+			if(monoClient.name.equals(clients.get(i)))
+				this.clients.addElement(clients.get(i)+"<³ª>");
+			else
+				this.clients.addElement(clients.get(i));
+		}
 	}
 	
 	public void refreshRooms(ArrayList<String> rooms){
@@ -82,12 +80,6 @@ public class Lobby extends JFrame {
 		this.rooms.removeAllElements();
 		for(int i=0; i<length; i++)
 			this.rooms.addElement(rooms.get(i));
-		/*roomList.setModel(this.rooms);
-		
-		cp.removeAll();
-		cp.add(roomList, "room");
-		cp.add(userList, "user");
-		cp.add(roomCreateButton);*/
 	}
 	
 	class roomHandler implements MouseListener{
