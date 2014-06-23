@@ -118,7 +118,6 @@ public class monoServer {
 
 					String roomName = data.getRoomName();
 					addRoom(roomName, name);
-					System.out.println("Sizeof " + roomsName.size());
 					SendToAll(new LobbyProtocol(roomsName,
 							LobbyProtocol.SEND_ROOM_LIST));
 
@@ -185,7 +184,6 @@ public class monoServer {
 	public synchronized void breakRoom(String RoomName, String name){
 		if(clients.get(name).isMaster == true){
 			destroyRoom(RoomName);
-			System.out.println("Master has gone");
 		} else{
 			ObjectOutputStream oos = this.clients.get(name).getOuputStream();
 			try {
@@ -206,7 +204,6 @@ public class monoServer {
 		
 		for(int i=0; i<clientList.size(); i++){
 			ObjectOutputStream oos = this.clients.get(clientList.get(i)).getOuputStream();
-			System.out.println(oos);
 			try {
 				oos.writeObject(new LobbyProtocol(clientList.get(i), LobbyProtocol.EXIT_ROOM));
 				oos.reset();

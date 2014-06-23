@@ -155,9 +155,6 @@ public class monoClient extends Thread{
 			this.players.clear();
 		this.players = players;
 		
-		for(int i =0 ; i<players.size(); i++)
-			System.out.println(players.get(i));
-		
 		room.refresh(players);
 	}
 	
