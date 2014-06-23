@@ -109,8 +109,8 @@ public class monoClient extends Thread{
 			
 			lobby.f.setVisible(false);
 			room = new Room(this, roomName);
-		} else if (state == LobbyProtocol.EXIT_ROOM){
-			if(roomMaster==false)
+		} else if (state == LobbyProtocol.EXIT_ROOM || state == LobbyProtocol.OUT_ROOM){
+			if(roomMaster==false && state == LobbyProtocol.EXIT_ROOM)
 				JOptionPane.showMessageDialog(null, "방장이 게임을 종료했습니다.");
 			roomMaster = false;
 			roomName = null;

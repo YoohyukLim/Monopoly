@@ -187,7 +187,7 @@ public class monoServer {
 		} else{
 			ObjectOutputStream oos = this.clients.get(name).getOuputStream();
 			try {
-				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.EXIT_ROOM));
+				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.OUT_ROOM));
 				oos.reset();
 			} catch (IOException e) {
 				e.printStackTrace();
