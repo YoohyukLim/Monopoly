@@ -31,12 +31,13 @@ public class Room extends JFrame {
 	
 	private monoClient monoClient;
 	
-	public Room(monoClient monoclient) {
+	public Room(monoClient monoclient, String roomName) {
 		this.monoClient = monoclient;
 		f = this;
 		
 		this.setSize(300,300);
 		this.setResizable(false);
+		this.addWindowListener(new windowHandler());
 		
 		cp = this.getContentPane();
 		panel = new JPanel();
@@ -75,7 +76,7 @@ public class Room extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				f.setVisible(false);
-				monoClient.lobby.f.setVisible(true);
+				monoClient.outRoom();
 			}
 		});
 		
@@ -96,12 +97,12 @@ public class Room extends JFrame {
 		public void windowClosing(WindowEvent e){
 			e.getWindow().setVisible(false);
 			e.getWindow().dispose();
-			monoClient.exit();
+			monoClient.outRoom();
 		}
 	}
 
 	public static void main(String[] args) {
-		new Room(null);
+		new Room(null, null);
 	}
 
 }

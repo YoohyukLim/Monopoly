@@ -21,14 +21,23 @@ public class RoomManager {
 	}
 	
 	public boolean enterRoom(String name){
-		if(isFull != true){
+		if(clientName.size() < 2){
 			clientName.add(name);
-			if(clientName.size() == 2)
-				isFull = true;
 			return true;
 		} else
 			return false;
 			
+	}
+	
+	public void outClient(String name){
+		if(name.equals(roomMaster))
+			roomMaster = null;
+		clientName.remove(name);
+	}
+	
+	public void outClientAll(){
+		roomMaster = null;
+		clientName = null;
 	}
 	
 	public ArrayList getClients(){

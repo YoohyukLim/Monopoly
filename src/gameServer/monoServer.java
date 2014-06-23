@@ -86,7 +86,7 @@ public class monoServer {
 
 				System.out.println(name + "님이 접속하셨습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
-				UpdateClient(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
+				SendToAll(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
 				out.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
 
 				while (in != null) {
@@ -106,27 +106,34 @@ public class monoServer {
 				System.out.println("[" + socket.getInetAddress() + ":"
 						+ socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
-				UpdateClient(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
+				SendToAll(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
 			}
 		}// run()
 		
 		private void analysisLobbyProtocol(LobbyProtocol data){
-			String name = data.getName();
+			name = data.getName();
 			short state = data.getProtocol();
 			
-			if(state == LobbyProtocol.CREATE_ROOM){
+			if (state == LobbyProtocol.CREATE_ROOM){
+				
 				String roomName = data.getRoomName();
 				addRoom(roomName, name);
 				System.out.println("Sizeof "+roomsName.size());
-				UpdateRoom(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+				SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
 				
 				LobbyProtocol roomdata = new LobbyProtocol(name, state);
 				roomdata.setRoomName(roomName);
 				sendToClient(roomdata);
-			} else if(state == LobbyProtocol.BREAK_ROOM){
+				
+			} else if (state == LobbyProtocol.OUT_ROOM){
+				
 				String roomName = data.getRoomName();
-				breakRoom(roomName);
-				UpdateRoom(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+				breakRoom(roomName, name);
+				SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+				
+			} else if (state == LobbyProtocol.ENTER_ROOM){
+				String roomName = data.getRoomName();
+				enterRoom(roomName, name);
 			}
 		}
 
@@ -151,10 +158,59 @@ public class monoServer {
 		clients.get(name).enterRoom(Rname, true);
 	}
 	
-	public synchronized void breakRoom(String name){
-		roomList.remove(name);
-		roomsName.remove(name);
-		clients.get(name).outRoom();
+	public synchronized void enterRoom(String RoomName, String name){
+		ObjectOutputStream oos = this.clients.get(name).getOuputStream();
+		try {
+			if (roomList.get(RoomName).enterRoom(name)) {
+				clients.get(name).enterRoom(RoomName, false);
+				LobbyProtocol room = new LobbyProtocol(name, LobbyProtocol.ENTER_ROOM);
+				room.setRoomName(RoomName);
+				oos.writeObject(room);
+				oos.reset();
+			} else {
+				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER_FAIL));
+				oos.reset();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void breakRoom(String RoomName, String name){
+		if(clients.get(name).isMaster == true){
+			destroyRoom(RoomName);
+			System.out.println("Master has gone");
+		} else{
+			ObjectOutputStream oos = this.clients.get(name).getOuputStream();
+			try {
+				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.EXIT_ROOM));
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			clients.get(name).outRoom();
+			roomList.get(RoomName).outClient(name);
+		}
+	}
+	
+	public synchronized void destroyRoom(String RoomName){
+		RoomManager room = roomList.get(RoomName);
+		ArrayList<String> clientList = room.getClients();
+		
+		for(int i=0; i<clientList.size(); i++){
+			ObjectOutputStream oos = this.clients.get(clientList.get(i)).getOuputStream();
+			System.out.println(oos);
+			try {
+				oos.writeObject(new LobbyProtocol(clientList.get(i), LobbyProtocol.EXIT_ROOM));
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.clients.get(clientList.get(i)).outRoom();
+		}
+		roomList.get(RoomName).outClientAll();
+		roomList.remove(RoomName);
+		roomsName.remove(RoomName);
 	}
 	
 	public synchronized void addClient(String name, ObjectOutputStream out){
@@ -167,7 +223,7 @@ public class monoServer {
 		clientsName.remove(name);
 	}
 	
-	public void UpdateClient(LobbyProtocol data) {
+	public void SendToAll(LobbyProtocol data) {
 		Iterator it = clients.keySet().iterator();
 		while (it.hasNext()) {
 			try {
@@ -179,17 +235,4 @@ public class monoServer {
 			}
 		}
 	}// sendToAll
-	
-	public void UpdateRoom(LobbyProtocol data){
-		Iterator it = clients.keySet().iterator();
-		while (it.hasNext()) {
-			try {
-				ObjectOutputStream out = ((ClientManager) clients.get((String) it.next())).getOuputStream();
-				out.writeObject(data);
-				out.reset();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }

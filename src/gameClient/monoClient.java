@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
 import protocol.LobbyProtocol;
@@ -69,7 +71,7 @@ public class monoClient extends Thread{
 				//System.out.println("From Server : " + data);
 				
 				if(data instanceof LobbyProtocol)
-					analysisLoginProtocol((LobbyProtocol) data);
+					analysisLobbyProtocol((LobbyProtocol) data);
 				else if (data instanceof ChatProtocol)
 					analysisChatProtocol((ChatProtocol) data);
 				else if (data instanceof GameProtocol)
@@ -84,8 +86,9 @@ public class monoClient extends Thread{
 		}
 	}
 	
-	public void analysisLoginProtocol(LobbyProtocol data){
-		String name = data.getName();
+	public void analysisLobbyProtocol(LobbyProtocol data){
+		if(data.getName() != null)
+			name = data.getName();
 		short state = data.getProtocol();
 		
 		if(state == LobbyProtocol.SEND_USER_LIST){
@@ -97,7 +100,20 @@ public class monoClient extends Thread{
 			roomName = data.getRoomName();
 			
 			lobby.f.setVisible(false);
-			room = new Room(this);
+			room = new Room(this, roomName);
+		} else if (state == LobbyProtocol.ENTER_ROOM){
+			roomName = data.getRoomName();
+			
+			lobby.f.setVisible(false);
+			room = new Room(this, roomName);
+		} else if (state == LobbyProtocol.EXIT_ROOM){
+			roomMaster = false;
+			roomName = null;
+			room.setVisible(false);
+			if(lobby.f.isVisible() == false)
+				lobby.f.setVisible(true);
+		} else if (state == LobbyProtocol.ENTER_FAIL){
+			JOptionPane.showMessageDialog(null, "방이 이미 꽉 차있습니다.");
 		}
 	}
 	
@@ -105,6 +121,15 @@ public class monoClient extends Thread{
 	}
 	
 	public void analysisGameProtocol(GameProtocol data){
+	}
+	
+	public void enterRoom(String RoomName){
+	}
+	
+	public void outRoom(){
+		LobbyProtocol data = new LobbyProtocol(name, LobbyProtocol.OUT_ROOM);
+		data.setRoomName(roomName);
+		sendToServer(data);
 	}
 	
 	public void refreshClients(ArrayList<String> clients){
@@ -125,11 +150,6 @@ public class monoClient extends Thread{
 	
 	public void sendToServer(Protocol data){
 		try {
-			/*if (data instanceof LobbyProtocol) {
-				if (data.getProtocol() == LobbyProtocol.CREATE_ROOM) {
-					out.writeObject(data);
-				}
-			}*/
 			out.writeObject(data);
 			out.reset();
 		} catch (IOException e) {
