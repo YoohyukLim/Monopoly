@@ -1,7 +1,13 @@
 package gui;
 
+import gameClient.monoClient;
+
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,7 +27,15 @@ public class Room extends JFrame {
 	private JButton startButton;
 	private JButton	exitButton;
 	
-	public Room() {
+	private monoClient monoClient;
+	
+	public Room(monoClient monoclient) {
+		this.monoClient = monoclient;
+		f = this;
+		
+		this.setSize(300,300);
+		this.setResizable(false);
+		
 		cp = this.getContentPane();
 		panel = new JPanel();
 		masterLabel = new JLabel();
@@ -47,6 +61,14 @@ public class Room extends JFrame {
 		startButton.setBounds(50, 200, 80, 30);
 		exitButton.setBounds(160, 200, 80, 30);
 		
+		exitButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				f.setVisible(false);
+				monoClient.lobby.f.setVisible(true);
+			}
+		});
+		
 		cp.setLayout(null);
 		cp.add(masterLabel);
 		cp.add(joinerLabel);
@@ -54,13 +76,20 @@ public class Room extends JFrame {
 		cp.add(joinerPanel);
 		cp.add(startButton);
 		cp.add(exitButton);
+		
+		this.setVisible(true);
+	}
+	
+	class windowHandler extends WindowAdapter{
+		public void windowClosing(WindowEvent e){
+			e.getWindow().setVisible(false);
+			e.getWindow().dispose();
+			monoClient.exit();
+		}
 	}
 
 	public static void main(String[] args) {
-		f = new Room();
-		f.setSize(300,300);
-		f.setResizable(false);
-		f.setVisible(true);
+		new Room(null);
 	}
 
 }

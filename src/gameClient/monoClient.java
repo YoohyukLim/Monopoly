@@ -2,14 +2,13 @@ package gameClient;
 
 import gui.Lobby;
 import gui.NicknameSet;
+import gui.Room;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
 
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
@@ -25,10 +24,14 @@ public class monoClient extends Thread{
 	static ObjectInputStream in;
 	Protocol data;
 
-	public static JFrame m_frame;
 	public static Lobby lobby;
+	public static Room room;
 	
 	public ArrayList<String> clients;
+	public ArrayList<String> rooms;
+	
+	public boolean roomMaster = false;
+	public String roomName;
 
 	public static void main(String args[]) {
 		new monoClient();
@@ -50,6 +53,7 @@ public class monoClient extends Thread{
 			in = new ObjectInputStream(socket.getInputStream());
 			
 			out.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER));
+			out.reset();
 			
 			lobby = new Lobby(this);
 			this.start();
@@ -81,8 +85,19 @@ public class monoClient extends Thread{
 	}
 	
 	public void analysisLoginProtocol(LobbyProtocol data){
-		if(data.getProtocol() == LobbyProtocol.SEND_USER_LIST){
+		String name = data.getName();
+		short state = data.getProtocol();
+		
+		if(state == LobbyProtocol.SEND_USER_LIST){
 			refreshClients(data.getUserlist());
+		} else if (state == LobbyProtocol.SEND_ROOM_LIST){
+			refreshRooms(data.getRoomlist());
+		} else if(state == LobbyProtocol.CREATE_ROOM){
+			roomMaster = true;
+			roomName = data.getRoomName();
+			
+			lobby.f.setVisible(false);
+			room = new Room(this);
 		}
 	}
 	
@@ -98,6 +113,28 @@ public class monoClient extends Thread{
 		this.clients = new ArrayList<String>(clients);
 		
 		lobby.refreshClients(this.clients);
+	}
+	
+	public void refreshRooms(ArrayList<String> rooms){
+		if(this.rooms!=null)
+			this.rooms.clear();
+		this.rooms = rooms;
+		
+		lobby.refreshRooms(rooms);
+	}
+	
+	public void sendToServer(Protocol data){
+		try {
+			/*if (data instanceof LobbyProtocol) {
+				if (data.getProtocol() == LobbyProtocol.CREATE_ROOM) {
+					out.writeObject(data);
+				}
+			}*/
+			out.writeObject(data);
+			out.reset();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void exit() {

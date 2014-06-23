@@ -16,8 +16,11 @@ import protocol.LobbyProtocol;
 import protocol.Protocol;
 
 public class monoServer {
-	HashMap<String, ObjectOutputStream> clients;
+	HashMap<String, ClientManager> clients;
 	ArrayList<String> clientsName;
+	HashMap<String, RoomManager> roomList;
+	ArrayList<String> roomsName;
+	
 	Protocol data;
 
 	public static void main(String args[]) {
@@ -25,10 +28,13 @@ public class monoServer {
 	}
 
 	public monoServer() {
-		clients = new HashMap<String, ObjectOutputStream>();
+		clients = new HashMap<String, ClientManager>();
 		clientsName = new ArrayList<String>();
+		roomList = new HashMap<String, RoomManager>();
+		roomsName = new ArrayList<String>();
 		//Collections.synchronizedMap(clients);
 		//Collections.synchronizedList(clientsName);
+		//Collections.synchronizedList(roomsName);
 	}
 
 	public void start() {
@@ -80,12 +86,14 @@ public class monoServer {
 
 				System.out.println(name + "님이 접속하셨습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
-				UpdateClient(new LobbyProtocol(clientsName));
+				UpdateClient(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
+				out.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
 
 				while (in != null) {
 					data = (Protocol) in.readObject();
-
-					if (data instanceof ChatProtocol)
+					if (data instanceof LobbyProtocol)
+						analysisLobbyProtocol((LobbyProtocol) data);
+					else if (data instanceof ChatProtocol)
 						analysisChatProtocol((ChatProtocol) data);
 					else if (data instanceof GameProtocol)
 						analysisGameProtocol((GameProtocol) data);
@@ -95,22 +103,62 @@ public class monoServer {
 				e.printStackTrace();
 			} finally {
 				subClient(name);
-				UpdateClient(new LobbyProtocol(clientsName));
 				System.out.println("[" + socket.getInetAddress() + ":"
 						+ socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
 				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
+				UpdateClient(new LobbyProtocol(clientsName, LobbyProtocol.SEND_USER_LIST));
 			}
 		}// run()
+		
+		private void analysisLobbyProtocol(LobbyProtocol data){
+			String name = data.getName();
+			short state = data.getProtocol();
+			
+			if(state == LobbyProtocol.CREATE_ROOM){
+				String roomName = data.getRoomName();
+				addRoom(roomName, name);
+				System.out.println("Sizeof "+roomsName.size());
+				UpdateRoom(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+				
+				LobbyProtocol roomdata = new LobbyProtocol(name, state);
+				roomdata.setRoomName(roomName);
+				sendToClient(roomdata);
+			} else if(state == LobbyProtocol.BREAK_ROOM){
+				String roomName = data.getRoomName();
+				breakRoom(roomName);
+				UpdateRoom(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+			}
+		}
 
 		private void analysisGameProtocol(GameProtocol data) {
 		}
 
 		private void analysisChatProtocol(ChatProtocol data) {
 		}
+		
+		private void sendToClient(Protocol data){
+			try {
+				out.writeObject(data);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}// ServerReceiver()
 	
+	public synchronized void addRoom(String Rname, String name){
+		roomList.put(Rname, new RoomManager(Rname, name));
+		roomsName.add(Rname);
+		clients.get(name).enterRoom(Rname, true);
+	}
+	
+	public synchronized void breakRoom(String name){
+		roomList.remove(name);
+		roomsName.remove(name);
+		clients.get(name).outRoom();
+	}
+	
 	public synchronized void addClient(String name, ObjectOutputStream out){
-		clients.put(name, out);
+		clients.put(name, new ClientManager(name, out));
 		clientsName.add(name);
 	}
 	
@@ -123,7 +171,7 @@ public class monoServer {
 		Iterator it = clients.keySet().iterator();
 		while (it.hasNext()) {
 			try {
-				ObjectOutputStream out = (ObjectOutputStream) clients.get((String) it.next());
+				ObjectOutputStream out = ((ClientManager) clients.get((String) it.next())).getOuputStream();
 				out.writeObject(data);
 				out.reset();
 			} catch (IOException e) {
@@ -131,4 +179,17 @@ public class monoServer {
 			}
 		}
 	}// sendToAll
+	
+	public void UpdateRoom(LobbyProtocol data){
+		Iterator it = clients.keySet().iterator();
+		while (it.hasNext()) {
+			try {
+				ObjectOutputStream out = ((ClientManager) clients.get((String) it.next())).getOuputStream();
+				out.writeObject(data);
+				out.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

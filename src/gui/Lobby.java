@@ -21,7 +21,7 @@ public class Lobby extends JFrame {
 	private JList roomList;
 	private JList userList;
 	private JButton roomCreateButton;
-	private DefaultListModel room;
+	private DefaultListModel rooms;
 	private DefaultListModel clients;
 	private Container cp;
 	private monoClient monoClient;
@@ -37,9 +37,9 @@ public class Lobby extends JFrame {
 		f.addWindowListener(new windowHandler());
 		f.setVisible(true);
 		cp = f.getContentPane();
-		room = new DefaultListModel<>();
+		rooms = new DefaultListModel<>();
 		clients = new DefaultListModel<>();
-		roomList = new JList((ListModel) room);
+		roomList = new JList((ListModel) rooms);
 		userList = new JList((ListModel) clients);
 		roomCreateButton = new JButton();
 		roomCreateButton.setText("방 만들기");
@@ -61,6 +61,19 @@ public class Lobby extends JFrame {
 		for(int i=0; i<length; i++)
 			this.clients.addElement(clients.get(i));
 		userList.setModel(this.clients);
+		
+		cp.removeAll();
+		cp.add(roomList, "room");
+		cp.add(userList, "user");
+		cp.add(roomCreateButton);
+	}
+	
+	public void refreshRooms(ArrayList<String> rooms){
+		int length = rooms.size();
+		this.rooms.removeAllElements();
+		for(int i=0; i<length; i++)
+			this.rooms.addElement(rooms.get(i));
+		roomList.setModel(this.rooms);
 		
 		cp.removeAll();
 		cp.add(roomList, "room");
