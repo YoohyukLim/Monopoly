@@ -31,6 +31,7 @@ public class monoClient extends Thread{
 	
 	public ArrayList<String> clients;
 	public ArrayList<String> rooms;
+	public ArrayList<String> players;
 	
 	public boolean roomMaster = false;
 	public String roomName;
@@ -95,7 +96,9 @@ public class monoClient extends Thread{
 			refreshClients(data.getUserlist());
 		} else if (state == LobbyProtocol.SEND_ROOM_LIST){
 			refreshRooms(data.getRoomlist());
-		} else if(state == LobbyProtocol.CREATE_ROOM){
+		} else if (state == LobbyProtocol.SEND_PLAYER_LIST){
+			refreshGameRoom(data.getPlayerList());
+		} else if (state == LobbyProtocol.CREATE_ROOM){
 			roomMaster = true;
 			roomName = data.getRoomName();
 			
@@ -107,6 +110,8 @@ public class monoClient extends Thread{
 			lobby.f.setVisible(false);
 			room = new Room(this, roomName);
 		} else if (state == LobbyProtocol.EXIT_ROOM){
+			if(roomMaster==false)
+				JOptionPane.showMessageDialog(null, "방장이 게임을 종료했습니다.");
 			roomMaster = false;
 			roomName = null;
 			room.setVisible(false);
@@ -121,9 +126,6 @@ public class monoClient extends Thread{
 	}
 	
 	public void analysisGameProtocol(GameProtocol data){
-	}
-	
-	public void enterRoom(String RoomName){
 	}
 	
 	public void outRoom(){
@@ -146,6 +148,17 @@ public class monoClient extends Thread{
 		this.rooms = rooms;
 		
 		lobby.refreshRooms(rooms);
+	}
+	
+	public void refreshGameRoom(ArrayList<String> players){
+		if(this.players!=null)
+			this.players.clear();
+		this.players = players;
+		
+		for(int i =0 ; i<players.size(); i++)
+			System.out.println(players.get(i));
+		
+		room.refresh(players);
 	}
 	
 	public void sendToServer(Protocol data){

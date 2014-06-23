@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -91,6 +92,25 @@ public class Room extends JFrame {
 		cp.add(exitButton);
 		
 		this.setVisible(true);
+	}
+	
+	public void refresh(ArrayList <String> players){
+		String enemy = null;
+		masterNick.setText("Player1");
+		joinerNick.setText("Player2");
+		for(int i=0 ;i<players.size(); i++)
+			if(!monoClient.name.equals(players.get(i)))
+				enemy = players.get(i);
+		
+		if(monoClient.roomMaster == true){
+			masterNick.setText(monoClient.name);
+			if(enemy!=null)
+				joinerNick.setText(enemy);
+		}else{
+			if(enemy!=null)
+				masterNick.setText(enemy);
+			joinerNick.setText(monoClient.name);
+		}
 	}
 	
 	class windowHandler extends WindowAdapter{

@@ -18,9 +18,11 @@ public class LobbyProtocol implements Protocol {
 	public static final short SEND_USER_LIST = 4000;
 	public static final short SEND_TOTAL_USER = 4100;
 	public static final short SEND_ROOM_LIST = 4200;
+	public static final short SEND_PLAYER_LIST = 4300;
 	
 	private ArrayList<String> clients;
 	private ArrayList<String> rooms;
+	private ArrayList<String> playsers;
 	private String name;
 	private String roomName;
 	private short state;
@@ -36,6 +38,8 @@ public class LobbyProtocol implements Protocol {
 			this.clients = data;
 		} else if(state == SEND_ROOM_LIST){
 			this.rooms = data;
+		} else if(state == SEND_PLAYER_LIST){
+			this.playsers = data;
 		}
 	}
 	
@@ -46,6 +50,10 @@ public class LobbyProtocol implements Protocol {
 	
 	public ArrayList<String> getRoomlist(){
 		return rooms;
+	}
+	
+	public ArrayList<String> getPlayerList(){
+		return playsers;
 	}
 
 	public short getProtocol() {

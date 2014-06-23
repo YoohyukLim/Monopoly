@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -114,26 +113,32 @@ public class monoServer {
 			name = data.getName();
 			short state = data.getProtocol();
 			
-			if (state == LobbyProtocol.CREATE_ROOM){
-				
-				String roomName = data.getRoomName();
-				addRoom(roomName, name);
-				System.out.println("Sizeof "+roomsName.size());
-				SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
-				
-				LobbyProtocol roomdata = new LobbyProtocol(name, state);
-				roomdata.setRoomName(roomName);
-				sendToClient(roomdata);
-				
-			} else if (state == LobbyProtocol.OUT_ROOM){
-				
-				String roomName = data.getRoomName();
-				breakRoom(roomName, name);
-				SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
-				
-			} else if (state == LobbyProtocol.ENTER_ROOM){
-				String roomName = data.getRoomName();
-				enterRoom(roomName, name);
+			try {
+				if (state == LobbyProtocol.CREATE_ROOM) {
+
+					String roomName = data.getRoomName();
+					addRoom(roomName, name);
+					System.out.println("Sizeof " + roomsName.size());
+					SendToAll(new LobbyProtocol(roomsName,
+							LobbyProtocol.SEND_ROOM_LIST));
+
+					LobbyProtocol roomdata = new LobbyProtocol(name, state);
+					roomdata.setRoomName(roomName);
+					sendToClient(roomdata);
+					out.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+					NoticePlayers(roomName);
+				} else if (state == LobbyProtocol.OUT_ROOM) {
+
+					String roomName = data.getRoomName();
+					breakRoom(roomName, name);
+					SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+
+				} else if (state == LobbyProtocol.ENTER_ROOM) {
+					String roomName = data.getRoomName();
+					enterRoom(roomName, name);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -167,6 +172,7 @@ public class monoServer {
 				room.setRoomName(RoomName);
 				oos.writeObject(room);
 				oos.reset();
+				NoticePlayers(RoomName);
 			} else {
 				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER_FAIL));
 				oos.reset();
@@ -190,6 +196,7 @@ public class monoServer {
 			}
 			clients.get(name).outRoom();
 			roomList.get(RoomName).outClient(name);
+			NoticePlayers(RoomName);
 		}
 	}
 	
@@ -221,6 +228,19 @@ public class monoServer {
 	public synchronized void subClient(String name){
 		clients.remove(name);
 		clientsName.remove(name);
+	}
+	
+	public void NoticePlayers(String roomName){
+		ArrayList<String> players = roomList.get(roomName).getClients();
+		for(int i = 0 ; i<players.size(); i++){
+			ObjectOutputStream oos = clients.get(players.get(i)).getOuputStream();
+			try {
+				oos.writeObject(new LobbyProtocol(players, LobbyProtocol.SEND_PLAYER_LIST));
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void SendToAll(LobbyProtocol data) {
