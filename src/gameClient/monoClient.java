@@ -66,7 +66,7 @@ public class monoClient extends Thread{
 		while(in!=null){
 			try {
 				data = (Protocol) in.readObject();
-				System.out.println("From Server : " + data);
+				//System.out.println("From Server : " + data);
 				
 				if(data instanceof LobbyProtocol)
 					analysisLoginProtocol((LobbyProtocol) data);

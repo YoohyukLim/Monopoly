@@ -12,6 +12,7 @@ public class LobbyProtocol implements Protocol {
 	public static final short CREATE_ROOM = 2000;
 	public static final short ENTER_ROOM = 2100;
 	public static final short BREAK_ROOM = 2200;
+	public static final short OUT_ROOM = 2300;
 	public static final short EXIT = 3000;
 	public static final short SEND_USER_LIST = 4000;
 	public static final short SEND_TOTAL_USER = 4100;

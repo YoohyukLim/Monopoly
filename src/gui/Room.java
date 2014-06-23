@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import protocol.LobbyProtocol;
+
 public class Room extends JFrame {
 	
 	public static JFrame f;
@@ -65,6 +67,8 @@ public class Room extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				f.setVisible(false);
+				LobbyProtocol room = new LobbyProtocol(monoClient.name, LobbyProtocol.OUT_ROOM);
+				room.setRoomName(monoClient.roomName);
 				monoClient.lobby.f.setVisible(true);
 			}
 		});
