@@ -569,6 +569,10 @@ public class Board {
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
+			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
+				return;
+			}
 			try {
 				Sound btnsound = new Sound(
 						"Resources/sounds/game/global-button_large.wav");

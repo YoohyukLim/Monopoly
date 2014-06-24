@@ -22,6 +22,7 @@ public class GameController {
 	public int DiceNumber, Dice1, Dice2;
 	Dice dice = new Dice();
 	public Card tempcard;
+	public String myName;
 	public int cardmap[][];
 
 	public GameController() {
@@ -197,5 +198,13 @@ public class GameController {
 
 	public int getTurn() {
 		return turn / Players.size() + 1;
+	}
+	
+	public String getMyName() {
+		return myName;
+	}
+	
+	public void setMyName(String myName) {
+		this.myName = myName;
 	}
 }
