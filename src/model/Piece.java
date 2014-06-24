@@ -1,12 +1,6 @@
 package model;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
-
-import javax.swing.JPanel;
-
-import standard.GameController;
 
 public class Piece {
 	public int piece_type;

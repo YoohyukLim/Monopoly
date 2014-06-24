@@ -267,27 +267,14 @@ public class monoServer {
    }
    
    public void startGame(String roomName) throws Exception{
-      Map map = new Map();
-      GameProtocol gameProtocol;
-      map.generate_map();
+	  GameProtocol gameProtocol;
+	  Map map = new Map();
+      map.generateMapList();
 
-      ArrayList<Piece> Players = new ArrayList<Piece>(2);
       ArrayList<String> roomPlayers = roomList.get(roomName).getClients();
-      Piece Player1 = new Piece(0, 0);
-      Player1.setName(roomPlayers.get(0));
-      Player1.map_size = 36;
-      Piece Player2 = new Piece(1, 0);
-      Player2.setName(roomPlayers.get(1));
-      Player2.map_size = 36;
-      Players.add(Player1);
-      Players.add(Player2);
 
-      GameController gameController = new GameController(map);
-      gameController.setPlayer(Players);
-      
       for(int i = 0 ; i<roomPlayers.size(); i++){
-         gameProtocol = new GameProtocol(roomPlayers.get(i), GameProtocol.GAME_START);
-         gameProtocol.setGameController(gameController);
+         gameProtocol = new GameProtocol(roomPlayers.get(i),  GameProtocol.GAME_START, map.mapList, roomPlayers);
          ObjectOutputStream oos = clients.get(roomPlayers.get(i)).getOuputStream();
          try {
             oos.writeObject(gameProtocol);

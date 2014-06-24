@@ -12,12 +12,15 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import model.Piece;
+
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
 import protocol.LobbyProtocol;
 import protocol.Protocol;
 import standard.Board;
 import standard.GameController;
+import standard.Map;
 
 public class monoClient extends Thread{
 	public static String name;
@@ -38,6 +41,7 @@ public class monoClient extends Thread{
 	public boolean roomMaster = false;
 	public String roomName;
 	
+	public Map map;
 	public Board board;
 	public GameController gameController;
 
@@ -140,7 +144,7 @@ public class monoClient extends Thread{
 		short state = data.getProtocol();
 		if (state == GameProtocol.GAME_START) {
 			JOptionPane.showMessageDialog(null, "!!!!");
-			//startGame(data.getGameController());
+			startGame(data);
 		}
 	}
 	
@@ -174,12 +178,29 @@ public class monoClient extends Thread{
 		room.refresh(players);
 	}
 
-	public void startGame(GameController gameController) {
-		this.gameController = gameController;
+	public void startGame(GameProtocol data) {
 		try {
-			board = new Board(this.gameController.map);
-			this.gameController.setView(board);
-			board.getController(this.gameController);
+			map = new Map();
+			map.generate_map(data.getMapList());
+			
+			ArrayList<Piece> Players = new ArrayList<Piece>(2);
+			Piece Player1 = new Piece(0, 0);
+			Player1.setName(data.getRoomPlayer().get(0));
+			Player1.map_size = 36;
+			Piece Player2 = new Piece(1, 0);
+			Player2.setName(data.getRoomPlayer().get(1));
+			Player2.map_size = 36;
+			
+			Players.add(Player1);
+			Players.add(Player2);
+			
+			gameController = new GameController();
+			gameController.setPlayer(Players);
+			board = new Board(map);
+			gameController.setView(board);
+			board.getController(gameController);
+
+			room.setVisible(false);
 			board.start();
 		} catch (Exception e) {
 			e.printStackTrace();

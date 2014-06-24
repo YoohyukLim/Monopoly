@@ -16,7 +16,6 @@ import model.Sound;
 
 public class GameController {
 	public Board board;
-	public Map map;
 	public ArrayList<Piece> Players;
 	public int currentPlayer;
 	public int playerN;
@@ -26,8 +25,7 @@ public class GameController {
 	public Card tempcard;
 	public int cardmap[][];
 
-	public GameController(Map map) {
-		this.map = map;
+	public GameController() {
 	}
 
 	public void setPlayerbyDice() throws Exception {

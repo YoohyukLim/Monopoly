@@ -6,7 +6,8 @@ import model.Piece;
 public class Monopoly {
 	public static void main(String args[]) throws Exception {
 		Map map = new Map();
-		map.generate_map();
+		map.generateMapList();
+		map.generate_map(map.mapList);
 
 		ArrayList<Piece> Players = new ArrayList<Piece>(2);
 		Piece Player1 = new Piece(0, 0);
@@ -19,9 +20,7 @@ public class Monopoly {
 		Players.add(Player1);
 		Players.add(Player2);
 
-		System.out.print("\n");
-
-		GameController gameController = new GameController(map);
+		GameController gameController = new GameController();
 		gameController.setPlayer(Players);
 
 		Board board = new Board(map);
