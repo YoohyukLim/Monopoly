@@ -262,32 +262,45 @@ public class monoServer {
 	public synchronized void gameOuted(String RoomName) {
 		RoomManager room = roomList.get(RoomName);
 		ArrayList<String> clientList = room.getClients();
+		
+		roomList.get(RoomName).outClientAll();
+		roomList.remove(RoomName);
+		roomsName.remove(RoomName);
 
 		for (int i = 0; i < clientList.size(); i++) {
 			ObjectOutputStream oos = this.clients.get(clientList.get(i)).getOuputStream();
 	         try {
 	            oos.writeObject(new GameProtocol(clientList.get(i), GameProtocol.OUT_GAME));
 	            oos.reset();
+	            oos.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+	            oos.reset();
 	         } catch (IOException e) {
 	            e.printStackTrace();
 	         }
 			this.clients.get(clientList.get(i)).outRoom();
 		}
-		roomList.get(RoomName).outClientAll();
-		roomList.remove(RoomName);
-		roomsName.remove(RoomName);
 	}
 	
 	public void gameOver(String RoomName){
 		RoomManager room = roomList.get(RoomName);
 		ArrayList<String> clientList = room.getClients();
 
-		for (int i = 0; i < clientList.size(); i++) {
-			this.clients.get(clientList.get(i)).outRoom();
-		}
 		roomList.get(RoomName).outClientAll();
 		roomList.remove(RoomName);
 		roomsName.remove(RoomName);
+		
+		for (int i = 0; i < clientList.size(); i++) {
+			ObjectOutputStream oos = this.clients.get(clientList.get(i)).getOuputStream();
+	         try {
+	            oos.writeObject(new GameProtocol(clientList.get(i), GameProtocol.OUT_GAME));
+	            oos.reset();
+	            oos.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
+	            oos.reset();
+	         } catch (IOException e) {
+	            e.printStackTrace();
+	         }
+			this.clients.get(clientList.get(i)).outRoom();
+		}
 	}
    
    public synchronized void addClient(String name, ObjectOutputStream out){
