@@ -9,8 +9,7 @@ import dialog.missionDialog;
 
 import model.Card;
 import model.Dice;
-import model.MasterYi_Sound;
-import model.OhKong_Sound;
+import model.Champion_Sound;
 import model.Piece;
 import model.Sound;
 
@@ -34,10 +33,7 @@ public class GameController {
 		DiceNumber = Dice1 + Dice2;
 		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = "
 				+ DiceNumber;
-		if(currentPlayer==0)
-			new OhKong_Sound().normal();
-		else if(currentPlayer==1)
-			new MasterYi_Sound().normal();
+		new Champion_Sound(Players.get(currentPlayer).getType()).normal();
 		JOptionPane.showMessageDialog(null, msg);
 
 		Players.get(currentPlayer).movePosition(DiceNumber);

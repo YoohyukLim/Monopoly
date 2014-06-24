@@ -64,10 +64,7 @@ public class Piece {
 	}
 	
 	public void caught() throws Exception{
-		if(piece_type==0)
-			new OhKong_Sound().dead();
-		else if(piece_type==1)
-			new MasterYi_Sound().dead();
+		new Champion_Sound(piece_type).dead();
 		
 		this.position = 0;
 	}
