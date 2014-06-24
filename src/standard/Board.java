@@ -11,23 +11,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -36,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import model.Card;
 import model.Map_piece;
@@ -106,6 +101,8 @@ public class Board {
 		cardfile[2]= new String("Resources/image/card2.png");
 		
 		frame = new JFrame();
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		frame.addWindowListener(new windowHandler());
 		cardlayout = new CardLayout();
 
 		boardpanel = new JPanel();
@@ -367,7 +364,7 @@ public class Board {
 		frame.getContentPane().add(chatpanel);
 		frame.getContentPane().add(consolepanel);
 
-		refreshInfo();
+		refreshInfo(gameController.currentPlayer);
 
 		bgm.loop();
 	}
@@ -385,7 +382,7 @@ public class Board {
 		}
 	}
 
-	public void refreshInfo() {
+	public void refreshInfo(int currentPlayer) {
 		JLabel playerNameLabel = new JLabel();
 		JLabel currentTurnLabel = new JLabel();
 		JLabel rotationCntLabel = new JLabel();
@@ -404,11 +401,11 @@ public class Board {
 		currentTurnLabel.setForeground(Color.WHITE);
 		currentTurnLabel.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 23));
 		rotationCntLabel.setText("µπ¿∫ πŸƒ˚ ºˆ: "
-				+ String.valueOf(players.get(currentPlayer).rotationCnt));
+				+ String.valueOf(monoClient.currentRotationCnt));
 		rotationCntLabel.setForeground(Color.WHITE);
 		rotationCntLabel.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
 		caughtCntLabel.setText("¿‚¿∫ ºˆ: "
-				+ String.valueOf(players.get(currentPlayer).catchCnt));
+				+ String.valueOf(monoClient.currentCatchCnt));
 		caughtCntLabel.setForeground(Color.WHITE);
 		caughtCntLabel.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
 
@@ -527,8 +524,18 @@ public class Board {
 		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
-
 	
+	public void gameOver(){
+		System.out.println("GAMEOVER");
+		this.frame.setVisible(false);
+		this.frame.dispose();
+	}
+
+	class windowHandler extends WindowAdapter{
+		public void windowClosing(WindowEvent e){	
+			monoClient.outGame();
+		}
+	}
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
@@ -595,6 +602,11 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+				JOptionPane.showMessageDialog(null, "ªÛ¥ÎπÊ ≈œ¿‘¥œ¥Ÿ.");
+				return;
+			}
+			
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
@@ -647,6 +659,11 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+				JOptionPane.showMessageDialog(null, "ªÛ¥ÎπÊ ≈œ¿‘¥œ¥Ÿ.");
+				return;
+			}
+			
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());

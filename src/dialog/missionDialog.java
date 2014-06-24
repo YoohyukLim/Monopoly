@@ -1,5 +1,7 @@
 package dialog;
 
+import gameClient.monoClient;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import protocol.GameProtocol;
+
 import model.Sound;
 
 import standard.GameController;
@@ -22,13 +26,15 @@ public class missionDialog extends JDialog {
 	GameController gameController;
 	JFrame frame;
 	JButton ok;
-	int playerNumber;
+	String me;
+	String winner;
 
-	public missionDialog(JFrame parent, GameController gameController, int playerNumber) throws Exception {
+	public missionDialog(JFrame parent, GameController gameController, String me, String winner) throws Exception {
 		super(parent, "GAME OVER", true);
 		this.missionDialog = this;
 		this.gameController = gameController;
-		this.playerNumber = playerNumber;
+		this.me = me;
+		this.winner = winner;
 		this.setSize(new Dimension(350, 200));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -38,9 +44,16 @@ public class missionDialog extends JDialog {
 	}
 
 	public void init() throws Exception {
-		Sound victory = new Sound("Resources/sounds/game/victory.wav");
-		JLabel text1 = new JLabel("VICTORY");
-		JLabel text2 = new JLabel(gameController.Players.get(playerNumber).getName());
+		Sound sound;
+		JLabel text1;
+		if(me.equals(winner)){
+			sound = new Sound("Resources/sounds/game/victory.wav");
+			text1 = new JLabel("VICTORY");
+		}else{
+			sound = new Sound("Resources/sounds/game/lose.wav");
+			text1 = new JLabel("LOSE");
+		}
+		JLabel text2 = new JLabel("Winner-"+winner);
 		JPanel textPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
 		textPanel.setLayout(new BorderLayout());
@@ -58,16 +71,18 @@ public class missionDialog extends JDialog {
 		this.getContentPane().add(textPanel, BorderLayout.NORTH);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		gameController.board.bgm.stop();
-		victory.play();
+		sound.play();
 		this.setVisible(true);
 	}
 
 	class okbuttonhandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			missionDialog.setVisible(false);
-			gameController.board.frame.setVisible(false);
-			System.exit(0);
+			missionDialog.dispose();
+			gameController.monoClient.outGameServer();
+			GameProtocol data = new GameProtocol(me, GameProtocol.GAME_OVER);
+			data.setRoomName(gameController.monoClient.roomName);
+			gameController.monoClient.sendToServer(data);
 		}
 	}
 }

@@ -45,8 +45,11 @@ public class monoClient extends Thread{
 	public Board board;
 	public GameController gameController;
 	
-	public int Dice1;
-	public int Dice2;
+	public String currentName;
+	public int currentRotationCnt;
+	public int currentCatchCnt;
+	
+	public int [] Dice;
 
 	public static void main(String args[]) {
 		new monoClient();
@@ -100,8 +103,6 @@ public class monoClient extends Thread{
 	}
 	
 	public void analysisLobbyProtocol(LobbyProtocol data){
-		if(data.getName() != null)
-			name = data.getName();
 		short state = data.getProtocol();
 		
 		if(state == LobbyProtocol.SEND_USER_LIST){
@@ -126,7 +127,7 @@ public class monoClient extends Thread{
 				JOptionPane.showMessageDialog(null, "방장이 게임을 종료했습니다.");
 			roomMaster = false;
 			roomName = null;
-			room.setVisible(false);
+			room.dispose();
 			if(lobby.f.isVisible() == false)
 				lobby.f.setVisible(true);
 		} else if (state == LobbyProtocol.ENTER_FAIL){
@@ -145,9 +146,33 @@ public class monoClient extends Thread{
 	
 	public void analysisGameProtocol(GameProtocol data){
 		short state = data.getProtocol();
-		if (state == GameProtocol.GAME_START) {
-			JOptionPane.showMessageDialog(null, "!!!!");
-			startGame(data);
+		try {
+			if (state == GameProtocol.GAME_START) {
+				startGame(data);
+			} else if (state == GameProtocol.GAME_DOFINAL) {
+				currentName = data.getCurrentPlayer();
+				currentRotationCnt = data.getCurrentRotion();
+				currentCatchCnt = data.getCurrentCatch();
+				gameController.turn = data.getTurn();
+				gameController.dofinalServer();
+			} else if (state == GameProtocol.GAME_DOREST) {
+				currentName = data.getCurrentPlayer();
+				currentRotationCnt = data.getCurrentRotion();
+				currentCatchCnt = data.getCurrentCatch();
+				gameController.turn = data.getTurn();
+				Dice = data.getDice();
+				gameController.dorestServer();
+			} else if (state == GameProtocol.GAME_USECARD) {
+				currentName = data.getCurrentPlayer();
+				currentRotationCnt = data.getCurrentRotion();
+				currentCatchCnt = data.getCurrentCatch();
+				gameController.turn = data.getTurn();
+				gameController.useCardServer(data.getCard(), data.getCardPosition());
+			} else if (state == GameProtocol.OUT_GAME){
+				outGameServer();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -207,11 +232,22 @@ public class monoClient extends Thread{
 			gameController.getClient(this);
 			board.getClient(this);
 
-			room.setVisible(false);
+			room.dispose();
 			board.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void outGame(){
+		GameProtocol data = new GameProtocol(name, GameProtocol.OUT_GAME);
+		data.setRoomName(roomName);
+		sendToServer(data);
+	}
+	
+	public void outGameServer(){
+		lobby.f.setVisible(true);
+		board.gameOver();
 	}
 	
 	public void sendToServer(Protocol data){

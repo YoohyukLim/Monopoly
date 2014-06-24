@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import model.Dice;
 import model.Piece;
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
@@ -168,6 +169,21 @@ public class monoServer {
       }
 
       private void analysisGameProtocol(GameProtocol data) {
+    	  name = data.getName();
+    	  String roomName = data.getRoomName();
+          short state = data.getProtocol();
+    	  
+          if(state == GameProtocol.GAME_DOREST){
+        	  data.setDice(new Dice().exec(1), new Dice().exec(4));
+        	  SendToAllPlayers(roomName, data);
+          } else if(state == GameProtocol.GAME_DOFINAL || state == GameProtocol.GAME_USECARD){
+        	  SendToAllPlayers(roomName, data);
+          } else if(state == GameProtocol.OUT_GAME){
+        	  gameOuted(data.getRoomName());
+          } else if(state == GameProtocol.GAME_OVER){
+        	  if(data.getName().equals(roomList.get(roomName).roomMaster))
+        		  gameOver(roomName);
+          }
       }
 
       private void analysisChatProtocol(ChatProtocol data) {
@@ -242,6 +258,37 @@ public class monoServer {
       roomList.remove(RoomName);
       roomsName.remove(RoomName);
    }
+
+	public synchronized void gameOuted(String RoomName) {
+		RoomManager room = roomList.get(RoomName);
+		ArrayList<String> clientList = room.getClients();
+
+		for (int i = 0; i < clientList.size(); i++) {
+			ObjectOutputStream oos = this.clients.get(clientList.get(i)).getOuputStream();
+	         try {
+	            oos.writeObject(new GameProtocol(clientList.get(i), GameProtocol.OUT_GAME));
+	            oos.reset();
+	         } catch (IOException e) {
+	            e.printStackTrace();
+	         }
+			this.clients.get(clientList.get(i)).outRoom();
+		}
+		roomList.get(RoomName).outClientAll();
+		roomList.remove(RoomName);
+		roomsName.remove(RoomName);
+	}
+	
+	public void gameOver(String RoomName){
+		RoomManager room = roomList.get(RoomName);
+		ArrayList<String> clientList = room.getClients();
+
+		for (int i = 0; i < clientList.size(); i++) {
+			this.clients.get(clientList.get(i)).outRoom();
+		}
+		roomList.get(RoomName).outClientAll();
+		roomList.remove(RoomName);
+		roomsName.remove(RoomName);
+	}
    
    public synchronized void addClient(String name, ObjectOutputStream out){
       clients.put(name, new ClientManager(name, out));
@@ -265,25 +312,41 @@ public class monoServer {
          }
       }
    }
+
+	public void startGame(String roomName) throws Exception {
+		GameProtocol gameProtocol;
+		Map map = new Map();
+		map.generateMapList();
+
+		ArrayList<String> roomPlayers = roomList.get(roomName).getClients();
+
+		for (int i = 0; i < roomPlayers.size(); i++) {
+			gameProtocol = new GameProtocol(roomPlayers.get(i),
+					GameProtocol.GAME_START, map.mapList, roomPlayers);
+			ObjectOutputStream oos = clients.get(roomPlayers.get(i))
+					.getOuputStream();
+			try {
+				oos.writeObject(gameProtocol);
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
    
-   public void startGame(String roomName) throws Exception{
-	  GameProtocol gameProtocol;
-	  Map map = new Map();
-      map.generateMapList();
-
-      ArrayList<String> roomPlayers = roomList.get(roomName).getClients();
-
-      for(int i = 0 ; i<roomPlayers.size(); i++){
-         gameProtocol = new GameProtocol(roomPlayers.get(i),  GameProtocol.GAME_START, map.mapList, roomPlayers);
-         ObjectOutputStream oos = clients.get(roomPlayers.get(i)).getOuputStream();
-         try {
-            oos.writeObject(gameProtocol);
-            oos.reset();
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
-      }
-   }
+	public void SendToAllPlayers(String roomName, Protocol data) {
+		ArrayList<String> players = roomList.get(roomName).getClients();
+		for (int i = 0; i < players.size(); i++) {
+			ObjectOutputStream oos = clients.get(players.get(i))
+					.getOuputStream();
+			try {
+				oos.writeObject(data);
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
    
    public void SendToAll(Protocol data) {
       Iterator it = clients.keySet().iterator();

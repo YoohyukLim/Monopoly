@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import protocol.GameProtocol;
+
 import dialog.cardDialog;
 import dialog.missionDialog;
 
@@ -27,44 +29,38 @@ public class GameController {
 	public String myName;
 	public int cardmap[][];
 	
-	monoClient monoClient;
+	public monoClient monoClient;
 
 	public GameController() {
 	}
 	
-	public void diceButton(){
-		try {
-			Sound btnsound = new Sound(
-					"Resources/sounds/game/global-button_large.wav");
-			btnsound.play();
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		System.out.println("/********************************/");
-		if (board.lessThanFive == false) {
-			JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
-			return;
-		} else if (board.cardtime == true) {
-			JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
-
-			try {
-				dofinal();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+	public void diceButton(){		
+		if(getMyName().equals(Players.get(currentPlayer).getName())) {
+			System.out.println("/********************************/");
+			if (board.lessThanFive == false) {
+				JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
+				return;
+			} else if (board.cardtime == true) {
+				JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
+	
+				try {
+					dofinal();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				return;
 			}
-			return;
-		}
-
-		board.lessThanFive = getCard();
-
-		if (board.lessThanFive == true) {
-			try {
-				dorest();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+	
+			board.lessThanFive = getCard();
+	
+			if (board.lessThanFive == true) {
+				try {
+					dorest();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -72,42 +68,64 @@ public class GameController {
 	public void dorest() throws Exception {
 		board.refreshCards();
 		board.update("card");
-		board.disappearPiece(currentPlayer);
-		setPlayerbyDice();
-		board.refreshInfo();
 
-		CardExec();
-		MapExec();
-		CardExec();
-		board.refreshInfo();
+		GameProtocol data = new GameProtocol(monoClient.name, GameProtocol.GAME_DOREST);
+		data.setRoomName(monoClient.roomName);
+		data.setCurrentPlayer(Players.get(currentPlayer).getName(), Players.get(currentPlayer).rotationCnt, Players.get(currentPlayer).catchCnt, turn);
+		monoClient.sendToServer(data);
+	}
+	
+	public void dorestServer(){
+		try{
+			new Champion_Sound(Players.get(currentPlayer).getType()).normal();
+			board.disappearPiece(currentPlayer);
+			setPlayerbyDice();
+			board.refreshInfo(currentPlayer);
 
-		catching();
-		board.showPiece(currentPlayer);
-		
-		board.Dice_button.setVisible(false);
-		board.Next_button.setVisible(true);
+			CardExec();
+			MapExec();
+			CardExec();
+			board.refreshInfo(currentPlayer);
 
-		board.executableCards();
+			catching();
+			board.showPiece(currentPlayer);
+			
+			board.Dice_button.setVisible(false);
+			board.Next_button.setVisible(true);
+			
+			if(getMyName().equals(Players.get(currentPlayer).getName()))
+				board.executableCards();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void dofinal(){
+		GameProtocol data = new GameProtocol(monoClient.name, GameProtocol.GAME_DOFINAL);
+		data.setRoomName(monoClient.roomName);
+		data.setCurrentPlayer(Players.get(currentPlayer).getName(), Players.get(currentPlayer).rotationCnt, Players.get(currentPlayer).catchCnt, turn);
+		monoClient.sendToServer(data);
 	}
 
-	public void dofinal() throws Exception {
+	public void dofinalServer() throws Exception {
 		board.Next_button.setVisible(false);
 		board.Dice_button.setVisible(true);
 		board.gameController.missionCheck();
-		board.refreshInfo();
+		board.refreshInfo(currentPlayer);
 		currentPlayer = changePlayer();
 		board.update("card");
-		board.refreshInfo();
+		board.refreshInfo(currentPlayer);
 		board.cardtime = false;
 	}
 
 	public void setPlayerbyDice() throws Exception {
-		Dice1 = monoClient.Dice1;
-		Dice2 = monoClient.Dice2;
+		Dice1 = monoClient.Dice[0];
+		Dice2 = monoClient.Dice[1];
+
 		DiceNumber = Dice1 + Dice2;
 		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = "
 				+ DiceNumber;
-		new Champion_Sound(Players.get(currentPlayer).getType()).normal();
 		
 		if(getMyName().equals(Players.get(currentPlayer).getName()))
 			JOptionPane.showMessageDialog(null, msg);
@@ -135,7 +153,8 @@ public class GameController {
 		
 		System.out.println("//Card Type: "+cardmap[position][2]+"//");
 		System.out.println("//"+new Card().getTypeText(cardmap[position][2])+"//");
-		JOptionPane.showMessageDialog(null, new Card().getTypeText(cardmap[position][2]));
+		if(getMyName().equals(Players.get(currentPlayer).getName()))
+			JOptionPane.showMessageDialog(null, new Card().getTypeText(cardmap[position][2]));
 		new Card().exec(cardmap[position][1], player, cardmap[position][2]);
 		board.disappearCard(position);
 		
@@ -189,12 +208,25 @@ public class GameController {
 		}
 		System.out.println("Card"+n+" is used");
 		player.deleteCard(n);
-		cardmap[position][0]=1;
-		cardmap[position][1]=currentPlayer;
-		cardmap[position][2]=n;
-		board.showCard(position);
+		
+		int [] card = new int[3];
+		card[0] = 1;
+		card[1] = currentPlayer;
+		card[2] = n;
+		GameProtocol data = new GameProtocol(monoClient.name, GameProtocol.GAME_USECARD);
+		data.setRoomName(monoClient.roomName);
+		data.setCurrentPlayer(Players.get(currentPlayer).getName(), Players.get(currentPlayer).rotationCnt, Players.get(currentPlayer).catchCnt, turn);
+		data.setCard(card, position);
+		monoClient.sendToServer(data);
 		
 		return true;
+	}
+	
+	public void useCardServer(int [] card, int cardPosition){
+		cardmap[cardPosition][0]=card[0];
+		cardmap[cardPosition][1]=card[1];
+		cardmap[cardPosition][2]=card[2];
+		board.showCard(cardPosition);
 	}
 
 	public void deleteCard(int n) {
@@ -268,7 +300,7 @@ public class GameController {
 	
 	public void loadMissionDialog(int i) throws Exception{
 		System.out.println("Game Over!");
-		new missionDialog(board.frame, this, i);
+		new missionDialog(board.frame, this, monoClient.name, Players.get(i).getName());
 	}
 	
 	public void getClient(monoClient monoClient){
