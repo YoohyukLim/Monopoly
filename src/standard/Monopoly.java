@@ -21,11 +21,12 @@ public class Monopoly {
 
 		System.out.print("\n");
 
-		GameController gameController = new GameController();
+		GameController gameController = new GameController(map);
 		gameController.setPlayer(Players);
 
 		Board board = new Board(map);
 		gameController.setView(board);
 		board.getController(gameController);
+		board.start();
 	}
 }
