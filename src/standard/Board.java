@@ -38,7 +38,7 @@ import model.Sound;
 public class Board {
 	Map map;
 	GameController gameController;
-	static ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
+	ArrayList<JPanel> PieceList = new ArrayList<JPanel>();
 	int currentPlayer, currentTurn;
 	URL url_dice = new File("Resources/image/Dice_on.png").toURI().toURL();
 	URL url_next = new File("Resources/image/Next.png").toURI().toURL();
