@@ -1,5 +1,7 @@
 package standard;
 
+import gameClient.monoClient;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -72,6 +74,7 @@ public class Board {
 	public boolean cardtime = false;
 	
 	public Sound bgm = new Sound("Resources/sounds/game/ChmpSlct_DraftMode.wav");
+	monoClient monoClient;
 
 	public Board(Map map) throws Exception {
 		this.map = map;
@@ -525,47 +528,7 @@ public class Board {
 		cardlayout.show(cardside, String.valueOf(currentPlayer));
 	}
 
-	public void dorest() throws Exception {
-		refreshCards();
-		update("card");
-		disappearPiece(currentPlayer);
-		gameController.setPlayerbyDice();
-		refreshInfo();
-		// showPiece(currentPlayer);
-		// disappearPiece(currentPlayer);
-		/*
-		 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
-		 * // TODO Auto-generated catch block e1.printStackTrace(); }
-		 */
-		gameController.CardExec();
-		gameController.MapExec();
-		gameController.CardExec();
-		refreshInfo();
-		/*
-		 * try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e1) {
-		 * // TODO Auto-generated catch block e1.printStackTrace(); }
-		 */
-		// showPiece(currentPlayer);
-		// disappearPiece(currentPlayer);
-		gameController.catching();
-		showPiece(currentPlayer);
-		
-		Dice_button.setVisible(false);
-		Next_button.setVisible(true);
-
-		executableCards();
-	}
-
-	public void dofinal() throws Exception {
-		Next_button.setVisible(false);
-		Dice_button.setVisible(true);
-		gameController.missionCheck();
-		refreshInfo();
-		currentPlayer = gameController.changePlayer();
-		update("card");
-		refreshInfo();
-		cardtime = false;
-	}
+	
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
@@ -573,40 +536,7 @@ public class Board {
 				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
 				return;
 			}
-			try {
-				Sound btnsound = new Sound(
-						"Resources/sounds/game/global-button_large.wav");
-				btnsound.play();
-			} catch (Exception e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			System.out.println("/********************************/");
-			if (lessThanFive == false) {
-				JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
-				return;
-			} else if (cardtime == true) {
-				JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
-
-				try {
-					dofinal();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				return;
-			}
-
-			lessThanFive = gameController.getCard();
-
-			if (lessThanFive == true) {
-				try {
-					dorest();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+			gameController.dicnButton();
 		}
 
 		@Override
@@ -679,7 +609,7 @@ public class Board {
 				e2.printStackTrace();
 			}
 			try {
-				dorest();
+				gameController.dorest();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -730,7 +660,7 @@ public class Board {
 			System.out.println("Using this card!");
 			if (gameController.useCard(number)) {
 				try {
-					dofinal();
+					gameController.dofinal();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -784,6 +714,10 @@ public class Board {
 
 	public void showCard(int card) {
 		cardPiece[card].setVisible(true);
+	}
+	
+	public void getClient(monoClient monoClient){
+		this.monoClient = monoClient;
 	}
 
 	class IPanel extends JPanel {

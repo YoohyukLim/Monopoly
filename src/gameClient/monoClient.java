@@ -200,6 +200,9 @@ public class monoClient extends Thread{
 			gameController.setView(board);
 			gameController.setMyName(name);
 			board.getController(gameController);
+			
+			gameController.getClient(this);
+			board.getClient(this);
 
 			room.setVisible(false);
 			board.start();

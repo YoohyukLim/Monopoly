@@ -1,5 +1,7 @@
 package standard;
 
+import gameClient.monoClient;
+
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -24,8 +26,79 @@ public class GameController {
 	public Card tempcard;
 	public String myName;
 	public int cardmap[][];
+	
+	monoClient monoClient;
 
 	public GameController() {
+	}
+	
+	public void dicnButton(){
+		try {
+			Sound btnsound = new Sound(
+					"Resources/sounds/game/global-button_large.wav");
+			btnsound.play();
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		System.out.println("/********************************/");
+		if (board.lessThanFive == false) {
+			JOptionPane.showMessageDialog(null, "지울 카드를 클릭해야 합니다.");
+			return;
+		} else if (board.cardtime == true) {
+			JOptionPane.showMessageDialog(null, "카드를 사용하지 않고 넘어갑니다.");
+
+			try {
+				dofinal();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return;
+		}
+
+		board.lessThanFive = getCard();
+
+		if (board.lessThanFive == true) {
+			try {
+				dorest();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	public void dorest() throws Exception {
+		board.refreshCards();
+		board.update("card");
+		board.disappearPiece(currentPlayer);
+		setPlayerbyDice();
+		board.refreshInfo();
+
+		CardExec();
+		MapExec();
+		CardExec();
+		board.refreshInfo();
+
+		catching();
+		board.showPiece(currentPlayer);
+		
+		board.Dice_button.setVisible(false);
+		board.Next_button.setVisible(true);
+
+		board.executableCards();
+	}
+
+	public void dofinal() throws Exception {
+		board.Next_button.setVisible(false);
+		board.Dice_button.setVisible(true);
+		board.gameController.missionCheck();
+		board.refreshInfo();
+		currentPlayer = changePlayer();
+		board.update("card");
+		board.refreshInfo();
+		board.cardtime = false;
 	}
 
 	public void setPlayerbyDice() throws Exception {
@@ -194,6 +267,10 @@ public class GameController {
 	public void loadMissionDialog(int i) throws Exception{
 		System.out.println("Game Over!");
 		new missionDialog(board.frame, this, i);
+	}
+	
+	public void getClient(monoClient monoClient){
+		this.monoClient = monoClient;
 	}
 
 	public int getTurn() {
