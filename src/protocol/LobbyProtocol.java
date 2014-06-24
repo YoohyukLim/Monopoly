@@ -22,6 +22,7 @@ public class LobbyProtocol implements Protocol {
 	public static final short GAME_START_USER = 5000;
 	public static final short GAME_START_MASTER = 5100;
 	public static final short GAME_READY_CANCEL = 5200;
+	public static final short GAME_START_FAIL = 5300;
 	
 	private ArrayList<String> clients;
 	private ArrayList<String> rooms;

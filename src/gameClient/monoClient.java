@@ -119,6 +119,14 @@ public class monoClient extends Thread{
 				lobby.f.setVisible(true);
 		} else if (state == LobbyProtocol.ENTER_FAIL){
 			JOptionPane.showMessageDialog(null, "방이 이미 꽉 차있습니다.");
+		} else if (state == LobbyProtocol.GAME_START_USER) {
+			room.getReady();
+		} else if (state == LobbyProtocol.GAME_READY_CANCEL) {
+			room.cancelReady();
+		} else if (state == LobbyProtocol.GAME_START_MASTER) {
+			JOptionPane.showMessageDialog(null, "게임 시작합니다");
+		} else if (state == LobbyProtocol.GAME_START_FAIL) {
+			JOptionPane.showMessageDialog(null, "상대방이 준비해야 합니다.");
 		}
 	}
 	

@@ -136,15 +136,23 @@ public class monoServer {
 					String roomName = data.getRoomName();
 					enterRoom(roomName, name);
 				} else if (state == LobbyProtocol.GAME_START_MASTER) {
-					
+					String roomName = data.getRoomName();
+					RoomManager room = roomList.get(roomName);
+					if (room.isReady) {
+						startGame(roomName);
+					} else {
+						sendToClient(new LobbyProtocol(name, LobbyProtocol.GAME_START_FAIL));
+					}
 				} else if (state == LobbyProtocol.GAME_START_USER) {
 					String roomName = data.getRoomName();
 					RoomManager room = roomList.get(roomName);
 					room.isReady = true;
-					
-					sendToClient(null);
+					sendToClient(new LobbyProtocol(name, LobbyProtocol.GAME_START_USER));
 				} else if (state == LobbyProtocol.GAME_READY_CANCEL) {
-					
+					String roomName = data.getRoomName();
+					RoomManager room = roomList.get(roomName);
+					room.isReady = false;
+					sendToClient(new LobbyProtocol(name, LobbyProtocol.GAME_READY_CANCEL));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -243,6 +251,19 @@ public class monoServer {
 			ObjectOutputStream oos = clients.get(players.get(i)).getOuputStream();
 			try {
 				oos.writeObject(new LobbyProtocol(players, LobbyProtocol.SEND_PLAYER_LIST));
+				oos.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void startGame(String roomName){
+		ArrayList<String> players = roomList.get(roomName).getClients();
+		for(int i = 0 ; i<players.size(); i++){
+			ObjectOutputStream oos = clients.get(players.get(i)).getOuputStream();
+			try {
+				oos.writeObject(new LobbyProtocol(players, LobbyProtocol.GAME_START_MASTER));
 				oos.reset();
 			} catch (IOException e) {
 				e.printStackTrace();
