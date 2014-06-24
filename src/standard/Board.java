@@ -81,7 +81,14 @@ public class Board {
 		this.gameController = _gameController;
 		this.currentPlayer = _gameController.currentPlayer;
 		this.players = _gameController.Players;
-		initialize();
+	}
+	
+	public void start(){
+		try {
+			initialize();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.frame.setVisible(true);
 	}
 
