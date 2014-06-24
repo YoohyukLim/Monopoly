@@ -32,7 +32,7 @@ public class GameController {
 	public GameController() {
 	}
 	
-	public void dicnButton(){
+	public void diceButton(){
 		try {
 			Sound btnsound = new Sound(
 					"Resources/sounds/game/global-button_large.wav");
@@ -102,13 +102,15 @@ public class GameController {
 	}
 
 	public void setPlayerbyDice() throws Exception {
-		Dice1 = dice.exec(1);
-		Dice2 = dice.exec(2);
+		Dice1 = monoClient.Dice1;
+		Dice2 = monoClient.Dice2;
 		DiceNumber = Dice1 + Dice2;
 		String msg = "Dice Number: " + Dice1 + " + " + Dice2 + " = "
 				+ DiceNumber;
 		new Champion_Sound(Players.get(currentPlayer).getType()).normal();
-		JOptionPane.showMessageDialog(null, msg);
+		
+		if(getMyName().equals(Players.get(currentPlayer).getName()))
+			JOptionPane.showMessageDialog(null, msg);
 
 		Players.get(currentPlayer).movePosition(DiceNumber);
 		System.out
@@ -143,7 +145,7 @@ public class GameController {
 	}
 
 	public boolean getCard() {
-		Card card = new Card(1);
+		Card card = new Card();
 		if (Players.get(currentPlayer).cardList.size() < 5) {
 			Players.get(currentPlayer).addCard(card);
 			System.out.println("Card Type: "

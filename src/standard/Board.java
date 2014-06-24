@@ -536,7 +536,7 @@ public class Board {
 				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
 				return;
 			}
-			gameController.dicnButton();
+			gameController.diceButton();
 		}
 
 		@Override

@@ -9,14 +9,15 @@ public class Card {
 	int card_number;
 
 	public Card() {
-	}
-
-	public Card(int num) {
 		Calendar now = Calendar.getInstance();
-		int seed = now.get(Calendar.MILLISECOND) + num;
+		int seed = now.get(Calendar.MILLISECOND);
 		Random r = new Random();
 		r.setSeed(seed);
 		this.setCardNumber(Math.abs(r.nextInt() % 10) + 1);
+	}
+	
+	public Card(int num){
+		this.card_number = num;
 	}
 
 	public void setCardNumber(int card_number) {

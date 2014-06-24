@@ -44,6 +44,9 @@ public class monoClient extends Thread{
 	public Map map;
 	public Board board;
 	public GameController gameController;
+	
+	public int Dice1;
+	public int Dice2;
 
 	public static void main(String args[]) {
 		new monoClient();
