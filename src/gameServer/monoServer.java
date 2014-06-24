@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import model.Piece;
 import protocol.ChatProtocol;
 import protocol.GameProtocol;
 import protocol.LobbyProtocol;
 import protocol.Protocol;
+import standard.Board;
+import standard.GameController;
+import standard.Map;
 
 public class monoServer {
 	HashMap<String, ClientManager> clients;
@@ -91,7 +95,11 @@ public class monoServer {
 				while (in != null) {
 					data = (Protocol) in.readObject();
 					if (data instanceof LobbyProtocol)
-						analysisLobbyProtocol((LobbyProtocol) data);
+						try {
+							analysisLobbyProtocol((LobbyProtocol) data);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					else if (data instanceof ChatProtocol)
 						analysisChatProtocol((ChatProtocol) data);
 					else if (data instanceof GameProtocol)
@@ -109,7 +117,7 @@ public class monoServer {
 			}
 		}// run()
 		
-		private void analysisLobbyProtocol(LobbyProtocol data){
+		private void analysisLobbyProtocol(LobbyProtocol data) throws Exception{
 			name = data.getName();
 			short state = data.getProtocol();
 			
@@ -258,12 +266,31 @@ public class monoServer {
 		}
 	}
 	
-	public void startGame(String roomName){
-		ArrayList<String> players = roomList.get(roomName).getClients();
-		for(int i = 0 ; i<players.size(); i++){
-			ObjectOutputStream oos = clients.get(players.get(i)).getOuputStream();
+	public void startGame(String roomName) throws Exception{
+		Map map = new Map();
+		GameProtocol gameProtocol;
+		map.generate_map();
+
+		ArrayList<Piece> Players = new ArrayList<Piece>(2);
+		ArrayList<String> roomPlayers = roomList.get(roomName).getClients();
+		Piece Player1 = new Piece(0, 0);
+		Player1.setName(roomPlayers.get(0));
+		Player1.map_size = 36;
+		Piece Player2 = new Piece(1, 0);
+		Player2.setName(roomPlayers.get(1));
+		Player2.map_size = 36;
+		Players.add(Player1);
+		Players.add(Player2);
+
+		GameController gameController = new GameController(map);
+		gameController.setPlayer(Players);
+		
+		for(int i = 0 ; i<roomPlayers.size(); i++){
+			gameProtocol = new GameProtocol(roomPlayers.get(i), GameProtocol.GAME_START);
+			gameProtocol.setGameController(gameController);
+			ObjectOutputStream oos = clients.get(roomPlayers.get(i)).getOuputStream();
 			try {
-				oos.writeObject(new LobbyProtocol(players, LobbyProtocol.GAME_START_MASTER));
+				oos.writeObject(gameProtocol);
 				oos.reset();
 			} catch (IOException e) {
 				e.printStackTrace();

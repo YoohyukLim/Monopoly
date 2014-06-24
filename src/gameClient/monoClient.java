@@ -16,6 +16,8 @@ import protocol.ChatProtocol;
 import protocol.GameProtocol;
 import protocol.LobbyProtocol;
 import protocol.Protocol;
+import standard.Board;
+import standard.GameController;
 
 public class monoClient extends Thread{
 	public static String name;
@@ -35,6 +37,9 @@ public class monoClient extends Thread{
 	
 	public boolean roomMaster = false;
 	public String roomName;
+	
+	public Board board;
+	public GameController gameController;
 
 	public static void main(String args[]) {
 		new monoClient();
@@ -123,8 +128,6 @@ public class monoClient extends Thread{
 			room.getReady();
 		} else if (state == LobbyProtocol.GAME_READY_CANCEL) {
 			room.cancelReady();
-		} else if (state == LobbyProtocol.GAME_START_MASTER) {
-			JOptionPane.showMessageDialog(null, "게임 시작합니다");
 		} else if (state == LobbyProtocol.GAME_START_FAIL) {
 			JOptionPane.showMessageDialog(null, "상대방이 준비해야 합니다.");
 		}
@@ -134,6 +137,11 @@ public class monoClient extends Thread{
 	}
 	
 	public void analysisGameProtocol(GameProtocol data){
+		short state = data.getProtocol();
+		if (state == GameProtocol.GAME_START) {
+			JOptionPane.showMessageDialog(null, "!!!!");
+			//startGame(data.getGameController());
+		}
 	}
 	
 	public void outRoom(){
@@ -165,6 +173,18 @@ public class monoClient extends Thread{
 		
 		room.refresh(players);
 	}
+
+	public void startGame(GameController gameController) {
+		this.gameController = gameController;
+		try {
+			board = new Board(this.gameController.map);
+			this.gameController.setView(board);
+			board.getController(this.gameController);
+			board.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void sendToServer(Protocol data){
 		try {
@@ -174,7 +194,7 @@ public class monoClient extends Thread{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void exit() {
 		System.exit(0);
 	}
