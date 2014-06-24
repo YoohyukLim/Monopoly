@@ -8,6 +8,7 @@ public class RoomManager {
 	
 	String roomMaster;
 	boolean isFull = false;
+	boolean isReady = false;
 	
 	public RoomManager(){
 		clientName = new ArrayList<>();

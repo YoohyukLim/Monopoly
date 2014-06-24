@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import protocol.LobbyProtocol;
+
 public class Room extends JFrame {
 	
 	public static JFrame f;
@@ -73,6 +75,29 @@ public class Room extends JFrame {
 		startButton.setBounds(50, 200, 80, 30);
 		exitButton.setBounds(160, 200, 80, 30);
 		
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LobbyProtocol temp;
+				String command = e.getActionCommand();
+				if (command.equals("시작")) {
+					if (monoClient.roomMaster && monoClient.players.size() == 2) {
+						temp = new LobbyProtocol(monoClient.name, LobbyProtocol.GAME_START_MASTER);
+						temp.setRoomName(monoClient.roomName);
+						monoClient.sendToServer(temp);
+					} else if (monoClient.players.size() == 2) {
+						temp = new LobbyProtocol(monoClient.name, LobbyProtocol.GAME_START_USER);
+						temp.setRoomName(monoClient.roomName);
+						monoClient.sendToServer(temp);
+					}
+				} else if (command.equals("대기 중")) {
+					temp = new LobbyProtocol(monoClient.name, LobbyProtocol.GAME_READY_CANCEL);
+					temp.setRoomName(monoClient.roomName);
+					monoClient.sendToServer(temp);
+				}
+			}
+		});
+		
 		exitButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -111,6 +136,14 @@ public class Room extends JFrame {
 				masterNick.setText(enemy);
 			joinerNick.setText(monoClient.name);
 		}
+	}
+	
+	public void getReady() {
+		startButton.setText("대기 중");
+	}
+	
+	public void cancelReady() {
+		startButton.setText("시작");
 	}
 	
 	class windowHandler extends WindowAdapter{

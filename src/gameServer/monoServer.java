@@ -135,6 +135,16 @@ public class monoServer {
 				} else if (state == LobbyProtocol.ENTER_ROOM) {
 					String roomName = data.getRoomName();
 					enterRoom(roomName, name);
+				} else if (state == LobbyProtocol.GAME_START_MASTER) {
+					
+				} else if (state == LobbyProtocol.GAME_START_USER) {
+					String roomName = data.getRoomName();
+					RoomManager room = roomList.get(roomName);
+					room.isReady = true;
+					
+					sendToClient(null);
+				} else if (state == LobbyProtocol.GAME_READY_CANCEL) {
+					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
