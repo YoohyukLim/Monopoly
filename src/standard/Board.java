@@ -3,7 +3,6 @@ package standard;
 import gameClient.monoClient;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -49,12 +47,11 @@ public class Board {
 	Icon backimage = new ImageIcon("Resources/image/background.jpg");
 	JLabel Dice_button, Next_button, background;
 
-	JPanel boardpanel, infopanel, topside, leftside, rightside,
-			botside;
+	JPanel boardpanel, infopanel, topside, leftside, rightside, botside;
 	IPanel chatpanel, consolepanel;
-	
+
 	JLayeredPane dicepanel;
-	JPanel infoside, cardside, cardpanel[], cardstate[], cards[][];
+	JPanel infoside, cardside, cardpanel, cardstate, cards[];
 	JLabel Map_piece[];
 	IPanel[][] playerPiece;
 	JPanel[] playerPiecePanel;
@@ -63,11 +60,10 @@ public class Board {
 	ArrayList<Card> playerCard;
 
 	public JFrame frame;
-	CardLayout cardlayout;
 
 	public boolean lessThanFive = true;
 	public boolean cardtime = false;
-	
+
 	public Sound bgm = new Sound("Resources/sounds/game/ChmpSlct_DraftMode.wav");
 	monoClient monoClient;
 
@@ -80,8 +76,8 @@ public class Board {
 		this.currentPlayer = _gameController.currentPlayer;
 		this.players = _gameController.Players;
 	}
-	
-	public void start(){
+
+	public void start() {
 		try {
 			initialize();
 		} catch (Exception e) {
@@ -96,14 +92,13 @@ public class Board {
 		Random r = new Random();
 		r.setSeed(seed);
 		String cardfile[] = new String[3];
-		cardfile[0]= new String("Resources/image/card0.png");
-		cardfile[1]= new String("Resources/image/card1.png");
-		cardfile[2]= new String("Resources/image/card2.png");
-		
+		cardfile[0] = new String("Resources/image/card0.png");
+		cardfile[1] = new String("Resources/image/card1.png");
+		cardfile[2] = new String("Resources/image/card2.png");
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.addWindowListener(new windowHandler());
-		cardlayout = new CardLayout();
 
 		boardpanel = new JPanel();
 		infopanel = new JPanel();
@@ -152,7 +147,7 @@ public class Board {
 			playerPiece[i][1].setPreferredSize(new Dimension(30, 30));
 			playerPiece[i][1].setMaximumSize(new Dimension(30, 30));
 			playerPiece[i][1].setMinimumSize(new Dimension(30, 30));
-			
+
 			playerPiecePanel[i].setLayout(new GridBagLayout());
 			playerPiecePanel[i].setOpaque(false);
 			playerPiecePanel[i].add(playerPiece[i][0]);
@@ -190,7 +185,7 @@ public class Board {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 100));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 100));
 				PieceList.get(i).setMinimumSize(new Dimension(100, 100));
-				//PieceList.get(i).setBackground(new Color(0, 255, 255));
+				// PieceList.get(i).setBackground(new Color(0, 255, 255));
 				playerPiecePanel[i].setPreferredSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMaximumSize(new Dimension(100, 50));
 				playerPiecePanel[i].setMinimumSize(new Dimension(100, 50));
@@ -221,10 +216,11 @@ public class Board {
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				/*if (i % 2 == 0)
-					PieceList.get(i).setBackground(new Color(127, 255, 0));
-				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));*/
+				/*
+				 * if (i % 2 == 0) PieceList.get(i).setBackground(new Color(127,
+				 * 255, 0)); else PieceList.get(i).setBackground(new Color(0,
+				 * 255, 127));
+				 */
 			} else {
 				PieceList.get(i).setPreferredSize(new Dimension(100, 60));
 				PieceList.get(i).setMaximumSize(new Dimension(100, 60));
@@ -247,10 +243,11 @@ public class Board {
 
 				PieceList.get(i).add(Map_piece[i], 0);
 				PieceList.get(i).addMouseListener(MBHandler);
-				/*if (i % 2 == 0)
-					PieceList.get(i).setBackground(new Color(127, 255, 0));
-				else
-					PieceList.get(i).setBackground(new Color(0, 255, 127));*/
+				/*
+				 * if (i % 2 == 0) PieceList.get(i).setBackground(new Color(127,
+				 * 255, 0)); else PieceList.get(i).setBackground(new Color(0,
+				 * 255, 127));
+				 */
 			}
 		}
 
@@ -272,8 +269,10 @@ public class Board {
 		rightside.setOpaque(false);
 
 		// DicePanel
-		/*background = new JLabel(backimage);
-		dicepanel.add(background, new Integer(1));*/
+		/*
+		 * background = new JLabel(backimage); dicepanel.add(background, new
+		 * Integer(1));
+		 */
 		Dice_button = new JLabel(dice_icon);
 		Next_button = new JLabel(next_icon);
 		DiceBtnHandler DBhandler = new DiceBtnHandler();
@@ -282,14 +281,16 @@ public class Board {
 		Next_button.setVisible(false);
 		dicepanel.add(Dice_button, 0);
 		dicepanel.add(Next_button, 1);
-		/*background.setBounds(0, 0, backimage.getIconWidth(),
-				backimage.getIconHeight());*/
+		/*
+		 * background.setBounds(0, 0, backimage.getIconWidth(),
+		 * backimage.getIconHeight());
+		 */
 		Dice_button.setBounds(100, 340, dice_icon.getIconWidth(),
 				dice_icon.getIconHeight());
 		Next_button.setBounds(100, 340, next_icon.getIconWidth(),
 				dice_icon.getIconHeight());
 
-		//boardpanel.setBackground(new Color(0, 255, 255));
+		// boardpanel.setBackground(new Color(0, 255, 255));
 		boardpanel.setPreferredSize(new Dimension(680, 680));
 		boardpanel.setLayout(new BorderLayout(0, 0));
 		boardpanel.setOpaque(false);
@@ -302,42 +303,38 @@ public class Board {
 		infopanel.add(infoside, BorderLayout.NORTH);
 
 		// Card
-		cardside.setLayout(cardlayout);
+		cardside.setLayout(new BoxLayout(cardside, BoxLayout.PAGE_AXIS));
 		cardside.setBackground(new Color(0, 0, 0));
 		cardside.setOpaque(false);
-		cardpanel = new JPanel[2];
-		cardstate = new JPanel[2];
-		cards = new IPanel[2][5];
-		for (int i = 0; i < cardpanel.length; i++) {
-			cardpanel[i] = new JPanel();
-			cardpanel[i].setLayout(new FlowLayout(0, 0, 0));
-			cardpanel[i].setBackground(new Color(0, 0, 0));
-			cardpanel[i].setOpaque(false);
+		cardpanel = new JPanel();
+		cardstate = new JPanel();
+		cards = new IPanel[5];
 
-			cardstate[i] = new JPanel();
-			cardstate[i].setLayout(new FlowLayout(0, 0, 0));
-			cardstate[i].setPreferredSize(new Dimension(320, 500));
-			cardstate[i].setMinimumSize(new Dimension(320, 500));
-			cardstate[i].setMaximumSize(new Dimension(320, 500));
-			cardstate[i].setOpaque(false);
+		cardpanel = new JPanel();
+		cardpanel.setLayout(new FlowLayout(0, 0, 0));
+		cardpanel.setBackground(new Color(0, 0, 0));
+		cardpanel.setOpaque(false);
 
-			JLabel mycard_label = new JLabel();
-			mycard_label.setOpaque(true);
-			mycard_label.setText(players.get(i).getName() + "'s Cards");
-			mycard_label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
-			mycard_label.setBackground(new Color(0, 0, 127));
-			mycard_label.setForeground(new Color(255, 0, 0));
-			mycard_label.setPreferredSize(new Dimension(320, 30));
-			mycard_label.setMinimumSize(new Dimension(320, 30));
-			mycard_label.setMaximumSize(new Dimension(320, 30));
-			mycard_label.setHorizontalAlignment(JLabel.CENTER);
-			cardpanel[i].add(mycard_label, 0);
-			cardpanel[i].add(cardstate[i], 1);
-		}
+		cardstate = new JPanel();
+		cardstate.setLayout(new FlowLayout(0, 0, 0));
+		cardstate.setPreferredSize(new Dimension(320, 500));
+		cardstate.setMinimumSize(new Dimension(320, 500));
+		cardstate.setMaximumSize(new Dimension(320, 500));
+		cardstate.setOpaque(false);
 
-		cardside.add(cardpanel[0], String.valueOf(0));
-		cardside.add(cardpanel[1], String.valueOf(1));
-		cardlayout.show(cardside, "0");
+		JLabel mycard_label = new JLabel();
+		mycard_label.setOpaque(true);
+		mycard_label.setText(gameController.getMyName() + "'s Cards");
+		mycard_label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		mycard_label.setBackground(new Color(0, 0, 127));
+		mycard_label.setForeground(new Color(255, 0, 0));
+		mycard_label.setPreferredSize(new Dimension(320, 30));
+		mycard_label.setMinimumSize(new Dimension(320, 30));
+		mycard_label.setMaximumSize(new Dimension(320, 30));
+		mycard_label.setHorizontalAlignment(JLabel.CENTER);
+		cardpanel.add(mycard_label, 0);
+		cardpanel.add(cardstate, 1);
+		cardside.add(cardpanel);
 
 		infopanel.add(cardside, BorderLayout.SOUTH);
 
@@ -348,7 +345,7 @@ public class Board {
 		cardside.setPreferredSize(new Dimension(320, 530));
 		cardside.setBackground(new Color(0, 127, 255));
 
-		//chatpanel.setBackground(new Color(255, 0, 255));
+		// chatpanel.setBackground(new Color(255, 0, 255));
 		chatpanel.setPreferredSize(new Dimension(680, 220));
 		consolepanel = new IPanel("Resources/image/info.png");
 		consolepanel.setPreferredSize(new Dimension(320, 220));
@@ -371,14 +368,6 @@ public class Board {
 	private Color getImage(String string) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public void update(String msg) {
-		switch (msg) {
-		case "card":
-			cardlayout.show(cardside, String.valueOf(currentPlayer));
-			break;
-		}
 	}
 
 	public void refreshInfo(int currentPlayer) {
@@ -415,14 +404,14 @@ public class Board {
 	}
 
 	public void refreshCards() throws Exception {
-		playerCard = gameController.Players.get(currentPlayer).cardList;
+		playerCard = gameController.Players.get(gameController.getMyNumber()).cardList;
 		int length = playerCard.size();
 		System.out.println("//"
 				+ gameController.Players.get(currentPlayer).getName()
 				+ "'s cards " + length + "//");
 
-		cardpanel[currentPlayer].remove(1);
-		cardstate[currentPlayer].removeAll();
+		cardpanel.remove(1);
+		cardstate.removeAll();
 
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
@@ -430,32 +419,34 @@ public class Board {
 			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
 
-			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
-			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
-					255 - 10 * i, 255 - 10 * i));
-			cards[currentPlayer][i].add(cardtype, 0);
-			cards[currentPlayer][i].add(cardtext, 1);
+			cards[i] = new IPanel("Resources/image/cardpage.jpg");
+			cards[i].setPreferredSize(new Dimension(320, 100));
+			cards[i].setMinimumSize(new Dimension(320, 100));
+			cards[i].setMaximumSize(new Dimension(320, 100));
+			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
+					255 - 10 * i));
+			cards[i].add(cardtype, 0);
+			cards[i].add(cardtext, 1);
 
-			cardstate[currentPlayer].add(cards[currentPlayer][i]);
+			cardstate.add(cards[i]);
 		}
 
-		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
-		cardside.remove(cardpanel[currentPlayer]);
-		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
+		cardpanel.add(cardstate, 1);
+		cardside.removeAll();
+		cardside.add(cardpanel);
+		cardside.setVisible(false);
+		cardside.setVisible(true);
 	}
 
 	public void deleteCards() throws Exception {
-		playerCard = gameController.Players.get(currentPlayer).cardList;
+		playerCard = gameController.Players.get(gameController.getMyNumber()).cardList;
 		int length = playerCard.size();
 		DeleteCardBtnHandler cardhandler = new DeleteCardBtnHandler();
 
 		System.out.println("Let's Delete Card!");
 
-		cardpanel[currentPlayer].remove(1);
-		cardstate[currentPlayer].removeAll();
+		cardpanel.remove(1);
+		cardstate.removeAll();
 
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
@@ -465,36 +456,36 @@ public class Board {
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
-			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
-			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
-					255 - 10 * i, 255 - 10 * i));
-			cards[currentPlayer][i].add(cardtype, 0);
-			cards[currentPlayer][i].add(cardtext, 1);
-			cards[currentPlayer][i].add(cardnumber, 2);
-			cards[currentPlayer][i].addMouseListener(cardhandler);
-
-			cardstate[currentPlayer].add(cards[currentPlayer][i]);
+			cards[i] = new IPanel("Resources/image/cardpage.jpg");
+			cards[i].setPreferredSize(new Dimension(320, 100));
+			cards[i].setMinimumSize(new Dimension(320, 100));
+			cards[i].setMaximumSize(new Dimension(320, 100));
+			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
+					255 - 10 * i));
+			cards[i].add(cardtype, 0);
+			cards[i].add(cardtext, 1);
+			cards[i].add(cardnumber, 2);
+			cards[i].addMouseListener(cardhandler);
+			cardstate.add(cards[i]);
 		}
 
-		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
-		cardside.remove(cardpanel[currentPlayer]);
-		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
-		cardlayout.show(cardside, String.valueOf(currentPlayer));
+		cardpanel.add(cardstate, 1);
+		cardside.remove(cardpanel);
+		cardside.add(cardpanel);
+		cardside.setVisible(false);
+		cardside.setVisible(true);
 	}
 
 	public void executableCards() throws Exception {
-		playerCard = gameController.Players.get(currentPlayer).cardList;
+		playerCard = gameController.Players.get(gameController.getMyNumber()).cardList;
 		int length = playerCard.size();
 		CardBtnHandler cardhandler = new CardBtnHandler();
 		cardtime = true;
 
 		System.out.println("Let's use Card!");
 
-		cardpanel[currentPlayer].remove(1);
-		cardstate[currentPlayer].removeAll();
+		cardpanel.remove(1);
+		cardstate.removeAll();
 
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
@@ -504,42 +495,45 @@ public class Board {
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
-			cards[currentPlayer][i] = new IPanel("Resources/image/cardpage.jpg");
-			cards[currentPlayer][i].setPreferredSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMinimumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setMaximumSize(new Dimension(320, 100));
-			cards[currentPlayer][i].setBackground(new Color(255 - 10 * i,
-					255 - 10 * i, 255 - 10 * i));
-			cards[currentPlayer][i].add(cardtype, 0);
-			cards[currentPlayer][i].add(cardtext, 1);
-			cards[currentPlayer][i].add(cardnumber, 2);
-			cards[currentPlayer][i].addMouseListener(cardhandler);
+			cards[i] = new IPanel("Resources/image/cardpage.jpg");
+			cards[i].setPreferredSize(new Dimension(320, 100));
+			cards[i].setMinimumSize(new Dimension(320, 100));
+			cards[i].setMaximumSize(new Dimension(320, 100));
+			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
+					255 - 10 * i));
+			cards[i].add(cardtype, 0);
+			cards[i].add(cardtext, 1);
+			cards[i].add(cardnumber, 2);
+			cards[i].addMouseListener(cardhandler);
 
-			cardstate[currentPlayer].add(cards[currentPlayer][i]);
+			cardstate.add(cards[i]);
 		}
 
-		cardpanel[currentPlayer].add(cardstate[currentPlayer], 1);
-		cardside.remove(cardpanel[currentPlayer]);
-		cardside.add(cardpanel[currentPlayer], String.valueOf(currentPlayer));
-		cardlayout.show(cardside, String.valueOf(currentPlayer));
+		cardpanel.add(cardstate, 1);
+		cardside.remove(cardpanel);
+		cardside.add(cardpanel);
+		cardside.setVisible(false);
+		cardside.setVisible(true);
 	}
-	
-	public void gameOver(){
+
+	public void gameOver() {
 		System.out.println("GAMEOVER");
 		this.frame.setVisible(false);
 		this.frame.dispose();
 		bgm.stop();
 	}
 
-	class windowHandler extends WindowAdapter{
-		public void windowClosing(WindowEvent e){	
+	class windowHandler extends WindowAdapter {
+		public void windowClosing(WindowEvent e) {
 			monoClient.outGame();
 		}
 	}
 
 	class DiceBtnHandler implements MouseListener {
 		public void mouseClicked(MouseEvent e) {
-			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+			if (!gameController.getMyName().equals(
+					gameController.Players.get(gameController.currentPlayer)
+							.getName())) {
 				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
 				return;
 			}
@@ -602,15 +596,17 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+			if (!gameController.getMyName().equals(
+					gameController.Players.get(gameController.currentPlayer)
+							.getName())) {
 				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
 				return;
 			}
-			
+
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
-			
+
 			System.out.println("Deleting card has clicked!");
 			gameController.deleteCard(number);
 			gameController.addCard(gameController.tempcard);
@@ -659,11 +655,13 @@ public class Board {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (!gameController.getMyName().equals(gameController.Players.get(gameController.currentPlayer).getName())) {
+			if (!gameController.getMyName().equals(
+					gameController.Players.get(gameController.currentPlayer)
+							.getName())) {
 				JOptionPane.showMessageDialog(null, "상대방 턴입니다.");
 				return;
 			}
-			
+
 			JPanel card = (JPanel) e.getComponent();
 			JLabel cardNumber = (JLabel) card.getComponent(2);
 			int number = Integer.parseInt(cardNumber.getText());
@@ -673,10 +671,12 @@ public class Board {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			
-			System.out.println("Using this card!");
+
 			if (gameController.useCard(number)) {
 				try {
+					refreshCards();
+					gameController.sendCardtoServer();
+					System.out.println("The card was used");
 					gameController.dofinal();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -732,8 +732,8 @@ public class Board {
 	public void showCard(int card) {
 		cardPiece[card].setVisible(true);
 	}
-	
-	public void getClient(monoClient monoClient){
+
+	public void getClient(monoClient monoClient) {
 		this.monoClient = monoClient;
 	}
 

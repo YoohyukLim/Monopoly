@@ -22,7 +22,7 @@ import standard.Board;
 import standard.GameController;
 import standard.Map;
 
-public class monoClient extends Thread{
+public class monoClient extends Thread {
 	public static String name;
 	String serverIp = "127.0.0.1";
 
@@ -33,23 +33,23 @@ public class monoClient extends Thread{
 
 	public static Lobby lobby;
 	public static Room room;
-	
+
 	public ArrayList<String> clients;
 	public ArrayList<String> rooms;
 	public ArrayList<String> players;
-	
+
 	public boolean roomMaster = false;
 	public String roomName;
-	
+
 	public Map map;
 	public Board board;
 	public GameController gameController;
-	
+
 	public String currentName;
 	public int currentRotationCnt;
 	public int currentCatchCnt;
-	
-	public int [] Dice;
+
+	public int[] Dice;
 
 	public static void main(String args[]) {
 		new monoClient();
@@ -66,27 +66,27 @@ public class monoClient extends Thread{
 			socket = new Socket(serverIp, 7777);
 
 			System.out.println("서버에 연결되었습니다.");
-		
+
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
-			
+
 			lobby = new Lobby(this);
 			out.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER));
 			out.reset();
-			
+
 			this.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void run(){
-		while(in!=null){
+
+	public void run() {
+		while (in != null) {
 			try {
 				data = (Protocol) in.readObject();
-				//System.out.println("From Server : " + data);
-				
-				if(data instanceof LobbyProtocol)
+				// System.out.println("From Server : " + data);
+
+				if (data instanceof LobbyProtocol)
 					analysisLobbyProtocol((LobbyProtocol) data);
 				else if (data instanceof ChatProtocol)
 					analysisChatProtocol((ChatProtocol) data);
@@ -101,36 +101,37 @@ public class monoClient extends Thread{
 			}
 		}
 	}
-	
-	public void analysisLobbyProtocol(LobbyProtocol data){
+
+	public void analysisLobbyProtocol(LobbyProtocol data) {
 		short state = data.getProtocol();
-		
-		if(state == LobbyProtocol.SEND_USER_LIST){
+
+		if (state == LobbyProtocol.SEND_USER_LIST) {
 			refreshClients(data.getUserlist());
-		} else if (state == LobbyProtocol.SEND_ROOM_LIST){
+		} else if (state == LobbyProtocol.SEND_ROOM_LIST) {
 			refreshRooms(data.getRoomlist());
-		} else if (state == LobbyProtocol.SEND_PLAYER_LIST){
+		} else if (state == LobbyProtocol.SEND_PLAYER_LIST) {
 			refreshGameRoom(data.getPlayerList());
-		} else if (state == LobbyProtocol.CREATE_ROOM){
+		} else if (state == LobbyProtocol.CREATE_ROOM) {
 			roomMaster = true;
 			roomName = data.getRoomName();
-			
+
 			lobby.f.setVisible(false);
 			room = new Room(this, roomName);
-		} else if (state == LobbyProtocol.ENTER_ROOM){
+		} else if (state == LobbyProtocol.ENTER_ROOM) {
 			roomName = data.getRoomName();
-			
+
 			lobby.f.setVisible(false);
 			room = new Room(this, roomName);
-		} else if (state == LobbyProtocol.EXIT_ROOM || state == LobbyProtocol.OUT_ROOM){
-			if(roomMaster==false && state == LobbyProtocol.EXIT_ROOM)
+		} else if (state == LobbyProtocol.EXIT_ROOM
+				|| state == LobbyProtocol.OUT_ROOM) {
+			if (roomMaster == false && state == LobbyProtocol.EXIT_ROOM)
 				JOptionPane.showMessageDialog(null, "방장이 게임을 종료했습니다.");
 			roomMaster = false;
 			roomName = null;
 			room.dispose();
-			if(lobby.f.isVisible() == false)
+			if (lobby.f.isVisible() == false)
 				lobby.f.setVisible(true);
-		} else if (state == LobbyProtocol.ENTER_FAIL){
+		} else if (state == LobbyProtocol.ENTER_FAIL) {
 			JOptionPane.showMessageDialog(null, "방이 이미 꽉 차있습니다.");
 		} else if (state == LobbyProtocol.GAME_START_USER) {
 			room.getReady();
@@ -140,11 +141,11 @@ public class monoClient extends Thread{
 			JOptionPane.showMessageDialog(null, "상대방이 준비해야 합니다.");
 		}
 	}
-	
-	public void analysisChatProtocol(ChatProtocol data){
+
+	public void analysisChatProtocol(ChatProtocol data) {
 	}
-	
-	public void analysisGameProtocol(GameProtocol data){
+
+	public void analysisGameProtocol(GameProtocol data) {
 		short state = data.getProtocol();
 		try {
 			if (state == GameProtocol.GAME_START) {
@@ -167,50 +168,52 @@ public class monoClient extends Thread{
 				currentRotationCnt = data.getCurrentRotion();
 				currentCatchCnt = data.getCurrentCatch();
 				gameController.turn = data.getTurn();
-				gameController.useCardServer(data.getCard(), data.getCardPosition());
-			} else if (state == GameProtocol.OUT_GAME){
+				gameController.useCardServer(data.getCard(),
+						data.getCardPosition());
+			} else if (state == GameProtocol.OUT_GAME) {
 				outGameServer();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void outRoom(){
+
+	public void outRoom() {
 		LobbyProtocol data = new LobbyProtocol(name, LobbyProtocol.OUT_ROOM);
 		data.setRoomName(roomName);
 		sendToServer(data);
 	}
-	
-	public void refreshClients(ArrayList<String> clients){
-		if(this.clients!=null)
+
+	public void refreshClients(ArrayList<String> clients) {
+		if (this.clients != null)
 			this.clients.clear();
 		this.clients = new ArrayList<String>(clients);
-		
+
 		lobby.refreshClients(this.clients);
 	}
-	
-	public void refreshRooms(ArrayList<String> rooms){
-		if(this.rooms!=null)
+
+	public void refreshRooms(ArrayList<String> rooms) {
+		if (this.rooms != null)
 			this.rooms.clear();
 		this.rooms = rooms;
-		
+
 		lobby.refreshRooms(rooms);
 	}
-	
-	public void refreshGameRoom(ArrayList<String> players){
-		if(this.players!=null)
+
+	public void refreshGameRoom(ArrayList<String> players) {
+		if (this.players != null)
 			this.players.clear();
 		this.players = players;
-		
+
 		room.refresh(players);
 	}
 
 	public void startGame(GameProtocol data) {
 		try {
+			System.out.println("New Game Start");
 			map = new Map();
 			map.generate_map(data.getMapList());
-			
+
 			ArrayList<Piece> Players = new ArrayList<Piece>(2);
 			Piece Player1 = new Piece(0, 0);
 			Player1.setName(data.getRoomPlayer().get(0));
@@ -218,17 +221,22 @@ public class monoClient extends Thread{
 			Piece Player2 = new Piece(1, 0);
 			Player2.setName(data.getRoomPlayer().get(1));
 			Player2.map_size = 36;
-			
+
 			Players.add(Player1);
 			Players.add(Player2);
-			
+
 			gameController = new GameController();
 			gameController.setPlayer(Players);
-			board = new Board(map);
-			gameController.setView(board);
+			gameController.setView(new Board(map));
 			gameController.setMyName(name);
+			if (name.equals(data.getRoomPlayer().get(0)))
+				gameController.setMyNumber(0);
+			else
+				gameController.setMyNumber(1);
+
+			board = gameController.board;
 			board.getController(gameController);
-			
+
 			gameController.getClient(this);
 			board.getClient(this);
 
@@ -238,19 +246,28 @@ public class monoClient extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
-	public void outGame(){
+
+	public void outGame() {
+		roomMaster = false;
 		GameProtocol data = new GameProtocol(name, GameProtocol.OUT_GAME);
 		data.setRoomName(roomName);
 		sendToServer(data);
 	}
-	
-	public void outGameServer(){
+
+	public void outGameServer() {
+		roomMaster = false;
 		lobby.f.setVisible(true);
 		board.gameOver();
+		cleanBoard();
 	}
-	
-	public void sendToServer(Protocol data){
+
+	public void cleanBoard() {
+		board = null;
+		gameController = null;
+		System.gc();
+	}
+
+	public void sendToServer(Protocol data) {
 		try {
 			out.writeObject(data);
 			out.reset();
@@ -258,7 +275,7 @@ public class monoClient extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void exit() {
 		System.exit(0);
 	}
