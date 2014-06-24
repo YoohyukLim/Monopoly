@@ -79,42 +79,55 @@ public class monoServer {
 			try {
 				data = (Protocol) in.readObject();
 				name = data.getName();
+				if (clients.get(name) != null) {
+					sendToClient(new LobbyProtocol(name,
+							LobbyProtocol.LOGIN_ERROR));
+				} else {
+					try {
+						if (data instanceof LobbyProtocol) {
+							addClient(name, out);
+						} else
+							System.exit(0);
 
-				if (data instanceof LobbyProtocol) {
-					addClient(name, out);
-				} else
-					System.exit(0);
+						System.out.println(name + "님이 접속하셨습니다.");
+						System.out.println("현재 접속자 수는 " + clients.size()
+								+ "입니다.");
+						SendToAll(new LobbyProtocol(clientsName,
+								LobbyProtocol.SEND_USER_LIST));
+						out.writeObject(new LobbyProtocol(roomsName,
+								LobbyProtocol.SEND_ROOM_LIST));
 
-				System.out.println(name + "님이 접속하셨습니다.");
-				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
-				SendToAll(new LobbyProtocol(clientsName,
-						LobbyProtocol.SEND_USER_LIST));
-				out.writeObject(new LobbyProtocol(roomsName,
-						LobbyProtocol.SEND_ROOM_LIST));
-
-				while (in != null) {
-					data = (Protocol) in.readObject();
-					if (data instanceof LobbyProtocol)
-						try {
-							analysisLobbyProtocol((LobbyProtocol) data);
-						} catch (Exception e) {
-							e.printStackTrace();
+						while (in != null) {
+							data = (Protocol) in.readObject();
+							if (data instanceof LobbyProtocol)
+								try {
+									analysisLobbyProtocol((LobbyProtocol) data);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							else if (data instanceof ChatProtocol)
+								analysisChatProtocol((ChatProtocol) data);
+							else if (data instanceof GameProtocol)
+								analysisGameProtocol((GameProtocol) data);
 						}
-					else if (data instanceof ChatProtocol)
-						analysisChatProtocol((ChatProtocol) data);
-					else if (data instanceof GameProtocol)
-						analysisGameProtocol((GameProtocol) data);
+					} catch (IOException e) {
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} finally {
+						subClient(name);
+						System.out.println("[" + socket.getInetAddress() + ":"
+								+ socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
+						System.out.println("현재 접속자 수는 " + clients.size()
+								+ "입니다.");
+						SendToAll(new LobbyProtocol(clientsName,
+								LobbyProtocol.SEND_USER_LIST));
+					}
 				}
-			} catch (IOException e) {
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} finally {
-				subClient(name);
-				System.out.println("[" + socket.getInetAddress() + ":"
-						+ socket.getPort() + "]" + "에서 접속을 종료하였습니다.");
-				System.out.println("현재 접속자 수는 " + clients.size() + "입니다.");
-				SendToAll(new LobbyProtocol(clientsName,
-						LobbyProtocol.SEND_USER_LIST));
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 		}// run()
 
@@ -126,16 +139,21 @@ public class monoServer {
 				if (state == LobbyProtocol.CREATE_ROOM) {
 
 					String roomName = data.getRoomName();
-					addRoom(roomName, name);
-					SendToAll(new LobbyProtocol(roomsName,
-							LobbyProtocol.SEND_ROOM_LIST));
+					if (roomList.get(roomName) != null)
+						sendToClient(new LobbyProtocol(name,
+								LobbyProtocol.CREATE_FAIL));
+					else {
+						addRoom(roomName, name);
+						SendToAll(new LobbyProtocol(roomsName,
+								LobbyProtocol.SEND_ROOM_LIST));
 
-					LobbyProtocol roomdata = new LobbyProtocol(name, state);
-					roomdata.setRoomName(roomName);
-					sendToClient(roomdata);
-					out.writeObject(new LobbyProtocol(roomsName,
-							LobbyProtocol.SEND_ROOM_LIST));
-					NoticeRoomPlayers(roomName);
+						LobbyProtocol roomdata = new LobbyProtocol(name, state);
+						roomdata.setRoomName(roomName);
+						sendToClient(roomdata);
+						out.writeObject(new LobbyProtocol(roomsName,
+								LobbyProtocol.SEND_ROOM_LIST));
+						NoticeRoomPlayers(roomName);
+					}
 				} else if (state == LobbyProtocol.OUT_ROOM) {
 
 					String roomName = data.getRoomName();

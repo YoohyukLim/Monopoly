@@ -105,7 +105,10 @@ public class monoClient extends Thread {
 	public void analysisLobbyProtocol(LobbyProtocol data) {
 		short state = data.getProtocol();
 
-		if (state == LobbyProtocol.SEND_USER_LIST) {
+		if(state == LobbyProtocol.LOGIN_ERROR){
+			JOptionPane.showMessageDialog(null, "같은 이름의 유저가 있습니다.");
+			exit();
+		} else if (state == LobbyProtocol.SEND_USER_LIST) {
 			refreshClients(data.getUserlist());
 		} else if (state == LobbyProtocol.SEND_ROOM_LIST) {
 			refreshRooms(data.getRoomlist());
@@ -117,6 +120,9 @@ public class monoClient extends Thread {
 
 			lobby.f.setVisible(false);
 			room = new Room(this, roomName);
+		} else if (state == LobbyProtocol.CREATE_FAIL) {
+			JOptionPane.showMessageDialog(null, "같은 이름의 방이 있습니다.");
+			lobby.f.setVisible(true);
 		} else if (state == LobbyProtocol.ENTER_ROOM) {
 			roomName = data.getRoomName();
 
@@ -258,13 +264,6 @@ public class monoClient extends Thread {
 		roomMaster = false;
 		lobby.f.setVisible(true);
 		board.gameOver();
-		cleanBoard();
-	}
-
-	public void cleanBoard() {
-		board = null;
-		gameController = null;
-		System.gc();
 	}
 
 	public void sendToServer(Protocol data) {

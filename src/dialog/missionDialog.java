@@ -83,7 +83,6 @@ public class missionDialog extends JDialog {
 			GameProtocol data = new GameProtocol(me, GameProtocol.GAME_OVER);
 			data.setRoomName(gameController.monoClient.roomName);
 			gameController.monoClient.sendToServer(data);
-			gameController.monoClient.cleanBoard();
 		}
 	}
 }
