@@ -70,10 +70,11 @@ public class monoClient extends Thread{
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			
+			lobby = new Lobby(this);
+			
 			out.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER));
 			out.reset();
 			
-			lobby = new Lobby(this);
 			this.start();
 		} catch (Exception e) {
 			e.printStackTrace();

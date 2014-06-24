@@ -144,6 +144,7 @@ public class monoServer {
             } else if (state == LobbyProtocol.ENTER_ROOM) {
                String roomName = data.getRoomName();
                enterRoom(roomName, name);
+               sendToClient(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
             } else if (state == LobbyProtocol.GAME_START_MASTER) {
                String roomName = data.getRoomName();
                RoomManager room = roomList.get(roomName);
