@@ -125,7 +125,6 @@ public class Board {
 		frame.setTitle("Monopoly");
 		frame.setBounds(0, 0, 1006, 928);
 		frame.setResizable(false);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
 		topside.setLayout(new BoxLayout(topside, BoxLayout.LINE_AXIS));
@@ -529,6 +528,7 @@ public class Board {
 		System.out.println("GAMEOVER");
 		this.frame.setVisible(false);
 		this.frame.dispose();
+		bgm.stop();
 	}
 
 	class windowHandler extends WindowAdapter{
