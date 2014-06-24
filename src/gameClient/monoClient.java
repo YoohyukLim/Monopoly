@@ -71,7 +71,6 @@ public class monoClient extends Thread{
 			in = new ObjectInputStream(socket.getInputStream());
 			
 			lobby = new Lobby(this);
-			
 			out.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER));
 			out.reset();
 			
