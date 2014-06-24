@@ -125,7 +125,7 @@ public class monoServer {
 					roomdata.setRoomName(roomName);
 					sendToClient(roomdata);
 					out.writeObject(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
-					NoticePlayers(roomName);
+					NoticeRoomPlayers(roomName);
 				} else if (state == LobbyProtocol.OUT_ROOM) {
 
 					String roomName = data.getRoomName();
@@ -171,7 +171,7 @@ public class monoServer {
 				room.setRoomName(RoomName);
 				oos.writeObject(room);
 				oos.reset();
-				NoticePlayers(RoomName);
+				NoticeRoomPlayers(RoomName);
 			} else {
 				oos.writeObject(new LobbyProtocol(name, LobbyProtocol.ENTER_FAIL));
 				oos.reset();
@@ -194,7 +194,7 @@ public class monoServer {
 			}
 			clients.get(name).outRoom();
 			roomList.get(RoomName).outClient(name);
-			NoticePlayers(RoomName);
+			NoticeRoomPlayers(RoomName);
 		}
 	}
 	
@@ -227,7 +227,7 @@ public class monoServer {
 		clientsName.remove(name);
 	}
 	
-	public void NoticePlayers(String roomName){
+	public void NoticeRoomPlayers(String roomName){
 		ArrayList<String> players = roomList.get(roomName).getClients();
 		for(int i = 0 ; i<players.size(); i++){
 			ObjectOutputStream oos = clients.get(players.get(i)).getOuputStream();
@@ -240,7 +240,7 @@ public class monoServer {
 		}
 	}
 	
-	public void SendToAll(LobbyProtocol data) {
+	public void SendToAll(Protocol data) {
 		Iterator it = clients.keySet().iterator();
 		while (it.hasNext()) {
 			try {
