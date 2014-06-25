@@ -148,6 +148,8 @@ public class monoServer {
 						LobbyProtocol roomdata = new LobbyProtocol(name, state);
 						roomdata.setRoomName(roomName);
 						sendToClient(roomdata);
+						out.writeObject(new LobbyProtocol(roomsName,
+								LobbyProtocol.SEND_ROOM_LIST));
 						NoticeRoomPlayers(roomName);
 					}
 				} else if (state == LobbyProtocol.OUT_ROOM) {
