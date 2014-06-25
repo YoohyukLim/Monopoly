@@ -362,7 +362,8 @@ public class Board {
 		chatWrite.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gameController.sendMessage(chatWrite.getText());
+				if (!chatWrite.getText().trim().equals(""))
+					gameController.sendMessage(chatWrite.getText());
 				chatWrite.setText("");
 			}
 		});
