@@ -523,7 +523,7 @@ public class Board {
 			cardinfo.add(cardnumber, 2);
 			cards[i].add(cardimage);
 			cards[i].add(cardinfo);
-			cards[i].addMouseListener(cardhandler);
+			cardinfo.addMouseListener(cardhandler);
 			cardstate.add(cards[i]);
 		}
 
@@ -578,7 +578,7 @@ public class Board {
 			cardinfo.add(cardnumber, 2);
 			cards[i].add(cardimage);
 			cards[i].add(cardinfo);
-			cards[i].addMouseListener(cardhandler);
+			cardinfo.addMouseListener(cardhandler);
 
 			cardstate.add(cards[i]);
 		}
