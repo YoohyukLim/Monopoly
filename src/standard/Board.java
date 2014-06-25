@@ -439,7 +439,7 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
-			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
+			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
 
 			cards[i] = new IPanel("Resources/image/cardpage.jpg");
@@ -474,7 +474,7 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
-			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
+			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
@@ -513,7 +513,7 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
-			JLabel cardtype = new JLabel("Card Num: " + String.valueOf(number));
+			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);

@@ -73,41 +73,81 @@ public class Card {
 		default:
 		}
 	}
-
+	public String getCardType(int card_number) {
+		String msg = null;
+		switch (card_number) {
+		// corner
+		case 1:
+			msg = "니달리의 덫";
+			break;
+		case 2:
+			msg = "잔나의 계절풍";
+			break;
+		case 3:
+			msg = "기민함의 노래";
+			break;
+		// special maps
+		case 4:
+			msg = "승갓의 가호";
+			break;
+		case 5:
+			msg = "샤코의 깜짝 상자";
+			break;
+		case 6:
+			msg = "람머스의 도발";
+			break;
+		case 7:
+			msg = "흑점 폭발";
+			break;
+		case 8:
+			msg = "민병대";
+			break;
+		case 9:
+			msg = "로켓 손";
+			break;
+		case 10:
+			msg = "달빛 낙하";
+			break;
+		// normal
+		default:
+			msg = "Normal";
+		}
+		return msg;
+	}
 	public String getTypeText(int card_number) {
 		String msg = null;
 		switch (card_number) {
 		// corner
 		case 1:
-			msg = "니달리의 덫\n니달리의 방해를 받아 한 칸 후퇴합니다.";
+			msg = "니달리의 방해를 받아 한 칸 후퇴합니다.";
 			break;
 		case 2:
-			msg = "잔나의 계절풍\n잔나가 플레이어를 밀쳐내 세 칸 후퇴합니다.";
+			msg = "잔나가 플레이어를 밀쳐내 세 칸 후퇴합니다.";
 			break;
 		case 3:
-			msg = "기민함의 노래\n소나의 오오라로 두 칸 전진합니다.";
+			msg = "소나의 오오라로 두 칸 전진합니다.";
 			break;
 		// special maps
 		case 4:
-			msg = "승갓의 가호\n승갓의 가호를 받아 한 칸 전진합니다.";
+			msg = "승갓의 가호를 받아 한 칸 전진합니다.";
 			break;
 		case 5:
-			msg = "샤코의 깜짝 상자\n방향 감각을 상실하여 한 칸 후퇴합니다.";
+			msg = "방향 감각을 상실하여 한 칸 후퇴합니다.";
 			break;
 		case 6:
-			msg = "람머스의 도발\n람머스를 따라가 두 칸 후퇴합니다.";
+			msg = "람머스를 따라가 두 칸 후퇴합니다.";
 			break;
 		case 7:
-			msg = "흑점 폭발\n레오나가 방해하여 시작 위치로 돌아갑니다.";
+			msg = "레오나가 방해하여 시작 위치로 돌아갑니다.";
 			break;
 		case 8:
-			msg = "민병대\n이동속도가 빨라져 한 바퀴를 더 돕니다.";
+			msg = "이동속도가 빨라져 한 바퀴를 더 돕니다.";
 			break;
 		case 9:
-			msg = "로켓 손\n블리츠크랭크가 끌어당겨 네 칸 후퇴합니다.";
+			msg = "블리츠크랭크가 끌어당겨 네 칸 후퇴합니다.";
 			break;
 		case 10:
-			msg = "달빛 낙하\n다이애나가 주변을 모아 두 칸 후퇴합니다.";
+			msg = "다이애나가 주변을 모아 두 칸 후퇴합니다.";
 			break;
 		// normal
 		default:
