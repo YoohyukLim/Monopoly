@@ -326,9 +326,6 @@ public class monoServer {
 			ObjectOutputStream oos = this.clients.get(clientList.get(i))
 					.getOuputStream();
 			try {
-				oos.writeObject(new GameProtocol(clientList.get(i),
-						GameProtocol.OUT_GAME));
-				oos.reset();
 				oos.writeObject(new LobbyProtocol(roomsName,
 						LobbyProtocol.SEND_ROOM_LIST));
 				oos.reset();
