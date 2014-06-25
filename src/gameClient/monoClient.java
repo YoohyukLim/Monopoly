@@ -24,7 +24,7 @@ import standard.Map;
 
 public class monoClient extends Thread {
 	public static String name;
-	String serverIp = "192.168.0.43";
+	String serverIp = "127.0.0.1";
 
 	static Socket socket;
 	static ObjectOutputStream out;

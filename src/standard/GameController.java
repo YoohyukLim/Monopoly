@@ -226,6 +226,11 @@ public class GameController {
 			JOptionPane.showMessageDialog(null, "카드가 이미 존재합니다.");
 			return false;
 		}
+		card = new int[3];
+		card[0] = 1;
+		card[1] = currentPlayer;
+		card[2] = Players.get(currentPlayer).cardList.get(n).getCardNumber();
+		
 		System.out.println("Card" + n + " is used");
 		Players.get(currentPlayer).deleteCard(n);
 		board.disappearCard(n);
@@ -234,10 +239,6 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		card = new int[3];
-		card[0] = 1;
-		card[1] = currentPlayer;
-		card[2] = n;
 
 		return true;
 	}
