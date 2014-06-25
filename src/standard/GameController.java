@@ -182,7 +182,7 @@ public class GameController {
 		Random r = new Random();
 		r.setSeed(seed);
 
-		if (Math.abs(r.nextInt() % 10) > 2)
+		if (Math.abs(r.nextInt() % 3) < 2)
 			return true;
 
 		if (Players.get(currentPlayer).cardList.size() < 5) {
