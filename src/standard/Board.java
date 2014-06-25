@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -439,8 +440,23 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
+			JLabel cardimage = new JLabel(new ImageIcon(new File("Resources/image/cards/card"+number+".png").toURI().toURL()));
+			cardimage.setPreferredSize(new Dimension(64, 100));
+			cardimage.setMinimumSize(new Dimension(64, 100));
+			cardimage.setMaximumSize(new Dimension(64, 100));
+			JPanel cardinfo = new JPanel();
+			cardinfo.setOpaque(false);
+			cardinfo.setPreferredSize(new Dimension(256, 100));
+			cardinfo.setMinimumSize(new Dimension(256, 100));
+			cardinfo.setMaximumSize(new Dimension(256, 100));
 			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			cardtype.setHorizontalAlignment(JLabel.CENTER);
+			cardtext.setHorizontalAlignment(JLabel.CENTER);
+			cardtype.setVerticalAlignment(JLabel.CENTER);
+			cardtext.setVerticalAlignment(JLabel.CENTER);
+			JLabel cardnumber = new JLabel(String.valueOf(i));
+			cardnumber.setVisible(false);
 
 			cards[i] = new IPanel("Resources/image/cardpage.jpg");
 			cards[i].setPreferredSize(new Dimension(320, 100));
@@ -448,9 +464,12 @@ public class Board {
 			cards[i].setMaximumSize(new Dimension(320, 100));
 			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
 					255 - 10 * i));
-			cards[i].add(cardtype, 0);
-			cards[i].add(cardtext, 1);
-
+			cards[i].setLayout(new FlowLayout(0, 0, 0));
+			cardinfo.add(cardtype, 0);
+			cardinfo.add(cardtext, 1);
+			cardinfo.add(cardnumber, 2);
+			cards[i].add(cardimage);
+			cards[i].add(cardinfo);
 			cardstate.add(cards[i]);
 		}
 
@@ -474,8 +493,21 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
+			JLabel cardimage = new JLabel(new ImageIcon(new File("Resources/image/cards/card"+number+".png").toURI().toURL()));
+			cardimage.setPreferredSize(new Dimension(64, 100));
+			cardimage.setMinimumSize(new Dimension(64, 100));
+			cardimage.setMaximumSize(new Dimension(64, 100));
+			JPanel cardinfo = new JPanel();
+			cardinfo.setOpaque(false);
+			cardinfo.setPreferredSize(new Dimension(256, 100));
+			cardinfo.setMinimumSize(new Dimension(256, 100));
+			cardinfo.setMaximumSize(new Dimension(256, 100));
 			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			cardtype.setHorizontalAlignment(JLabel.CENTER);
+			cardtext.setHorizontalAlignment(JLabel.CENTER);
+			cardtype.setVerticalAlignment(JLabel.CENTER);
+			cardtext.setVerticalAlignment(JLabel.CENTER);
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
@@ -485,9 +517,12 @@ public class Board {
 			cards[i].setMaximumSize(new Dimension(320, 100));
 			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
 					255 - 10 * i));
-			cards[i].add(cardtype, 0);
-			cards[i].add(cardtext, 1);
-			cards[i].add(cardnumber, 2);
+			cards[i].setLayout(new BoxLayout(cards[i], BoxLayout.LINE_AXIS));
+			cardinfo.add(cardtype, 0);
+			cardinfo.add(cardtext, 1);
+			cardinfo.add(cardnumber, 2);
+			cards[i].add(cardimage);
+			cards[i].add(cardinfo);
 			cards[i].addMouseListener(cardhandler);
 			cardstate.add(cards[i]);
 		}
@@ -513,8 +548,21 @@ public class Board {
 		for (int i = 0; i < length; i++) {
 			Card temp = playerCard.get(i);
 			int number = temp.getCardNumber();
+			JLabel cardimage = new JLabel(new ImageIcon(new File("Resources/image/cards/card"+number+".png").toURI().toURL()));
+			cardimage.setPreferredSize(new Dimension(64, 100));
+			cardimage.setMinimumSize(new Dimension(64, 100));
+			cardimage.setMaximumSize(new Dimension(64, 100));
+			JPanel cardinfo = new JPanel();
+			cardinfo.setOpaque(false);
+			cardinfo.setPreferredSize(new Dimension(256, 100));
+			cardinfo.setMinimumSize(new Dimension(256, 100));
+			cardinfo.setMaximumSize(new Dimension(256, 100));
 			JLabel cardtype = new JLabel(temp.getCardType(number));
 			JLabel cardtext = new JLabel(temp.getTypeText(number));
+			cardtype.setHorizontalAlignment(JLabel.CENTER);
+			cardtext.setHorizontalAlignment(JLabel.CENTER);
+			cardtype.setVerticalAlignment(JLabel.CENTER);
+			cardtext.setVerticalAlignment(JLabel.CENTER);
 			JLabel cardnumber = new JLabel(String.valueOf(i));
 			cardnumber.setVisible(false);
 
@@ -524,9 +572,12 @@ public class Board {
 			cards[i].setMaximumSize(new Dimension(320, 100));
 			cards[i].setBackground(new Color(255 - 10 * i, 255 - 10 * i,
 					255 - 10 * i));
-			cards[i].add(cardtype, 0);
-			cards[i].add(cardtext, 1);
-			cards[i].add(cardnumber, 2);
+			cards[i].setLayout(new BoxLayout(cards[i], BoxLayout.LINE_AXIS));
+			cardinfo.add(cardtype, 0);
+			cardinfo.add(cardtext, 1);
+			cardinfo.add(cardnumber, 2);
+			cards[i].add(cardimage);
+			cards[i].add(cardinfo);
 			cards[i].addMouseListener(cardhandler);
 
 			cardstate.add(cards[i]);
