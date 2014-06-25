@@ -306,20 +306,17 @@ public class monoServer {
 		for (int i = 0; i < clientList.size(); i++) {
 			ObjectOutputStream oos1 = this.clients.get(clientList.get(i))
 					.getOuputStream();
-			ObjectOutputStream oos2 = this.clients.get(clientList.get(i))
-					.getOuputStream();
 			try {
 				oos1.writeObject(new GameProtocol(clientList.get(i),
 						GameProtocol.OUT_GAME));
 				oos1.reset();
-				oos2.writeObject(new LobbyProtocol(roomsName,
-						LobbyProtocol.SEND_ROOM_LIST));
-				oos2.reset();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			this.clients.get(clientList.get(i)).outRoom();
 		}
+		
+		SendToAll(new LobbyProtocol(roomsName, LobbyProtocol.SEND_ROOM_LIST));
 	}
 
 	public void gameOver(String RoomName) {
