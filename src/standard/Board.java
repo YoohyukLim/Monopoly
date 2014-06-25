@@ -10,6 +10,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.TextArea;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -23,6 +27,7 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -49,6 +54,8 @@ public class Board {
 
 	JPanel boardpanel, infopanel, topside, leftside, rightside, botside;
 	IPanel chatpanel, consolepanel;
+	TextArea chatRead;
+	TextField chatWrite;
 
 	JLayeredPane dicepanel;
 	JPanel infoside, cardside, cardpanel, cardstate, cards[];
@@ -346,7 +353,22 @@ public class Board {
 		cardside.setBackground(new Color(0, 127, 255));
 
 		// chatpanel.setBackground(new Color(255, 0, 255));
+		chatRead = new TextArea();
+		chatWrite = new TextField();
 		chatpanel.setPreferredSize(new Dimension(680, 220));
+		chatRead.setPreferredSize(new Dimension(675, 190));
+		chatWrite.setPreferredSize(new Dimension(675, 20));
+		chatRead.setEditable(false);
+		chatWrite.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameController.sendMessage(chatWrite.getText());
+				chatWrite.setText("");
+			}
+		});
+
+		chatpanel.add("chatRead", chatRead);
+		chatpanel.add("chatWrite", chatWrite);
 		consolepanel = new IPanel("Resources/image/info.png");
 		consolepanel.setPreferredSize(new Dimension(320, 220));
 

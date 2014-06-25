@@ -213,6 +213,11 @@ public class monoServer {
 		}
 
 		private void analysisChatProtocol(ChatProtocol data) {
+			String roomName = data.getRoomName();
+			short state = data.getProtocol();
+			if(state == ChatProtocol.SEND_MESSAGE){
+				SendToAllPlayers(roomName, data);
+			}
 		}
 
 		private void sendToClient(Protocol data) {

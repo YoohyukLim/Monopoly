@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import protocol.ChatProtocol;
 import protocol.GameProtocol;
 
 import dialog.cardDialog;
@@ -245,6 +246,15 @@ public class GameController {
       System.out.println("Card " + n + " is deleted");
       Players.get(currentPlayer).deleteCard(n);
       board.disappearCard(n);
+   }
+   
+   public void sendMessage(String text){
+	   String message = new String("["+myName+"]"+": "+text+"\n");
+	   monoClient.sendToServer(new ChatProtocol(myName, message, monoClient.roomName,ChatProtocol.SEND_MESSAGE));
+   }
+   
+   public void recieveMessage(String text){
+	   board.chatRead.append(text);
    }
 
    public void setPlayer(ArrayList<Piece> Players) {

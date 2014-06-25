@@ -149,6 +149,11 @@ public class monoClient extends Thread {
 	}
 
 	public void analysisChatProtocol(ChatProtocol data) {
+		String roomName = data.getRoomName();
+		short state = data.getProtocol();
+		if(state == ChatProtocol.SEND_MESSAGE){
+			gameController.recieveMessage(data.getMessage());
+		}
 	}
 
 	public void analysisGameProtocol(GameProtocol data) {
