@@ -540,8 +540,10 @@ public class Board {
 
 	public void gameOver() {
 		System.out.println("GAMEOVER");
-		//bgm.stop();
-		bgm=null;
+		if(bgm!=null){
+			bgm.stop();
+			bgm=null;
+		}
 		this.frame.setVisible(false);
 		this.frame.dispose();
 	}
