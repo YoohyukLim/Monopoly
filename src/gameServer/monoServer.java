@@ -94,8 +94,6 @@ public class monoServer {
 								+ "¿‘¥œ¥Ÿ.");
 						SendToAll(new LobbyProtocol(clientsName,
 								LobbyProtocol.SEND_USER_LIST));
-						out.writeObject(new LobbyProtocol(roomsName,
-								LobbyProtocol.SEND_ROOM_LIST));
 
 						while (in != null) {
 							data = (Protocol) in.readObject();
@@ -150,8 +148,6 @@ public class monoServer {
 						LobbyProtocol roomdata = new LobbyProtocol(name, state);
 						roomdata.setRoomName(roomName);
 						sendToClient(roomdata);
-						out.writeObject(new LobbyProtocol(roomsName,
-								LobbyProtocol.SEND_ROOM_LIST));
 						NoticeRoomPlayers(roomName);
 					}
 				} else if (state == LobbyProtocol.OUT_ROOM) {
@@ -185,6 +181,9 @@ public class monoServer {
 					room.isReady = false;
 					sendToClient(new LobbyProtocol(name,
 							LobbyProtocol.GAME_READY_CANCEL));
+				} else if (state == LobbyProtocol.SEND_ROOM_LIST) {
+					sendToClient(new LobbyProtocol(roomsName,
+							LobbyProtocol.SEND_ROOM_LIST));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

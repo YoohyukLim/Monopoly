@@ -40,7 +40,7 @@ public class Lobby extends JFrame {
 		f.setSize(330, 340);
 		f.setResizable(false);
 		f.addWindowListener(new windowHandler());
-		f.setVisible(true);
+		
 		cp = f.getContentPane();
 		rooms = new DefaultListModel<>();
 		clients = new DefaultListModel<>();
@@ -64,6 +64,9 @@ public class Lobby extends JFrame {
 		roomPane.setBounds(30, 30, 140, 240);
 		userPane.setBounds(200, 30, 100, 140);
 		roomCreateButton.setBounds(200, 200, 100, 70);
+		
+		monoClient.sendToServer(new LobbyProtocol(monoClient.name, LobbyProtocol.SEND_ROOM_LIST));
+		f.setVisible(true);
 	}
 
 	public void refreshClients(ArrayList<String> clients) {
